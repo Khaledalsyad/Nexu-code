@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nexus Code — Development Lab</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--navy:#051C2C;--blue:#2251FF;--cyan:#00A9F4;--bg:#F4F7FA;--card:#fff;--ink:#0B2236;--mute:#5A6B7B;--line:#DCE4EC}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#04121D;--card:#0A2236;--ink:#EAF1F8;--mute:#9DB0C2;--line:#17344D}}
+:root[data-theme="dark"]{--bg:#04121D;--card:#0A2236;--ink:#EAF1F8;--mute:#9DB0C2;--line:#17344D}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",Arial,sans-serif;line-height:1.9}
+header{background:linear-gradient(135deg,#051C2C 0%,#0A2F4D 60%,#2251FF 140%);color:#fff;padding:48px 20px 40px}
+.wrap{max-width:860px;margin:0 auto}
+.tag{display:inline-block;font-size:13px;letter-spacing:.5px;color:var(--cyan);border:1px solid var(--cyan);padding:2px 12px;border-radius:99px;margin-bottom:14px}
+h1{margin:0 0 8px;font-size:clamp(26px,5vw,38px);line-height:1.4}
+header p{margin:0;color:#B9CADA;max-width:600px}
+main{padding:28px 20px 60px}
+.mod{display:flex;align-items:center;gap:12px;margin:8px 0 18px}
+.mod b{background:var(--blue);color:#fff;border-radius:8px;padding:2px 12px;font-size:14px}
+.mod h2{margin:0;font-size:22px}
+.card{background:var(--card);border:1px solid var(--line);border-right:5px solid var(--blue);border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.card h3{margin:0 0 4px;font-size:19px;color:var(--blue)}
+.card .theme{color:var(--mute);font-size:14px;margin-bottom:12px}
+.row{margin:10px 0}
+.row span{display:block;font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:2px}
+.apply{background:var(--bg);border-radius:10px;padding:12px 14px;margin-top:14px;border:1px dashed var(--cyan)}
+.apply span{color:var(--blue)}
+.next{border:2px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--mute)}
+.sum{background:var(--navy);color:#fff;border-radius:12px;padding:20px 22px;margin:26px 0}
+.sum h3{margin:0 0 8px;color:var(--cyan)}
+.sum li{margin:4px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:0 0 18px}
+.stat{background:var(--navy);color:#fff;border-radius:12px;padding:14px 16px}
+.stat b{display:block;font-size:26px;color:var(--cyan);line-height:1.3}
+.stat small{color:#B9CADA;font-size:13px;line-height:1.6;display:block}
+.src{font-size:13px;color:var(--mute);margin:-6px 0 14px}
+.note{background:var(--bg);border-right:4px solid var(--cyan);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--mute);margin-top:12px}
+.q{border:2px solid var(--blue);border-radius:12px;padding:18px 20px;margin:20px 0}
+.q h3{margin:0 0 6px;color:var(--blue)}
+.skill{border-top:1px solid var(--line);padding-top:14px;margin-top:16px}
+.skill h4{margin:0 0 6px;font-size:17px}
+.apply ul{margin:6px 0 0;padding-right:20px}
+.apply li{margin:6px 0}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--navy);border-bottom:2px solid var(--blue)}
+.tabs .wrap{display:flex;gap:6px;padding:8px 20px;overflow-x:auto}
+.tabs button{font:inherit;font-size:14px;color:#B9CADA;background:transparent;border:0;border-radius:8px;padding:6px 14px;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--blue);color:#fff}
+.pane[hidden]{display:none}
+.hero{background:linear-gradient(135deg,#051C2C,#2251FF 150%);color:#fff;border-radius:14px;padding:26px 24px;margin-bottom:20px}
+.hero small{color:var(--cyan);letter-spacing:.5px}
+.hero h2{margin:6px 0 10px;font-size:clamp(22px,4.5vw,30px);line-height:1.5}
+.hero p{margin:0;color:#D5E1EC}
+.badge{display:inline-block;font-size:12px;background:var(--cyan);color:var(--navy);border-radius:99px;padding:1px 10px;margin-inline-start:8px;font-weight:700}
+.pts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:18px}
+.pt{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--cyan);border-radius:12px;padding:16px 18px}
+.pt b{display:block;color:var(--blue);margin-bottom:4px}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-right:5px solid var(--blue);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.steps li:before{content:counter(s);flex:none;width:32px;height:32px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700}
+.steps h4{margin:0 0 2px;font-size:17px}
+.steps .app{font-size:14px;color:var(--mute);margin-top:6px}
+.later{opacity:.85;border-style:dashed}
+.road{list-style:none;padding:0;margin:0}
+.road li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.road .st{flex:none;font-size:12px;border-radius:99px;padding:0 10px;height:22px;line-height:22px;background:var(--line);color:var(--mute)}
+.road .done{background:#1E9E6A;color:#fff}.road .now{background:var(--blue);color:#fff}
+.en{direction:ltr;unicode-bidi:embed}
+.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:10px 0 12px}
+.cmp>div{border-radius:10px;padding:12px 14px;font-size:15px;line-height:1.9}
+.cmp b{display:block;margin-bottom:4px;font-size:14px}
+.bad{background:rgba(220,70,60,.10);border:1px solid rgba(220,70,60,.45)}
+.bad b{color:#D0453B}
+.good{background:rgba(30,158,106,.12);border:1px solid rgba(30,158,106,.5)}
+.good b{color:#1E9E6A}
+.tip{position:relative;margin:44px 0 34px;border-radius:20px;padding:3px;background:linear-gradient(135deg,#00A9F4,#2251FF 55%,#00A9F4);box-shadow:0 0 0 1px rgba(0,169,244,.45),0 14px 44px rgba(34,81,255,.4);animation:tipglow 3s ease-in-out infinite}
+@keyframes tipglow{0%,100%{box-shadow:0 0 0 1px rgba(0,169,244,.45),0 14px 44px rgba(34,81,255,.35)}50%{box-shadow:0 0 0 1px rgba(0,169,244,.8),0 14px 56px rgba(0,169,244,.55)}}
+@media (prefers-reduced-motion:reduce){.tip{animation:none}}
+.tip-tag{position:absolute;top:-15px;right:24px;background:#00A9F4;color:#051C2C;font-weight:700;font-size:13px;padding:3px 16px;border-radius:99px}
+.tip-in{background:#051C2C;color:#EAF1F8;border-radius:17px;padding:30px 22px 24px}
+.tip-in h3{margin:0 0 4px;color:#00A9F4;font-size:22px}
+.tip-in h4{margin:22px 0 8px;font-size:17px;color:#fff;border-right:4px solid #00A9F4;padding-right:10px;line-height:1.7}
+.tip-in p{margin:6px 0;color:#C9D8E6}
+.tip-sub{color:#9DB7CC;font-size:14px;margin:0 0 6px}
+.tip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:10px 0}
+.tip-grid>div{border-radius:12px;padding:13px 15px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);font-size:15px;line-height:1.9;color:#D8E4EF}
+.tip-grid b{display:block;margin-bottom:4px;font-size:14px}
+.tip-grid .r{border-color:rgba(255,110,100,.6);background:rgba(255,110,100,.1)}.tip-grid .r b{color:#FF8A80}
+.tip-grid .g{border-color:rgba(60,210,150,.6);background:rgba(60,210,150,.1)}.tip-grid .g b{color:#5FE0AE}
+.tl{list-style:none;padding:0;margin:8px 0;counter-reset:t}
+.tl li{counter-increment:t;position:relative;padding:4px 52px 12px 0;color:#D8E4EF}
+.tl li:before{content:counter(t);position:absolute;right:0;top:2px;width:34px;height:34px;border-radius:50%;background:#00A9F4;color:#051C2C;font-weight:700;display:grid;place-items:center}
+.tl li:not(:last-child):after{content:"";position:absolute;right:16px;top:38px;bottom:-2px;width:2px;background:rgba(0,169,244,.4)}
+.tl b{color:#fff}
+.tip-quote{margin:22px 0 4px;padding:16px 18px;border-radius:12px;background:linear-gradient(135deg,rgba(0,169,244,.2),rgba(34,81,255,.25));border:1px solid rgba(0,169,244,.6);font-size:17px;line-height:1.9;color:#fff}
+.apr{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:6px 0 18px}
+.apr>div{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:14px;padding:18px 18px 16px;position:relative}
+.apr>div:nth-child(2){border-top-color:var(--cyan)}
+.apr>div:nth-child(3){border-top-color:#1E9E6A}
+.apr .l{width:46px;height:46px;border-radius:12px;background:var(--navy);color:var(--cyan);font-size:26px;font-weight:700;display:grid;place-items:center;margin-bottom:10px;direction:ltr}
+.apr h4{margin:0 0 6px;font-size:18px}
+.apr .q2{margin-top:10px;font-size:14px;color:var(--mute);border-top:1px dashed var(--line);padding-top:8px}
+.apr .q2 b{color:var(--blue)}
+.tree{display:flex;gap:14px;align-items:stretch;margin:12px 0;flex-wrap:wrap}
+.tree .root{flex:0 0 200px;background:var(--navy);color:#fff;border-radius:12px;padding:14px;display:grid;place-items:center;text-align:center;font-size:14px;line-height:1.8}
+.tree .br{flex:1;min-width:230px;display:grid;gap:8px}
+.tree .br>div{background:var(--card);border:1px solid var(--line);border-right:4px solid var(--cyan);border-radius:10px;padding:8px 12px;font-size:14px;line-height:1.8}
+.tree .br small{display:block;color:var(--mute)}
+.brand{display:flex;align-items:center;gap:14px;margin-bottom:20px;direction:ltr}
+.brand img{height:68px;width:auto;filter:drop-shadow(0 0 14px rgba(168,85,247,.55))}
+.bn{font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-weight:700;font-size:28px;letter-spacing:6px;color:#fff;line-height:1.1}
+.bn b{color:#A855F7;font-weight:700}
+.bs{display:flex;align-items:center;gap:8px;margin-top:6px;font-family:"Montserrat","Segoe UI",Arial,sans-serif;font-size:11px;letter-spacing:5px;color:#C9B8E8}
+.bs i{display:block;width:26px;height:1px;background:#A855F7}
+.pzbar{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:14px;color:#D5E1EC}
+.pzbar b{color:#fff}
+.pzbar button,.pzf button,.pz-box button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--cyan);background:transparent;color:var(--cyan);padding:3px 12px;font-size:13px}
+.pzbar button:hover,.pzf button:hover{background:rgba(0,169,244,.15)}
+.pzbar details{flex:1 0 100%;background:rgba(255,255,255,.07);border-radius:10px;padding:8px 12px}
+.pzbar summary{cursor:pointer;color:#fff}
+.pzbar table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+.pzbar td{padding:4px 8px;border-top:1px solid rgba(255,255,255,.14)}
+.pzb{display:inline-block;font-style:normal;font-size:11px;border-radius:99px;padding:0 9px;margin-inline-start:6px;background:var(--cyan);color:var(--navy);font-weight:700}
+.pzb.ai{background:#A855F7;color:#fff}
+.pzf{margin-top:8px;font-size:13px;color:var(--mute)}
+.pz-ov{position:fixed;inset:0;z-index:100;background:rgba(5,28,44,.94);display:grid;place-items:center;padding:20px;overflow:auto}
+.pz-box{background:var(--card);color:var(--ink);border-radius:16px;max-width:480px;width:100%;padding:24px;border:1px solid var(--line)}
+.pz-box h2{margin:0 0 6px;font-size:22px}
+.pz-box p{margin:0 0 12px;color:var(--mute);font-size:14px}
+.pz-box input[type=text]{width:100%;font:inherit;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-bottom:12px}
+.pz-ch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.pz-ch label{border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer;font-size:14px;display:flex;gap:6px;align-items:center}
+.pz-ch input{accent-color:var(--blue)}
+.pz-go{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important;padding:8px 22px!important;font-size:15px!important}
+.pz-sk{margin-inline-start:10px}
+.pz-note{font-size:12px;color:var(--mute);margin-top:12px}
+footer{text-align:center;color:var(--mute);font-size:13px;padding-bottom:30px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<div class="brand"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADYAAACgCAYAAABHep+DAAAIsElEQVR42u2dbYycVRXH/2dmdktLu2630qUV0tZWg40kGEQaCAGJEUI0JIr6BU0kMSGgiV9M1ETT4AcwkS+IIYIGxMQIBAVfWyhY2oYSDZi+2lJriYKrpIraWtzdmfn7Yc5NjseZfZnneeZ5zqQ3mdyZZ7Iz97fn5Z5znnvvAGfb2VaJJoP4EpICoA6gJSIcxHfWBgBVAyAi0gQgChkbjGRdRNoANpD8PoAJEaHCxmwk69qvJXmYnbaH5HIjybBQkyQPKNSb2u82cPWIUKtJ7lOYWdfvJnluGMk5qP0Ohu71cyHUMg2O5CqSL/WA8nDPk3xLZdXSQE2QfHEeqG5wY5WTnFG/lSR/s0AodrG56sAZSY2T/PUioVKbMXArSoczUGMk9/YJ5SX3K5LLSoMzUMtJ7soI5eGeKWUqMFDnktzp1ClrmzGSGxycgVpK8tmcJNULbgfJpYXDOagdBUF5tfw5yRGSUgicgRoluS1n9ZtPck+QrOlDcoXS/1iD5E8LllQvuEfsWPLKfJOkBg3l1fIHaUyZ4AyUkPzRgNRvPsk9ZMeWNVTaqh/6H5bb0vd/cSFB81yepq39wwAOA1gCoFlSoNPS7z8C4DE3vkzqeKFJ7wdtY03tj5N8e27zmqtdHBgwXIL6A8lNuedt86T7RXvDIyQ3FJaMGrjzB6CWSVLHSK4vPMM2cGtIHiwIbtbY1MaBlQ0KVksrqcFBdYF7K8nf5gSXoF4mua60Ao+DezEjXPq73xuXXl7VysBNZCgPWPXbUDpUF7hxLaX1U6U6XglJzQE3tojMetZIalPloHrUQp6aBy6p30GSF1b+BoWBW0Zyew+4BHWI5Plh7roYuHNMctpyfbkuPYdyQp3kk05yU4MIkwopa+nt2YaItABs18spl9slIq+QHNH344CZ5BAAbky82j+bOVGsgPv/qHMY/zCuvRYNSkxh9YArxtwSzmF0kdbnXBHmochQSVpLSP7OzF1/JXlBSBV00vqIAk1rv1WvNxCxGbBHFKhN8gzJd0SWVlLDFSRPGDXckbl6W/I8lga+Xh9pQn5B+3p0sIuTELV/xr0OC3aRA/l3GaZRBJj/zHZ0sF6tHh0sqd6fnQQlOlhSub0OaPOwqOJJAKeNCl6D6M2UBXaZCfovJFcNepKuFfR5T2o/DWASwE1lOpI8JbaO5D+N1A6RHC0jtCoiEP6my8e+HD3CT8HwBSRfN1H+NMkrhiV9uc3lZSdIrg2bSTt7e9ypZPhNBUklx81S9QT3NMlzIsMlqV2k85mF+4Wu0ZLodZD3al3Rwv3YlMMlIlxD+8tJ/ss5lB+GVUkHd4WBS5K7M7qnHNH+Bp3bWuYuzE3DAvcFV/7+E8k1wxJ2PehU8oHoUktz3ISu7aBRy0uHxZl80nnJ74WWmp3EzS4mknwjjxsYtbKlprd1v6uXZgCMA/hg1kJQ2XqcCkDbFCqlM1eVWeHKO57cY9TxsLFBiSgxK5U/mmuTAJZWqZiTBWyPuTYCYFl0sNROGbsbBbAii51VCWzUjGnagDIqWBr4peZaE8CZYVHFd5rnh0TkFEnp9/yPsidoEZEWyUkAl5i3Dmpfjyqx9P3vB7AKwKy+3p7Fvqo0OW8zk/MUyYmweZnJya5zCefdYaN7k48tNwvJUmS/PrK0Uhx4jzudZat9PyrUp5wK7jfVYYkK9T6Sp11JYEvIkoBxFhtJvurKAZ8P6TCMW19L8qirTN0bFcquinvBOYsn0k2JUHaVbjbowH/iJPV8qCOcetjVfQ7quKn6hoNKHvB25yhOkbwsql0lSV2t81TLuPXrQ07C7hbtkR7r7kciB7ffcHb17cjhUpqvNuvq7bZCHTUrBUKnIvc4h/HxyNJKtrXShEzUrcQSeXl6+qxLALzNpPmPakEm/PL0q1y9YmcZ9YsiZv1J7UcBTAE4pq/bUcHSDr+N5tpJEfl7lvpglSRmP7O08lkRzuNVc20ZyVE9Gzj8pp3XtG8C2ATgXe79cGBJ7fa615eVAVbEBL3aLJklyW0h864eIdV33G71LSHzry5B8BYHtjO9H3mdVILz66S2hg2Ena2dp7UNm2h+Jmyi6WztA5qTNc22/JujSy4Vcz5tpJZqH58YFrivdIH7cHRPmdTya87eToWeBtJJLPr8ji5bQs6LXAsRo5b3u2ng4dCRianjj5ibE2kCv3ZY7O1qB/bYMMWT202gfFIXseRma2X8h9LAH9V+Bp3FK+/Oc0xlgKWizm7N2ZJdXZxn3lamTk/jfytX66pezFmsShZS+CkTbFLVMAEdjQ6WbCqtrU/1yGNFSK7vvKvPJHS52dOStu2vrExoZQ74r881IHNyn7/ZPu0P6s9rbI0MUGMATusvwcGFROKcQjudzKcLVm5VFaw5+6ohpxp/rV91AnA3gEOaa11JckxEWvpomkcLQEPDqJ0AbleoQuPCLBnsanQO/vkqgDsATJHch06J+wg6Z3qsBPAejSo2q/S6QTWrBLbEeLU6gDX6mCvi6HUDUKoEVnOf0erhrkUfA51asoA13eBrc0hk4C3Lf7FtJtxkVzWU97sTuYFZaf8NwA3qthtVgMsCNmqeLxWRV9DZGLCvCnD9gNHFfCkFgYhMAbgWwHOLhGtUSWLWRc+YyOMNANcDeHwRcLmfOpaXC541DkUU9GMAHlS42QU6IlYBjF0Glk511qdyC4BvobM1sTnHwFtVUsWewarCUX9d+LMA7lLJtXvA1aoAJl0kVusCRwBt3cT9JQC36d+yi+rVq2Rj7JIV/x+ciDQV7j4AH1L7qxl7rJy7ry00iFW4ERH5JTqHjr+pf1/J09Mbi6kwiciswj0F4DqdFhpVBGt1cfcLgWuIyG50zl08oW+dqZK7r/UTOaha1kVkP4Ar0dmKP16ltOXrAH6GzpkAry3KrXZ20tZF5HWS12g2DkQ83L9X/aSoW0eSYVB1O6f1+/sQCcxELGfb2TZM7b+A+0RS8pEkNgAAAABJRU5ErkJggg==" alt="Nexus Code logo"><div class="bw"><div class="bn">NEXUS <b>CODE</b></div><div class="bs"><i></i>DEVELOPMENT LAB<i></i></div></div></div>
+<h1>رحلتي في الكورس: من القصة إلى شغل مهندس البيانات</h1>
+<p>كل درس بتعلمه هنا، ومعاه إزاي بطبقه في شغلي اليومي.</p>
+<div class="pzbar" id="pzbar"></div>
+</div></header>
+<nav class="tabs"><div class="wrap">
+<button id="b6" class="on" onclick="show('c6')">صندوق الأدوات الرقمي</button>
+<button id="b5" onclick="show('c5')">العلاقات والرفاهية</button>
+<button id="b4" onclick="show('c4')">التواصل المؤثر</button>
+<button id="b3" onclick="show('c3')">حل المشكلات</button>
+<button id="b2" onclick="show('c2')">المرونة والتكيف</button>
+<button id="b1" onclick="show('c1')">مقدمة الرحلة</button>
+</div></nav>
+<main><div class="wrap"><section id="c1" class="pane" hidden>
+
+<div class="mod"><b>الوحدة ١</b><h2>مقدمة رحلتك</h2></div>
+
+<div class="card">
+<h3>ليلى</h3>
+<div class="theme">المرونة مع التقنية والأدوات</div>
+<div class="row"><span>المشكلة</span>خايفة من التغيير المستمر في التكنولوجيا، وحاسة إنها مش قادرة تواكب.</div>
+<div class="apply" data-pz="1"><span>التطبيق في الداتا:</span> الأدوات الجديدة بتظهر كل يوم (أدوات الأتمتة، مخازن البيانات السحابية). مش لازم ألحق كل حاجة. أختار أداة واحدة مفيدة لمشروعي الحالي وأتعلمها خطوة بخطوة، وأعتبر التغيير جزء طبيعي من المجال.</div>
+</div>
+
+<div class="card">
+<h3>فكتوريا</h3>
+<div class="theme">حل المشكلات باستقلالية</div>
+<div class="row"><span>المشكلة</span>واجهت مشروع جديد، فاتعلمت تعتمد على نفسها، وتفكر بشكل إبداعي، وتستشير غيرها.</div>
+<div class="apply" data-pz="2"><span>التطبيق في الداتا:</span> لما مسار البيانات (Pipeline) يقع أو استعلام (SQL) يبقى بطيء، أقسم المشكلة: أفحص السجلات (Logs)، أحدد نقطة الفشل بدقة، أجرب أكتر من حل. ولو احتجت مساعدة أروح لزميلي ومعايا محاولاتي والحلول المقترحة، فأستفيد أسرع وأعمق.</div>
+</div>
+
+<div class="card">
+<h3>جيري</h3>
+<div class="theme">التواصل الفعّال وطلب الملاحظات</div>
+<div class="row"><span>المشكلة</span>بعت رسالة طويلة جداً لمديره ومحدش فهم المطلوب منها، وكان خايف يطلب ملاحظات (Feedback).</div>
+<div class="apply" data-pz="3"><span>التطبيق في الداتا:</span>
+<b>في التقارير:</b> أبدأ بالنتيجة والتأثير الأول، مثلاً: «توقف المسار الفلاني أثّر على تقارير المبيعات، السبب كذا، والحل المقترح ياخد ساعة». التفاصيل التقنية بعد كده.<br>
+<b>في الملاحظات:</b> أسأل مديري والفريق اللي بيستخدم بياناتي: هل البيانات واضحة ومفيدة؟ في حاجة أحسنها في شكل الجداول أو تصميم قاعدة البيانات (Schema)؟</div>
+</div>
+
+<div class="sum">
+<h3>الخلاصة</h3>
+<ul>
+<li>أتعلم أداة واحدة في المرة، من غير ضغط المواكبة.</li>
+<li>أحاول وأحلل قبل ما أسأل، وأسأل ومعايا شغلي.</li>
+<li>أقول النتيجة الأول، وأطلب الملاحظات بدون خوف.</li>
+</ul>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الوحدة ٢</b><h2>قيّم مهاراتك (Reflect on your skills)</h2></div>
+
+<div class="card">
+<h3>المقالة الأولى: الوكلاء والروبوتات ونحن</h3>
+<div class="theme">تقرير معهد ماكنزي العالمي، نوفمبر 2025 — شراكة المهارات في عصر الذكاء الاصطناعي</div>
+</div>
+
+<div class="stats">
+<div class="stat"><b>57%</b><small>من ساعات العمل في أمريكا ممكن تتأتمت نظرياً. ده مش توقع بفقد وظائف.</small></div>
+<div class="stat"><b>72%</b><small>من المهارات بتُستخدم في شغل ممكن يتأتمت وشغل لازم بشر يعمله.</small></div>
+<div class="stat"><b>~7×</b><small>زيادة الطلب على طلاقة الذكاء الاصطناعي (AI Fluency) في سنتين.</small></div>
+<div class="stat"><b>2.9 تريليون $</b><small>قيمة ممكنة سنوياً بحلول 2030 لو أُعيد تصميم مسارات العمل كاملة.</small></div>
+</div>
+
+<div class="card">
+<h3>الفصل الأول: شغل المستقبل شراكة</h3>
+<div class="row"><span>الفكرة</span>الوكلاء الأذكياء (AI Agents) بياخدوا المهام المعرفية المتكررة، والبشر بيوجهوا ويراجعوا ويضمنوا الجودة. الأدوار بتتغير ومش بتختفي بالضرورة.</div>
+<div class="apply"><span>عندي كمهندس بيانات:</span> الشغل المتكرر (تنظيف يدوي، كود جاهز متكرر) هيقل عليا، وقيمتي هتتحول لتصميم مسارات البيانات (Pipelines) ومراجعة اللي الوكلاء بيطلعوه.</div>
+</div>
+
+<div class="card">
+<h3>الفصل الثاني: المهارات بتتطور ومش بتختفي</h3>
+<div class="row"><span>الفكرة</span>التقرير بيقيس تعرّض كل مهارة للأتمتة بمؤشر اسمه مؤشر تغيّر المهارات (Skill Change Index). المهارات الرقمية ومعالجة المعلومات أكتر تعرضاً، ومهارات الرعاية والتواصل أقل. وفي نفس الوقت الطلب بيزيد على ضمان الجودة وتحسين العمليات وتحليل الأعمال.</div>
+<div class="apply"><span>عندي كمهندس بيانات:</span> لغة الاستعلام (SQL) والبرمجة ظاهرة في الرسم كمهارات متأثرة، فمش كفاية أكتب كود. لازم أتعلم أشتغل مع المساعدين الأذكياء وأراجع شغلهم، وأقوّي المهارات الثمانية الثابتة: التواصل، الإدارة، العمليات، حل المشكلات، القيادة، الانتباه للتفاصيل، علاقات العملاء، والكتابة.</div>
+</div>
+
+<div class="card">
+<h3>الفصل الثالث: إعادة تصميم مسار العمل كله</h3>
+<div class="row"><span>الفكرة</span>حوالي 90% من الشركات استثمرت في الذكاء الاصطناعي لكن أقل من 40% شافت مكسب واضح. السبب إنهم بيحطوا الأداة على مهمة واحدة بدل ما يعيدوا تصميم المسار بالكامل (Workflow).</div>
+<div class="apply"><span>عندي كمهندس بيانات:</span> التقرير ذكر في حالة الشركة الدوائية إن هندسة البيانات المتينة من مفاتيح النجاح، وحالة البنك ظهر فيها إن المطور بيوجه أكتر من 15 وكيل. يعني أساس البيانات (Data Foundation) هو اللي بيشغل الوكلاء، وده شغلي.</div>
+<div class="note">إضافة مني ومش من التقرير: ممكن أصمم مسارات تغذي الوكلاء بسياق نضيف (زي RAG وقواعد البيانات المتجهية). ده تطبيق مقترح للمجال، والتقرير نفسه ما ذكرش التفاصيل دي.</div>
+</div>
+
+<div class="card">
+<h3>الفصل الرابع: القيادة والثقة</h3>
+<div class="row"><span>الفكرة</span>الرقابة بتتحول من مراجعة كل ناتج لوضع سياسات والتحقق من منطق الذكاء الاصطناعي ومعالجة الاستثناءات، مع اختبار التحيز والتحقق من الأداء.</div>
+<div class="apply"><span>عندي كمهندس بيانات:</span> أنا خط الدفاع الأول عن جودة البيانات (Data Quality) وحوكمتها (Data Governance) ومراقبة الأداء، لأن الوكيل اللي بياخد بيانات غلط هياخد قرارات غلط.</div>
+</div>
+
+<div class="card">
+<h3>المقالة التانية: ثلاث مهارات لا غنى عنها</h3>
+<div class="theme">نشرة ماكنزي للجيل زد (Mind the Gap) — الملخص من اللي بعتّه</div>
+<div class="skill">
+<h4>١. التفكير النقدي (Critical Thinking)</h4>
+<div class="row"><span>الفكرة في المقالة</span>التفكير النقدي مش مجرد استهلاك للمعلومات. هو تفكير هادف وعقلاني وتأملي لمواجهة المواقف المعقدة، وطرح الأسئلة الصح أحياناً بيبقى أهم من الإجابات نفسها.</div>
+<div class="apply" data-pz="4"><span>تطبيقه كمهندس بيانات:</span>
+<ul>
+<li><b>التحقق من صحة البيانات (Data Validation):</b> مش معنى إن مسار البيانات (Pipeline) اشتغل وكتب البيانات في مخزن البيانات (Data Warehouse) إن الشغل تمام. التفكير النقدي بيخليك تتشكك وتسأل: «هل الأرقام دي منطقية مقارنة باليوم اللي فات؟ هل في قيم شاذة (Outliers) غير مبررة؟»</li>
+<li><b>تصميم المعمارية (Architecture):</b> بدل ما تنقل كود قديم وتنفذه وخلاص، قف وفكر: «هل الأدوات دي هي الأنسب لحجم البيانات ده؟ وهل التكلفة على السحابة (Cloud Cost) هتبقى معقولة ولا في طريقة أضمن وأكفأ؟»</li>
+</ul></div>
+</div>
+
+<div class="skill">
+<h4>٢. الفضول الفكري (Intellectual Curiosity)</h4>
+<div class="row"><span>الفكرة في المقالة</span>في بيئة العمل الحديثة (وخصوصاً عن بُعد أو مع دخول تقنيات حديثة)، الفضول المستمر وسؤال الأسئلة اللي ما كنتش تعرف إنك تقدر تسألها هو اللي بيصنع الفرق، لأن التعلم المستمر بيتفوق دايماً على المعرفة الثابتة.</div>
+<div class="apply" data-pz="5"><span>تطبيقه كمهندس بيانات:</span>
+<ul>
+<li><b>مواكبة التكنولوجيا:</b> مجال هندسة البيانات بيتطور بسرعة مرعبة (زي أحدث أدوات تنسيق المهام (Orchestration)، وتقنيات معالجة البيانات اللحظية (Streaming) زي (Kafka) و(Flink)، وقواعد البيانات المتجهية (Vector Databases) للذكاء الاصطناعي). الفضول بيخليك تجرب الحاجات دي في مشاريع جانبية (Side Projects) وتفهم شغالين إزاي من جوه.</li>
+<li><b>فهم الأعمال (Business Acumen):</b> ما تقفش عند حدود الجداول والاستعلامات (Queries). اسأل دايماً محللي البيانات (Data Analysts) ومديري المنتج (Product Managers): «إيه المشكلة اللي البيانات دي هتحلها للشركة؟» الفضول في فهم أهداف الشركة بيخليك تبني مسارات بيانات تخدم فعلاً، مش مجرد جداول منقولة.</li>
+</ul></div>
+</div>
+
+<div class="skill">
+<h4>٣. المرونة (Flexibility)</h4>
+<div class="row"><span>الفكرة في المقالة</span>المقالة بتشير إلى نصيحة الرؤساء التنفيذيين: الإنسان مبيخرجش بشهادة واحدة يشتغل بيها طول عمره. العقلية اللازمة هي المرونة والمرونة النفسية (Flexibility and Resilience) للتكيف مع تغير الوظائف والأدوات باستمرار.</div>
+<div class="apply" data-pz="6"><span>تطبيقه كمهندس بيانات:</span>
+<ul>
+<li><b>التعامل مع التغيير المفاجئ:</b> تغير هيكل الجداول (Schema) المفاجئ من فريق تطوير البرمجيات (Software Development)، أو تعديل متطلبات أصحاب المصلحة (Stakeholders) في آخر لحظة، دي حاجات بتحصل كل يوم. المرونة بتخليك تتعامل مع الضغط ده بهدوء وتعيد توجيه خطتك بدل ما تعطل الشغل.</li>
+<li><b>التعامل مع أخطاء الإنتاج (Production Incidents):</b> لما مسار بيانات يقع بالليل ويضرب كل التقارير، المرونة العقلية والهدوء هما اللي بيخلوك تتبع الخطوات بشكل منظم لحد ما توصل للحل، بدل الدخول في حالة توتر تعطل الحل.</li>
+</ul></div>
+</div>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك يا خالد</h3>
+اختار مهارة واحدة من الثمانية الثابتة (التواصل، حل المشكلات، الانتباه للتفاصيل...) واكتب بكلامك: إزاي هتستخدمها في مشروعك الجاي مع مساعد ذكي، وإيه الجزء اللي هتسيبه للمساعد والجزء اللي هتراجعه بنفسك؟ ابعتلي إجابتك وأنا هضيفها هنا.
+</div>
+
+<div class="sum">
+<h3>خلاصة الوحدة ٢</h3>
+<ul>
+<li>شغلي بيتحول من كتابة الكود لتصميم المسارات ومراجعة اللي الوكلاء بيطلعوه.</li>
+<li>أنمّي طلاقتي في الذكاء الاصطناعي وأحافظ على المهارات الثابتة.</li>
+<li>جودة البيانات وحوكمتها هي ميزتي، لأن الوكلاء بتعتمد عليها.</li>
+<li>أفكر نقدياً، وأفضل فضولي، وأفضل مرن.</li>
+</ul>
+</div>
+
+<div class="next">الوحدة الجاية هتتضاف هنا أول ما تجيبها 👇</div>
+
+</section>
+
+<section id="c2" class="pane" hidden>
+<div class="hero"><small>الكورس ٢ من البرنامج</small>
+<h2>المرونة والتكيف <span class="en">(Adaptability &amp; Resilience Course)</span><span class="badge">مكتمل</span></h2>
+<p>التكيف هو «القدرة الخارقة» في بيئة العمل المتغيرة. مش مجرد رد فعل للتحديات، ده استعداد مسبق ليها.</p></div>
+
+<div class="mod"><b>الدرس ١</b><h2>مقدمة الكورس</h2></div>
+
+<div class="pts">
+<div class="pt"><b>الأهمية</b>الأشخاص القابلون للتكيف هم الأكتر طلباً وفرصة للتوظيف.</div>
+<div class="pt"><b>الخبر السار</b>التكيف مش صفة بتتولد بيها وبس. هو مهارة وعادات ممكن تتعلمها وتطورها.</div>
+</div>
+
+<div class="card">
+<h3>هتتعلم إيه في الكورس؟</h3>
+<div class="theme">أربع محطات أساسية</div>
+<ol class="steps">
+<li><div><h4>أهداف تعلم ذات معنى</h4>وضع أهداف واضحة ليها معنى عند اكتساب أي مهارة جديدة.
+<div class="app" data-pz="7">في شغلي: أحدد لكل أداة جديدة (زي (Azure)) هدف محدد بدل ما أتعلم بشكل عشوائي. <i>(اقتراح مني)</i></div></div></li>
+<li><div><h4>سلوكيات المتعلمين الأكفاء</h4>بناء السلوكيات اللي بيمارسها المتعلمون الأكفاء.
+<div class="app" data-pz="8">في شغلي: أفرّق بين إني أتفرج على شرح وإني أطبّق على مشروعي. <i>(اقتراح مني)</i></div></div></li>
+<li><div><h4>حلقة العادة <span class="en">(Habit Loop)</span></h4>تحويل السلوكيات دي لعادات ثابتة باستخدام حلقة العادة.
+<div class="app">تفاصيل الحلقة هتتضاف هنا لما تخلّص الدرس الخاص بيها.</div></div></li>
+<li><div><h4>نموذج <span class="en">APR</span></h4>التعامل مع المواقف الصعبة بعقلية مرنة.
+<div class="app">APR هو اختصار لـ: الوعي (Awareness)، التوقف (Pause)، إعادة الصياغة (Reframe). تفاصيل كل خطوة هتتضاف في الموديول ٣.</div></div></li>
+</ol>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+فكّر في موقف صعب حصل لك في تعلم أو شغل (مشروع وقع، أداة جديدة صعبة). رد فعلك كان إيه؟ ولو كنت مستعد قبلها، كنت هتعمل إيه مختلف؟ اكتب إجابتك وابعتهالي.
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٢</b><h2>التأمل في المرونة والتكيف <span class="en">(Reflecting on adaptability and resilience)</span></h2></div>
+
+<div class="card">
+<h3>قصة ميشيل</h3>
+<div class="theme">الدرس بيحكي قصة ميشيل، وبيطلع منها خمس ملاحظات وتطبيقات عملية للمرونة والتكيف</div>
+<ol class="steps">
+<li><div><h4>التخلص من «عقلية الخبير»</h4>
+<div class="row"><span>المشكلة</span>فرض الرأي والضغط الدائم لكونك الشخص الوحيد اللي معاه الإجابة في بداية أي دور جديد أو مهمة معقدة.</div>
+<div class="row"><span>التطبيق العملي</span>اعترف إنك مش مجبر تعرف كل حاجة لوحدك، وأشرك فريقك في التفكير بدل القيادة الأحادية. المرونة بتبدأ بقبول إن التعاون يسبق «الظهور بمظهر الخبير الدائم».</div>
+<div class="app" data-pz="9">في شغلي (اقتراح مني): أطلب مراجعة من زميل على تصميم الجداول قبل ما أبنيه، وأقول «مش عارف» بدل ما أخمّن.</div></div></li>
+<li><div><h4>الاستثمار في العلاقات الإنسانية الحقيقية</h4>
+<div class="row"><span>المشكلة</span>التعامل مع التوترات المهنية بجفاف أو ترك الأمور تتفاقم.</div>
+<div class="row"><span>التطبيق العملي</span>خصص وقت للتواصل الشخصي مع زملائك وشاركهم تحدياتك أو اللي بيدّيك طاقة. الانفتاح المتوازن بيبني روابط ثقة قوية بتحل نص مشاكل العمل اليومية وبتخلي الفريق أكتر مرونة في الأوقات الصعبة.</div>
+<div class="app" data-pz="10">في شغلي (اقتراح مني): أبني علاقة كويسة مع فريق التطوير ومحللي البيانات قبل ما يحصل تغيير مفاجئ في هيكل الجداول.</div></div></li>
+<li><div><h4>وضع حدود واضحة وتجنب الاحتراق الوظيفي</h4>
+<div class="row"><span>المشكلة</span>الانغماس في الشغل من غير توقف، وكتر الاجتماعات المتاحة طول اليوم، والشغل لحد وقت متأخر.</div>
+<div class="row"><span>التطبيق العملي</span>حافظ على مساحات وقت للتعافي وتجديد الطاقة، وحط حدود صحية لتوقيتات الشغل. الإرهاق المستمر بيقتل القدرة على الابتكار والتكيف.</div>
+<div class="app" data-pz="11">في شغلي (اقتراح مني): أحدد وقت واضح للتعلم والمشاريع الجانبية، وأفصل عن الشغل بعده.</div></div></li>
+<li><div><h4>مواجهة الصراع بمرونة بدل تجنبه</h4>
+<div class="row"><span>المشكلة</span>السكوت عن المشاكل أو تأجيل ترتيب الأولويات خوفاً من الصراع أو النقاشات الصعبة.</div>
+<div class="row"><span>التطبيق العملي</span>درّب نفسك على الكلام بصراحة وبناءً، وتحدّى الوضع الراهن لو بيعطّل الأداء، بدل التهرب من المواجهة.</div>
+<div class="app" data-pz="12">في شغلي (اقتراح مني): لما متطلبات أصحاب المصلحة (Stakeholders) تتعارض، أطرح الأولويات على الطاولة بدل ما أنفذ الاتنين بالعافية.</div></div></li>
+<li><div><h4>ربط الشغل بالمعنى والهدف الشخصي</h4>
+<div class="row"><span>المشكلة</span>أداء المهام بشكل روتيني بيفقد الفريق الشغف والارتباط بالنتيجة النهائية.</div>
+<div class="row"><span>التطبيق العملي</span>اتكلم بانتظام مع فريقك عن «السبب» وراء اللي بتعملوه، وإزاي أهداف المؤسسة بتنعكس على المعنى الشخصي والدافع الداخلي لكل فرد.</div>
+<div class="app" data-pz="13">في شغلي (اقتراح مني): أسأل قبل كل جدول أو مسار: مين هيستخدمه، ولأي قرار؟</div></div></li>
+</ol>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+من الخمس نقاط دي، أنهي نقطة أصعب عليك دلوقتي؟ ولو اخترت واحدة تبدأ بيها الأسبوع ده، هتبقى إيه وهتعمل إيه بالظبط؟ اكتب إجابتك وابعتهالي.
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٣</b><h2>رحلتك نحو التكيف والمرونة <span class="en">(Your Adaptability &amp; Resilience Journey)</span></h2></div>
+
+<div class="card">
+<h3>مفهوم التكيف الأساسي</h3>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>حالة مش صفة</b>التكيف مش صفة ثابتة (Trait). هو حالة (State) تقدر تطورها وتزودها بالتدريج بالممارسة المستمرة.</div>
+<div class="pt"><b>زي العضلة</b>المرونة تشبه العضلة البشرية: بتبقى أقوى بمرور الوقت وكتر الاستخدام ومواجهة التحديات.</div>
+<div class="pt"><b>خبرة فطرية</b>مش محتاج تتعلم التكيف من الصفر، لأنك بتتعلم وتنمو وتتكيف من يوم ما اتولدت.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>فوايد المرونة</h3>
+<div class="theme">في أوقات التغيير والضغط، العقلية المرنة بتحقق لك:</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>توتر أقل</b>التعامل مع الضغوط العالية بهدوء واتزان.</div>
+<div class="pt"><b>علاقات أحسن</b>بناء تواصل أقوى وأكتر إيجابية مع اللي حواليك في الشغل.</div>
+<div class="pt"><b>قرارات أفضل</b>القدرة على التفكير بوضوح وبسلاسة وسط الأزمات.</div>
+<div class="pt"><b>شغل أكتر متعة</b>تحويل التحديات اليومية من أعباء لتجارب مجزية وممتعة.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>المحركات الثلاثة الرئيسية للتكيف والمرونة</h3>
+<div class="theme">(Explore the three major drivers of adaptability and resilience)</div>
+<ol class="steps">
+<li><div><h4>تفعيل التعلم <span class="en">(Activate learning)</span></h4>
+<div class="row"><span>المعنى العملي</span>إنك تحدد بوعي إنت عايز تتعلم إيه، وتعمل عادات إيجابية تدعم التعلم ده، خصوصاً وقت الأزمات والضغط لما الواحد بيحس إنه مش فاضي.</div>
+<div class="row"><span>الموقف</span>شركتك قررت تستخدم نظام أو أداة تكنولوجية جديدة، وفجأة كل الشغل بقى ماشي بيها، وإنت حاسس بضغط وتوتر لأنك مش فاهمها.</div>
+<div class="row"><span>التصرف بمرونة</span>بدل ما تقاوم أو تتذمر وتقول «أنا مش هعرف أتعلم ده دلوقتي»، تقرر بوعي تخصص ربع ساعة كل يوم الصبح لتعلم الأداة دي، وتعتبر التحدي ده فرصة مش عقبة.</div>
+<div class="app" data-pz="14">في شغلي (اقتراح مني): أخصص ربع ساعة يومياً لأداة جديدة في مشروعي الحالي بدل ما أستنى لما أبقى فاضي.</div></div></li>
+<li><div><h4>تعزيز التكيف والمرونة الشخصية <span class="en">(Strengthen personal adaptability and resilience)</span></h4>
+<div class="row"><span>المعنى العملي</span>بناء قوتك النفسية والذهنية، بحيث لما يحصل ظرف طارئ (تغيير في الإدارة، تقليل في الميزانية، أو مشروع جديد تماماً اتطلب منك فجأة) ما ترتبكش وتفقد السيطرة، بل تقدر تتعامل مع الضغط وتعدّل خطتك بسرعة.</div>
+<div class="row"><span>الموقف</span>كلفوك بمشروع كبير وكنت عامل خطة معينة، وفجأة العميل غيّر كل المتطلبات قبل تسليم المشروع بأسبوع.</div>
+<div class="row"><span>التصرف بمرونة</span>بدل ما تدخل في حالة إحباط أو عصبية، تاخد نفس عميق وتقول: «تمام، التحدي اتغير، خلونا نعدل الأولويات ونشوف نقدر نخلص إيه بالموارد المتاحة وبأقل ضغط ممكن».</div>
+<div class="app" data-pz="15">في شغلي (اقتراح مني): لما يتغير هيكل الجداول (Schema) أو المتطلبات في آخر لحظة، أرتب الأولويات وأحدد اللي ينفع يخلص بدل ما أتوتر.</div></div></li>
+<li><div><h4>التعزيز بالهدف والمعنى <span class="en">(Reinforce with purpose)</span></h4>
+<div class="row"><span>المعنى العملي</span>لما الشغل يبقى روتيني أو ضاغط ومرهق، تفتكر دايماً «ليه أنا بعمل الشغل ده؟» و«إيه القيمة اللي بقدمها؟» عشان ترجع تشحن طاقتك وشغفك.</div>
+<div class="row"><span>الموقف</span>حاسس بملل وإرهاق شديد من كتر المهام الإدارية المكتوب عليك تنجزها يومياً من غير راحة.</div>
+<div class="row"><span>التصرف بمرونة</span>تفكر نفسك إن المهام دي هي اللي بتساعد فريقك يشتغل بسلاسة، أو إنها بتطوّر مهاراتك القيادية اللي هتفيدك في مسيرتك المستقبلية. الربط بالهدف ده بيحول الشغل من مجرد «وجع دماغ» لـ«خطوة حقيقية لقدام».</div>
+<div class="app" data-pz="16">في شغلي (اقتراح مني): لما أحس بملل من التوثيق والتنضيف المتكرر للبيانات، أفتكر إنه بيبني ملف أعمالي (Portfolio) وبيخلي البيانات موثوقة لكل اللي هيستخدمها.</div></div></li>
+</ol>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+من المحركات التلاتة (تفعيل التعلم، المرونة الشخصية، الهدف والمعنى)، أنهي واحد حاسس إنه أضعف عندك دلوقتي؟ واكتب موقف حقيقي حصل لك قريب، وإيه كان تصرفك، وإيه اللي كنت هتعمله بشكل مختلف. ابعتهولي وأضيفه.
+</div>
+
+<div class="hero" style="margin-top:40px"><small>الموديول ٢</small>
+<h2>أهداف التعلم <span class="en">(Module 2: Learning Objectives)</span></h2>
+<p>الموديول بيناقش حاجتين: وضع نوايا التعلم، وطرق تحسين قدرتك على التعلم بالتركيز على الرحلة والربط بالمعنى.</p></div>
+
+<div class="mod"><b>الموضوع ١</b><h2>وضع نوايا التعلم <span class="en">(Set learning intentions)</span></h2></div>
+
+<div class="card">
+<h3>ليه نضع نوايا التعلم؟ <span class="en">(Why Set Intentions?)</span></h3>
+<div class="theme">الفرق بين الأهداف وأهداف التعلم</div>
+<div class="row"><span>الأهداف المعتادة</span>في حياتنا اليومية بنعتاد نضع أهداف معتادة (مثل: ممارسة الرياضة 3 مرات أسبوعياً، تحقيق الأهداف الربع سنوية في العمل، أو تعلم لغة جديدة).</div>
+<div class="row"><span>الجديد</span>الأبحاث بتثبت إن وضع نية واضحة للتعلم بيخلي عملية التعلم نفسها أكتر كفاءة ومتعة ونجاحاً.</div>
+<div class="app" style="margin-top:12px" data-pz="17">في شغلي (اقتراح مني): هدف مثل «أخلص كورس هندسة البيانات» هدف أداء. أما نية التعلم فتبقى مثلاً: «أفهم إزاي مسار البيانات بيتبني من أوله لآخره وأطبقه على مشروعي».</div>
+</div>
+
+<div class="card">
+<h3>الأخطاء التلاتة الشائعة اللي بتعطل التعلم</h3>
+<ol class="steps">
+<li><div><h4>التركيز المفرط على هدف الأداء النهائي</h4>بدل الاستمتاع والتركيز على رحلة التعلم نفسها.</div></li>
+<li><div><h4>نوايا تعلم غير حقيقية أو بلا معنى شخصي</h4>نوايا مش نابعة منك ولا ليها معنى بالنسبة لك.</div></li>
+<li><div><h4>الخطأ الأكبر: عدم تخصيص أي وقت للنوايا أصلاً</h4>إنك ما تخصصش أي وقت من الأساس لوضع أي نوع من النوايا!</div></li>
+</ol>
+</div>
+
+<div class="card">
+<h3>ليه النوايا بتعمل كل ده؟</h3>
+<div class="theme">الآلية العصبية والنفسية</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>تجاوز المشتتات</b>عقولنا قدرتها محدودة على الانتباه وسط عالم مليان مشتتات. تحديد النوايا بوعي بيساعدنا «نخترق الضوضاء» ونفضل مركزين تماماً على اللي مهم شخصياً.</div>
+<div class="pt"><b>الملاحة والصمود</b>التركيز مش بس بيساعدنا نتخيل النتيجة النهائية، لكن كمان ندير رحلة التعلم ونقيّم ونعدّل مسارنا وقت الحاجة.</div>
+<div class="pt"><b>الاستمرار رغم الفشل</b>لما تواجه تحدي وما تنجحش من المحاولة الأولى أو التانية أو التالتة، الطاقة والتركيز الموجهين نحو نيتك هما اللي هيساعدوك تلاقي طريق للخروج من التحدي وتكمل لقدام بمتعة.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>النتيجة النهائية</h3>
+<div class="theme">سواء كنت بتتعلم مهارة تقنية جديدة أو بتتعلم إزاي تبقى مدير أحسن، نية التعلم بتحقق لك:</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>رؤيتك وهدفك</b>تحقيق رؤيتك وهدفك.</div>
+<div class="pt"><b>تجربة أحسن</b>تحسين تجربتك الشخصية في التعلم.</div>
+<div class="pt"><b>معنى وقوة أكبر</b>جعل التعلم ذا معنى وقوة أكبر.</div>
+</div>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+اختار حاجة بتتعلمها دلوقتي (كورس، أداة، مشروع). اكتب الهدف اللي موضوع ليها أولاً، وبعدين اكتب نية التعلم بكلامك: هتتعلمها ليه؟ وإيه المعنى الشخصي بالنسبة لك؟ وبعدين قارن الاتنين.
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الموضوع ٢</b><h2>التركيز على الرحلة والربط بالمعنى</h2></div>
+
+<div class="card">
+<h3>صياغة أو تأطير نوايا التعلم <span class="en">(Framing our intentions)</span></h3>
+<div class="theme">استكشف طرق تحسين قدرتك على التعلم بالتركيز على الرحلة والربط بالمعنى</div>
+<div class="row"><span>النقطة الجوهرية</span>الأشخاص الأكتر تكيفاً مش هم اللي بيضعوا نوايا بكثرة، لكن هم اللي بيصوغوا نواياهم بالطريقة الصحيحة. وفي طريقتين أساسيتين لتأطير النوايا.</div>
+</div>
+
+<div class="card">
+<h3>١. التركيز على الرحلة <span class="en">(Focus on the journey)</span></h3>
+<div class="row"><span>المفهوم في الكورس</span>إعطاء الأولوية لتجربة التعلم نفسها كنية تعلم، بدل التركيز المطلق على هدف الأداء النهائي. مثال الكورس: «أريد أن أتعلم لعب السوفتبول» بدل «أريد الفوز بالكأس».</div>
+<div class="apply" data-pz="18"><span>التطبيق العملي في هندسة البيانات:</span>
+<div class="cmp">
+<div class="bad"><b>الخطأ (التركيز على النتيجة فقط)</b>«هدفي أخلص مسار البيانات (Pipeline) وأسلم المشروع بكرة الصبح عشان المدير ما يعترضش.» ده بيخليك متوتر وعرضة للاحتراق لو ظهرت أخطاء تقنية.</div>
+<div class="good"><b>الصحيح (التركيز على الرحلة والتعلم)</b>«هدفي هو فهم وتصميم معمارية مسار البيانات (Data Pipeline Architecture) الجديدة دي بعمق، واستكشاف أفضل طريقة للتعامل مع البيانات اللحظية (Streaming Data) بكفاءة أثناء بنائها.»</div>
+</div>
+<div class="row" style="margin-bottom:0"><span>النتيجة</span>لما تواجه أخطاء (Bugs) أو مشاكل في الأداء، مش هتحس بالإحباط. هتتعامل معاها كجزء ممتع من عملية التعلم والتطوير التقني.</div></div>
+</div>
+
+<div class="card">
+<h3>٢. الربط بالمعنى <span class="en">(Link to meaning)</span></h3>
+<div class="row"><span>المفهوم في الكورس</span>ربط تجربة التعلم بشيء ذي قيمة ومعنى شخصي، بيديك إحساس بالتوجيه الذاتي وبيزود شغفك واهتمامك.</div>
+<div class="apply" data-pz="19"><span>التطبيق العملي في هندسة البيانات:</span>
+<div class="cmp">
+<div class="bad"><b>الخطأ (فقدان المعنى)</b>«أنا مضطر أتعلم أداة تنسيق المهام (Orchestration) الجديدة دي (زي Airflow أو Dagster) عشان الشركة فرضتها علينا وخلاص.»</div>
+<div class="good"><b>الصحيح (الربط بالمعنى الشخصي)</b>«لو تعلمت أجدول وأدير مسارات البيانات باحترافية وسرعة، هقدر أنقذ الفريق من الأعطال المتكررة، وأضمن إن بيانات التحليلات توصل لعلماء البيانات (Data Scientists) في وقتها وبأعلى جودة، عشان تساعد الشركة تاخد قرارات صح.»</div>
+</div>
+<div class="row" style="margin-bottom:0"><span>النتيجة</span>الربط بالهدف الأسمى ده بيغيّر نظرتك للمهمة التقنية تماماً، وبيحولها من «وجع دماغ روتيني» إلى «دور حاسم ومؤثر في المؤسسة».</div></div>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+خد هدف أداء عندك دلوقتي (زي «أخلص الكورس» أو «أسلم المشروع»). أعد صياغته مرتين: مرة بتركز فيها على الرحلة، ومرة بتربطه بمعنى شخصي ليك. أنهي صياغة حسيت إنها شدّتك أكتر ولو إيه السبب؟ ابعتلي إجابتك وأضيفها.
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الموضوع ٣</b><h2>نوايا التعلم وأهداف الأداء <span class="en">(Learning intentions and performance goals)</span></h2></div>
+
+<div class="card">
+<h3>١. الفارق الأساسي: نوايا التعلم مقابل أهداف الأداء</h3>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>نوايا التعلم (Learning Intentions)</b>التركيز على بناء مهارات ومعارف جديدة، والاستمتاع بالتجربة، والتجريب لما تكون «مبتدئ» في حاجة لسه ما تعرفهاش. التركيز هنا على جودة التعلم مش النتيجة الفورية.
+<div class="note">في الداتا: لما تقرر تتعلم تقنية جديدة كلياً لم تستخدمها قبل كده، زي أداة تنسيق مهام (Orchestration) جديدة (Prefect أو Apache Airflow 3)، أو مكتبة بيانات (Polars)، أو نظام تخزين (Delta Lake أو Iceberg). هدفك مش تسليم مشروع كامل، لكن استكشاف الأداة وفهم الصياغة (Syntax) وتجربة طريقة عملها.</div></div>
+<div class="pt"><b>أهداف الأداء (Performance Goals)</b>أهداف مرتبطة بأرقام أو نتائج محددة وواضحة (زي تحقيق نسبة مبيعات معينة). بتكون مفيدة جداً بس لما تكون أتقنت المهارات اللازمة قبل كده.
+<div class="note">في الداتا: «تقليل زمن معالجة مسار الـ ETL بنسبة 40% الربع ده» هدف أداء ما ينفعش تحطه بنجاح إلا لو عندك خبرة كافية في أدوات ضبط الأداء (Performance Tuning) والتحسين (Optimization).</div></div>
+</div>
+<div class="apply" style="margin-top:14px"><span>الخطأ الشائع:</span> فرض هدف أداء بدري أوي، زي بناء مسار بيانات إنتاجي معقد بأداء خارق في أول تجربة ليك مع أداة ما تعرفهاش. ده بيصيبك بالإحباط السريع والاستسلام.</div>
+</div>
+
+<div class="card">
+<h3>٢. الدروس المستفادة من علم الأعصاب وعلم النفس <span class="en">(Did You Know?)</span></h3>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>متعة الاكتشاف (علم الأعصاب)</b>الدماغ البشري مبرمج يحس بمتعة طبيعية عند الفضول والاستكشاف. التركيز على أهداف الأداء قبل الأوان بيحط ضغط على الدماغ و«بيختصر» دورة التعلم الطبيعية، وده بيقلل جودة استيعابك للمهارات على المدى الطويل.</div>
+<div class="pt"><b>التركيز على الرحلة (علم النفس)</b>الدراسات النفسية بتأكد إن التركيز على الرحلة والعملية نفسها بدل النتيجة النهائية بيرفع تركيزك ومتعتك. ولو بتنظر للتعلم كعبء تقيل نفسك تخلص منه، حاول تعكس تفكيرك وتستمتع بمرحلة التجربة وبناء الأساس دلوقتي.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>٣. أمثلة عملية قابلة للتطبيق في هندسة البيانات</h3>
+<div class="theme">(Data Engineering Scenario)</div>
+<div class="row"><span>الموقف ١: تعلم أداة تخزين جديدة (زي Iceberg أو Delta Lake)</span>
+<div class="cmp">
+<div class="bad"><b>الخطأ (البداية بهدف أداء مبكر)</b>تطالب نفسك بترحيل كل مخزن البيانات (Data Warehouse) للصيغة (Format) الجديدة خلال أسبوع وبدون أخطاء.</div>
+<div class="good"><b>الصح (البداية بنوايا التعلم)</b>تقضي أول أسبوع في بناء مسار بيانات صغير جداً للتجربة (Toy Pipeline)، وتجرب قراءة وكتابة البيانات، وتفهم معاملات (ACID Transactions) بمتعة ومن غير ضغط.</div>
+</div></div>
+<div class="row"><span>الموقف ٢: التحول إلى مهام السحابة (زي AWS أو GCP)</span>
+<div class="cmp">
+<div class="bad"><b>الخطأ (البداية بهدف أداء مبكر)</b>تدخل مباشرة في مشروع ضخم وتتوقع إن مفيش أي مشاكل في التكلفة (Cost Optimization) أو الصلاحيات (IAM).</div>
+<div class="good"><b>الصح (البداية بنوايا التعلم)</b>تعمل نية تعلم بإنشاء بنية تحتية (Infrastructure) صغيرة للتجربة، وتفهم إزاي الخدمات (Services) الأساسية بتشتغل خطوة بخطوة.</div>
+</div></div>
+<div class="row"><span>الموقف ٣: التعامل مع لغة برمجة أو تقنية غير مألوفة</span>
+<div class="cmp">
+<div class="bad"><b>الخطأ (البداية بهدف أداء مبكر)</b>تتوقع تكتب كود احترافي جاهز للإنتاج (Production-ready) من اليوم الأول.</div>
+<div class="good"><b>الصح (البداية بنوايا التعلم)</b>تقبل حقيقة إنك في مرحلة الاستكشاف، وتجرب أفكار مختلفة، وتقرا التوثيق (Documentation) باستمتاع.</div>
+</div></div>
+</div>
+
+<div class="sum">
+<h3>القاعدة الذهبية</h3>
+<p style="margin:0">ابدأ دايماً بنية التعلم (Learning Intention) عشان تبني أساس متين وخالي من الضغط، وهتلاقي نفسك متحفز وجاهز لتحقيق أهداف الأداء (Performance Goals) بكفاءة عالية لما يحين وقتها الحقيقي.</p>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+إيه الأداة أو التقنية الجديدة اللي قدامك دلوقتي؟ اكتب أول أسبوع ليها كنية تعلم (إيه اللي هتجرب وتستكشف)، وبعدين اكتب متى تحس إنك جاهز تحط ليها هدف أداء وإيه علامة الجاهزية دي.
+</div>
+
+<div class="sum" style="margin-top:34px">
+<h3>ملخص موديول نوايا التعلم <span class="en">(Module 2: Learning Objectives)</span></h3>
+<ul>
+<li><b>التحول في التفكير:</b> الانتقال من التركيز الدائم على «أهداف الأداء» المسبقة إلى تبني «نوايا التعلم» عند مواجهة مهارات أو تحديات جديدة.</li>
+<li><b>قيمة الاستكشاف:</b> إنك تعطي نفسك المساحة لارتكاب الأخطاء، والتجريب، والاستمتاع بالرحلة من غير ضغط النتيجة الفورية.</li>
+<li><b>أهمية المعنى الشخصي:</b> تفتكر دايماً «السبب» (Why) بتاعك، وإزاي إن ربط التعلم بمستقبلك وطموحك كمهندس بيانات (وتمكين أنظمة الذكاء الاصطناعي (AI)) هو الوقود اللي بيضمن لك الاستمرار والنجاح.</li>
+</ul>
+</div>
+
+<div class="hero" style="margin-top:40px"><small>الموديول ٣ • الدرس ١٥ من ٣٢ • الوقت المقدر: ٣٠ دقيقة</small>
+<h2>أهداف التعلم <span class="en">(Module 3: Learning Objectives)</span></h2>
+<p>في الموديول ده هتتعلم إزاي:</p></div>
+
+<div class="pts">
+<div class="pt"><b>١. أنواع العقليات (Mindsets)</b>تتعرف على أنواع مختلفة من العقليات وإزاي بتأثر على سلوكك وقدرتك على التكيف.</div>
+<div class="pt"><b>٢. إطار (APR)</b>تطبق إطار (APR) (الوعي (Awareness)، التوقف (Pause)، إعادة الصياغة (Reframe)) في المواقف الصعبة عشان تحوّل عقليتك لعقلية أكتر تكيفاً.</div>
+</div>
+
+<div class="mod"><b>الدرس ١٦</b><h2>ما هي العقليات؟ <span class="en">(What are mindsets?)</span></h2></div>
+
+<div class="card">
+<h3>ما هي العقلية؟ <span class="en">(Mindset)</span></h3>
+<div class="row"><span>التعريف</span>هي عبارة عن «فلاتر أو عدسات» عقلية يفسر بها عقلك العالم من حولك. عندما تواجه موقفاً معيناً، فإن عقليتك هي التي تؤثر على أفكارك ومشاعرك، وهي التي تحدد في النهاية خياراتك وسلوكك.</div>
+</div>
+
+<div class="card">
+<h3>كيف تقود العقلية سلوكنا؟</h3>
+<div class="theme">مثال عملي من السكريبت: زميلك طلب منك تصميم شكل مرئي لكتيب (بروشور)</div>
+<div class="cmp">
+<div class="bad"><b>العقلية الثابتة (Fixed Mindset)</b>فكرتك الأولى: «أنا لست جيداً في هذه الأمور». هذه الفكرة تجعلك تشعر بالقلق أو الانزعاج، وربما تدفعك للتسويف وتجنب المهمة تماماً.</div>
+<div class="good"><b>عقلية النمو (Growth Mindset)</b>فكرتك: «أنا أستمتع بالفرص الجديدة لتطوير مهاراتي». ستشعر بالحماس والفضول تجاه هذا التحدي الجديد.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>من أين تأتي هذه العقليات الافتراضية؟ <span class="en">(Default Mindsets)</span></h3>
+<div class="row"><span>الفكرة</span>هي ليست وليدة اللحظة، بل تشكلت نتيجة خبراتك وتجاربك السابقة.</div>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>بيئة مشجعة</b>إذا كان مديرك القديم دائماً ما يشجعك على التفكير خارج الصندوق، ستبرمج عقلك على تفضيل التجربة والمغامرة.</div>
+<div class="pt"><b>بيئة تقلل من الشأن</b>أما إذا عملت في بيئة كان يتم التقليل فيها من شأنك عند تقديم اقتراحات، فسيترسخ لديك خوف من التحدث إلا لو كنت «خبيراً» بنسبة 100% حتى لا تبدو سيئاً في عملك.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>هل نحن مجبرون على الاستمرار بهذه العقليات؟</h3>
+<div class="row"><span>الإجابة</span>بالتأكيد لا. امتلاك عقليات افتراضية لا يعني أنها قدر محتوم. يمكنك دائماً اختيار العقلية المناسبة لكل موقف بوعي، بناءً على ما تريد تحقيقه.</div>
+<div class="apply"><span>أهمية الوعي بالعقليات:</span> الدراسات تثبت أن العقليات تؤثر على كل شيء في حياتنا: الأداء المهني، التحصيل الدراسي، إدارة التوتر، وحتى الصحة البدنية. السر يكمن في الوعي بعقليتك الحالية واختيار ما يخدمك بشكل أفضل.</div>
+</div>
+
+<div class="card">
+<h3>ملخص الدرس ١٦</h3>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>قوة العقليات</b>بدأت الصفحة بتجارب علمية تثبت تأثير العقلية الإيجابية على الأداء والقدرات العقلية والجسدية والرضا الوظيفي.</div>
+<div class="pt"><b>المرشحات الفكرية</b>العقليات هي فلاتر بينك وبين الواقع، تؤثر على مشاعرك وتصرفاتك.</div>
+<div class="pt"><b>التحرر من العقلية الثابتة</b>العقليات ليست «خيّرة» أو «شريرة» بالمطلق. الهدف هو اختيار العدسة أو العقلية الأنسب لكل موقف، والابتعاد عن الأحكام المطلقة والتسويف.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>تطبيق عملي في هندسة البيانات</h3>
+<div class="theme">كيف تنعكس هذه المفاهيم على يومياتك؟ مقارنة بين العمل بعقلية ثابتة وعقلية النمو في مواقف تقنية حقيقية</div>
+<div class="row"><span>١. عند التعامل مع تقنية جديدة كلياً (مثل أداة تدفق بيانات لحظي (Streaming Tool) حديثة)</span>
+<div class="cmp">
+<div class="bad"><b>العقلية الثابتة (Fixed Mindset)</b>«أنا أعرف جيداً لغة الاستعلام (SQL) وبايثون (Python) التقليدية، لماذا يطلبون منا التعامل مع هذه الأداة المعقدة؟ أنا سيء في تعلم الأنظمة الموزعة الجديدة، حتماً سأفشل فيها.»<br><b style="margin-top:6px">الأثر:</b> تجنب المهمة، تأخير المشروع، والشعور بالإحباط والتوتر.</div>
+<div class="good"><b>عقلية النمو (Growth Mindset)</b>«هذه أداة جديدة وصعبة في البداية، لكن تعلمها سيزيد من قيمتي المهنية ويحل مشكلة معقدة في مسار البيانات (Data Pipeline).»<br><b style="margin-top:6px">الأثر:</b> البدء في قراءة التوثيق (Documentation)، وتجربة تتبع الأخطاء (Debugging) بصدر رحب، والتعلم بحماس.</div>
+</div></div>
+<div class="row"><span>٢. عند حدوث خطأ كارثي في بيئة الإنتاج (Production Pipeline Failure)</span>
+<div class="cmp">
+<div class="bad"><b>العقلية الثابتة</b>«الخطأ حدث بسبب كود كتبه شخص آخر، وأنا سيء في تتبع أخطاء الذاكرة والأداء في الأنظمة الموزعة (Distributed Systems).»<br><b style="margin-top:6px">الأثر:</b> القلق، إلقاء اللوم على الآخرين، والمماطلة في حل المشكلة.</div>
+<div class="good"><b>عقلية النمو</b>«هذا العطل فرصة ممتازة لفهم أعماق بنية النظام (Architecture) وكيفية تحسين استعلامات (Spark) أو (SQL) لكي لا تتكرر المشكلة مستقبلاً.»<br><b style="margin-top:6px">الأثر:</b> التركيز على الحل، التحليل الهادئ، واكتساب خبرة تقنية عميقة.</div>
+</div></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>أنواع العقليات</b><h2>ثلاث ثنائيات في بيئة عمل مهندس البيانات</h2></div>
+
+<div class="card">
+<h3>تطبيق أنواع العقليات المختلفة على التغيرات في عملك</h3>
+<div class="theme">كيف نطبق هذه الثنائيات في بيئة عمل مهندس البيانات اليومية؟ ثلاثة أمثلة حية:</div>
+</div>
+
+<div class="card">
+<h3>مثال ١: الخبير مقابل الفضولي <span class="en">(Expert vs Curious)</span></h3>
+<div class="row"><span>الموقف</span>طُلب منك بناء خط أنابيب بيانات (ETL Pipeline) باستخدام تقنية تخزين سحابي جديدة تماماً لم تلمسها من قبل.</div>
+<div class="cmp">
+<div class="bad"><b>الفخ (عقلية الخبير)</b>تشعر بالحرج من سؤال زملائك أو رئيسك لأنك تعتقد أنه «يجب أن تكون خبيراً فوراً»، فتكتم التساؤلات وتتعثر.</div>
+<div class="good"><b>التحول (عقلية الفضول)</b>تعترف بجهلك الحالي بالتقنية، وتتبنى الفضول: «سأطرح الأسئلة، وأقرأ التوثيق (Documentation)، وأستكشف الأداة بنفسي دون خوف من الخطأ».</div>
+</div>
+</div>
+
+<div class="card">
+<h3>مثال ٢: الضحية مقابل المبادر <span class="en">(Victim vs Agent)</span></h3>
+<div class="row"><span>الموقف</span>مصدر بيانات خارجي (API) يغيّر هيكل الجداول فجأة (Schema Change) بدون سابق إنذار، مما أدى لتعطل لوحة المتابعة (Dashboard) الخاصة بالشركة.</div>
+<div class="cmp">
+<div class="bad"><b>الفخ (عقلية الضحية)</b>«الفريق الآخر هو السبب، الفريق الإداري لا يخبرنا بالتغييرات، لا حول لي ولا قوة في منع هذا العطل المتكرر.»</div>
+<div class="good"><b>التحول (عقلية المبادر (Agent))</b>«صحيح أن التغيير مفاجئ، ولكن بصفتي مهندس بيانات، سأبني آليات تحقق تلقائي (عقود البيانات (Data Contracts) والتحقق من هيكل الجداول (Schema Validation)) لتنبيهنا مبكراً ومنع انهيار مسارات البيانات (Pipelines) مستقبلاً.»</div>
+</div>
+</div>
+
+<div class="card">
+<h3>مثال ٣: اليقين مقابل الاستكشاف <span class="en">(Certainty vs Exploration)</span></h3>
+<div class="row"><span>الموقف</span>كتابة استعلام (SQL) معقد أو كود (Spark) لتحليل بيانات ضخمة (Big Data) يعطي أداءً بطيئاً جداً.</div>
+<div class="cmp">
+<div class="bad"><b>الفخ (عقلية اليقين)</b>التمسك بالطريقة التقليدية لأنها «التي تعمل دائماً»، ورفض تجربة هيكلة تخزين مختلفة (التقسيم (Partitioning) أو الفهرسة (Indexing)).</div>
+<div class="good"><b>التحول (عقلية الاستكشاف)</b>الاستعداد لتجربة مسارات غير مألوفة، وتحليل خطة التنفيذ (Execution Plan)، وتعديل الطريقة بمرونة وفضول حتى الوصول لأعلى كفاءة وأقل تكلفة سحابية.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس الجديد</b><h2>تطبيق العقليات المرنة <span class="en">(Applying adaptable mindsets)</span></h2></div>
+
+<div class="card">
+<h3>تطبيق عملي على مجال هندسة البيانات</h3>
+<div class="row"><span>تخيل الموقف</span>أنت في مشروع ترحيل بيانات ضخم (Data Migration Project) يضم مطورين ومهندسي بيانات ومحللين. كيف تظهر هذه العقليات في بيئة عملك؟</div>
+</div>
+
+<div class="card">
+<h3>١. موقف شبيه بتانيا: عقلية الوفرة مقابل رد الفعل</h3>
+<div class="cmp">
+<div class="bad"><b>رد الفعل</b>التركيز فقط على تتبع الأخطاء البرمجية (Bugs) وإلقاء اللوم بين فريق هندسة البيانات (Data Engineering) وفريق التحليلات (Analytics).</div>
+<div class="good"><b>التحول للوفرة</b>النظر للتحدي كفرصة لبناء سياسة إدارة بيانات موحدة (Data Governance) تخدم الجميع وتحقق مكسباً مشتركاً وسرعة استعلام عالية.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>٢. موقف شبيه بماتيو: عقلية المبادر</h3>
+<div class="cmp">
+<div class="bad"><b>الفخ</b>الاستسلام لـ«الخبرة المحدودة» في الأدوات القديمة.</div>
+<div class="good"><b>التحول (عقلية المبادر)</b>التعامل مع تقنية بيانات جديدة (مثل (Apache Kafka) أو (Snowflake)) بحماس وتجربة عملية، بدلاً من الاستسلام للخبرة المحدودة.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>٣. موقف شبيه بأشلي: عقلية الفرصة مقابل الخبير</h3>
+<div class="cmp">
+<div class="bad"><b>الفخ (عقلية الخبير)</b>الخوف من الظهور بمظهر «غير الخبير» أمام الإدارة عند تعطل مسار البيانات (Pipeline).</div>
+<div class="good"><b>التحول (عقلية الفرصة والفضول)</b>تتبنى الفضول وتعتبرها فرصة لمشاركة الفريق في استكشاف جذر المشكلة (Root Cause) وتوثيق الحل، لتعميق المعرفة الجماعية.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس الجديد</b><h2>تحويل عقلياتنا باستخدام نظام <span class="en">APR</span> <span class="en">(Shifting our mindsets using APR)</span></h2></div>
+
+<div class="apr">
+<div><div class="l">A</div><h4>الوعي <span class="en">(Awareness)</span></h4>
+<div class="row"><span>ماذا تفعل؟</span>تلاحظ وتدرك ما يدور في عقلك في هذه اللحظة عند مواجهة تحدٍ أو مشكلة.</div>
+<div class="q2"><b>أسئلة تسألها لنفسك:</b> ما الذي أفكره وأشعر به الآن؟ ما هي العقلية التي أتحرك بها حالياً (هل هي عقلية ثابتة، خوف، ضحية، أم غيرها)؟</div></div>
+<div><div class="l">P</div><h4>التوقف <span class="en">(Pause)</span></h4>
+<div class="row"><span>ماذا تفعل؟</span>تأخذ استراحة قصيرة جداً في نفس اللحظة لتهدئة نفسك وإعادة مركزة طاقتك قبل أن تتخذ أي رد فعل متسرع.</div>
+<div class="q2"><b>كيف تطبقها؟</b> خذ عدة أنفاس عميقة، أو ركّز على ثبات قدميك على الأرض لتفرغ التوتر اللحظي.</div></div>
+<div><div class="l">R</div><h4>إعادة الإطار / الصياغة <span class="en">(Reframe)</span></h4>
+<div class="row"><span>ماذا تفعل؟</span>تغيّر عدسة تفكيرك وتبحث عن الفرص أو الزاوية الإيجابية التي تخدم أهدافك وتجعلك أكثر مرونة.</div>
+<div class="q2"><b>أسئلة تسألها لنفسك:</b> ما هي الفرص المتاحة لو غيرت عقليتي؟ كيف يمكنني تحويل هذا التحدي إلى فائدة؟</div></div>
+</div>
+
+<div class="card">
+<h3>تطبيق عملي لنظام APR في هندسة البيانات</h3>
+<div class="theme">تخيل أنك واجهت مشكلة مفاجئة: تعطل مسار بيانات (Pipeline Failure) قبيل تسليم تقرير مهم للعميل مباشرة.</div>
+<ol class="steps">
+<li><div><h4>الوعي <span class="en">(Awareness)</span></h4>تلاحظ أنك بدأت تشعر بالهلع، وتسيطر عليك عقلية الضحية أو رد الفعل: «يا له من حظ سيء، النظام يعطل دائماً، سأبدو سيئاً أمام الإدارة».</div></li>
+<li><div><h4>التوقف <span class="en">(Pause)</span></h4>تتوقف عن كتابة أكواد عشوائية تزيد الطين بلة، تأخذ نفساً عميقاً، وتفصل بين شعورك بالضغط وبين المشكلة التقنية بحياد.</div></li>
+<li><div><h4>إعادة الإطار <span class="en">(Reframe)</span></h4>تسأل نفسك: «كيف أستغل هذا الموقف؟» وتنتقل إلى عقلية الفرصة أو النمو: «صحيح أن الموقف ضاغط، ولكنها فرصة ممتازة لأكتب كود مراقبة وتنبيه تلقائي (Alerting &amp; Monitoring) يمنع حدوث هذا الخطأ من جذوره مستقبلاً».</div></li>
+</ol>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+افتكر آخر موقف ضغط حصل لك في شغل أو مذاكرة. لو كنت طبّقت الخطوات التلاتة بالترتيب، إيه كان هيبقى مختلف في كل خطوة؟ وإيه اللي بتحس إنه أصعب فيهم: إنك تلاحظ، ولا إنك تتوقف، ولا إنك تعيد الصياغة؟ ابعتلي إجابتك وأضيفها.
+</div>
+
+<div class="mod" style="margin-top:34px"><b>ملاحظات إضافية</b><h2>العقليات والتعامل مع الذكاء الاصطناعي</h2></div>
+
+<div class="card">
+<h3>١. تطبيق عقلية النمو (Growth Mindset) مع الذكاء الاصطناعي</h3>
+<div class="cmp">
+<div class="bad"><b>العقلية التقليدية (Fixed Mindset)</b>بتتعامل مع الذكاء الاصطناعي (AI) كأنه أداة بحث تقليدية (Google Search): بتكتب سؤال مباشر وتاخد إجابة سطحية، وتقول لنفسك: «أهو ده آخره، مبيطلعش أفكار جديدة».</div>
+<div class="good"><b>عقلية النمو (Growth Mindset)</b>بتؤمن إن الذكاء الاصطناعي شريك تفكير وتجريب (Experimentation). بدل ما تسأل سؤال عادي، بتدربه على التفكير الإبداعي، وتجرب استراتيجيات مختلفة في صياغة الأوامر (Prompting).</div>
+</div>
+</div>
+
+<div class="card">
+<h3>٢. إزاي تطلع أفكار «بره الصندوق» من الذكاء الاصطناعي (تطبيق عملي)</h3>
+<div class="theme">عشان تكسر العقليات الافتراضية (Default Mindsets) بتاعة الذكاء الاصطناعي وتخليه يطلع أفكار مبتكرة فعلاً في شغلك (زي هندسة البيانات أو غيرها)، استخدم الأساليب دي:</div>
+<ol class="steps">
+<li><div><h4>لعب الأدوار <span class="en">(Role-playing)</span></h4>قوله: «فكر كأنك مهندس معماري لأنظمة بيانات مبتكرة وضخمة، واقترح لي طريقة غير تقليدية لتصميم مسار البيانات (Pipeline) ده.»</div></li>
+<li><div><h4>تحدي الافتراضات <span class="en">(Challenge Assumptions)</span></h4>قوله: «دي الطريقة المعتادة اللي بنشتغل بيها، اعتبرها غلط واقترح عليّ 3 طرق تانية خالص بره الصندوق تماماً.»</div></li>
+<li><div><h4>إجبار الذكاء الاصطناعي على التنوع <span class="en">(Divergent Thinking)</span></h4>اطلب منه دائماً يديك أفكاراً غريبة ومجنونة في الأول قبل الأفكار التقليدية، لأن ده بيفتح باب للإبداع ما كنتش متوقعه.</div></li>
+</ol>
+</div>
+
+<div class="card">
+<h3>٣. الوعي بالعقليات <span class="en">(Mindset Awareness)</span></h3>
+<div class="row"><span>الفكرة</span>السكريبت بيؤكد إن الوعي بالعقلية الحالية هو مفتاح التغيير.</div>
+<div class="cmp">
+<div class="bad"><b>عقلية «تجنب المجهود»</b>لو حسيت إنك كسلان تفكر في مشكلة معقدة وقررت ترميها للذكاء الاصطناعي بشكل عشوائي.</div>
+<div class="good"><b>عقلية الشريك المبدع</b>لو دخلت وإنت واعي إنك شريك مبدع بتوجه الذكاء الاصطناعي، النتيجة هتكون مختلفة 180 درجة، وهتطلع بأفكار وحلول غير مسبوقة.</div>
+</div>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+آخر مرة استخدمت فيها مساعد ذكاء اصطناعي في شغلك، كنت بتعامله إزاي: كأداة بحث ولا كشريك تفكير؟ جرّب تعيد نفس السؤال بأسلوب واحد من التلاتة (لعب الأدوار، تحدي الافتراضات، التنوع) وشوف الفرق في النتيجة. ابعتلي اللي لاحظته.
+</div>
+
+<div class="tip">
+<span class="tip-tag">💡 نصائح التعامل مع الذكاء الاصطناعي</span>
+<div class="tip-in">
+<h3>إزاي تتعامل مع الذكاء الاصطناعي (AI) صح؟</h3>
+<p class="tip-sub">نصايح عملية مرتبطة بعقلية النمو، وبشغلك كمهندس بيانات.</p>
+
+<h4>١. تقييم فكرة «إعطاء المشكلة للذكاء الاصطناعي يحلها على طول»</h4>
+<p>لو دي كانت عقليتك الافتراضية الدائمة (Default Mindset): إنك تهرّب المشكلة للذكاء الاصطناعي أول ما تظهر من غير ما تفكر، فدي تعتبر عقلية اتكالية (Dependency Mindset) أو هروب من التحدي.</p>
+<div class="tip-grid">
+<div class="r"><b>⚠️ الخطورة الأولى</b>الذكاء الاصطناعي أحياناً بيدي كود شكله صح بس بيكون فيه أخطاء خفية (Bugs) أو مش ماشي مع معمارية (Architecture) مسار البيانات (Pipeline) بتاعتكم.</div>
+<div class="r"><b>⚠️ الخطورة التانية</b>لو المسار وقع في الإنتاج (Production) وإنت فاهم الكود على قده، والذكاء الاصطناعي هو اللي كتبه من غير ما تستوعبه، هتتأخر جداً في الحل وهتحس بعجز حقيقي.</div>
+<div class="g"><b>✅ إمتى تكون العقلية دي ذكية؟</b>لما تستخدمه كـ«مساعد سريع» (Co-pilot) يختصر عليك وقت البحث في توثيق أداة معينة (Documentation)، أو يقترح عليك فكرة حل (Snippet) تراجعها وتفهمها وتعدلها بنفسك.</div>
+</div>
+
+<h4>٢. إزاي تتعامل مع المشاكل في هندسة البيانات (من واقع الخبرة)</h4>
+<p>المشاكل عادة بتكون معقدة (زي انحراف البيانات (Data Drift)، وتداخل المسارات، ومشاكل الأداء (Performance) في الأقسام الضخمة، أو تضارب هيكل الجداول (Schema)). هنا أفضل عقلية تتبناها هي <b style="color:#fff">عقلية المحقق أو المستكشف (Investigator Mindset)</b>، وطريقتها كالتالي:</p>
+<ol class="tl">
+<li><b>التوقف والوعي:</b> أول ما المشكلة تحصل (المسار يقع)، ابعد عن الذعر أو التسرع في رمي الكود كله للذكاء الاصطناعي. خد نفس وافهم سجل الأخطاء (Error Log) كويس.</li>
+<li><b>استخدام الذكاء الاصطناعي بذكاء (Augmentation):</b> هنا بييجي دوره الحقيقي. خد تتبع الخطأ (Traceback) أو سجل الأخطاء وابعته له وقوله: «اقترح عليّ أسباب محتملة للخطأ ده». يعني خليه يحدد معاك «نقطة البداية» بدل ما تدور لوحدك ساعات في السجلات (Logs).</li>
+<li><b>الفهم والتعديل البشري:</b> الذكاء الاصطناعي هيطلع لك 3 أو 4 حلول مقترحة. هنا دورك الهندسي (Engineering Judgment) يشتغل: تختار الحل الأنسب لبيئة العمل بتاعتكم، وتعدله بإيدك وتفهمه كويس، عشان لو اتكرر تخلصه في ثواني المرة الجاية.</li>
+</ol>
+
+<div class="tip-quote"><b>الخلاصة:</b> ما تضيعش وقتك في اختراع العجلة لو الذكاء الاصطناعي يقدر يختصرها لك، لكن ما تسلّمش عقلك له بالكامل. هو «المساعد الذكي»، وإنت «المهندس القائد» اللي بيتخذ القرار النهائي.</div>
+</div>
+</div>
+
+<div class="card later">
+<h3>ملخص الموديول ٣</h3>
+لو في ملخص أو درس ناقص من الموديول ٣، ابعته وأضيفه هنا.
+</div>
+
+<div class="hero" style="margin-top:44px"><small>الموديول ٤</small>
+<h2>العادات <span class="en">(Habits)</span></h2>
+<p>كيف تبني عادات التعلم، وإيه العادات اللي لازم تتخلى عنها، وإزاي تحافظ على عاداتك الصحية.</p></div>
+
+<div class="mod"><b>الدرس ١</b><h2>هل تحوّل سلوكياتك إلى عادات؟ <span class="en">(Do you turn behaviors into habits?)</span></h2></div>
+
+<div class="card">
+<h3>ملخص الشرح</h3>
+<div class="row"><span>الفكرة</span>تشير الأبحاث إلى أن بناء العادة يستغرق عادة من شهر إلى شهرين من الممارسة، لكن تكوينها يعتمد على أكثر من مجرد الوقت. السر يكمن في فهم كيفية تشكل العادات واستمرارها باستخدام «حلقة العادة» (The Habit Loop)، والتي تتكون من 3 عناصر أساسية (مأخوذة هنا كمثال على عادة إعطاء وتلقي التعليقات (Feedback)).</div>
+</div>
+
+<div class="apr">
+<div><div class="l">1</div><h4>المحفز أو المؤشر <span class="en">(Cues)</span></h4>
+<div class="row" style="margin-bottom:0">هو الإشارة أو الحدث الذي يطلق العنان للسلوك (مثل تحديد موعد أسبوعي أو الانتهاء من مهمة برمجية معينة).</div></div>
+<div><div class="l">2</div><h4>الروتين <span class="en">(Routines)</span></h4>
+<div class="row" style="margin-bottom:0">هو السلوك الفعلي الذي تقوم به (مثل طلب تقييم كود أو تقديم ملاحظة لزميلك).</div></div>
+<div><div class="l">3</div><h4>المكافأة <span class="en">(Rewards)</span></h4>
+<div class="row" style="margin-bottom:0">هي النتيجة الإيجابية التي تعزز السلوك وتجعله يترسخ في عقلك (مثل تحسن أداء العمل، أو الشعور بالراحة والتواصل الجيد مع الفريق).</div></div>
+</div>
+
+<div class="card">
+<h3>تعزيز العادة بالمعنى <span class="en">(Turbocharge with meaning)</span></h3>
+<div class="row"><span>الفكرة</span>يمكنك مضاعفة قوة وسرعة تكوين العادة عن طريق ربطها بمعنى حقيقي وقيمة شخصية تهمك.</div>
+<div class="apply"><span>مثال:</span> عندما تجعل عادة «إعطاء وتلقي التعليقات» مرتبطة برغبتك الحقيقية في بناء علاقات قوية مع زملائك والاهتمام بمستقبلهم وتطوير نفسك باستمرار، فإن الالتزام بها يصبح أسهل بكثير.</div>
+</div>
+
+<div class="card">
+<h3>تطبيق عملي في هندسة البيانات</h3>
+<div class="theme">كيف نطبق حلقة العادة (The Habit Loop) لترسيخ عادات تعلم مفيدة؟</div>
+<ol class="steps">
+<li><div><h4>المحفز <span class="en">(Cue)</span></h4>بمجرد الانتهاء من كتابة أي استعلام (SQL) معقد أو بناء مسار بيانات (Data Pipeline) جديد...</div></li>
+<li><div><h4>الروتين <span class="en">(Routine)</span></h4>...تقوم فوراً بطلب مراجعة الكود (Code Review) من زميلك، أو تسأل نفسك: «ما الذي يمكنني تحسينه في الأداء؟»</div></li>
+<li><div><h4>المكافأة <span class="en">(Reward)</span></h4>الاستمتاع بقلة الأخطاء لاحقاً، وتوفير تكلفة تشغيل الخوادم السحابية، وشعورك بأن كفاءتك المهنية ترتفع يوماً بعد يوم.</div></li>
+</ol>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٢</b><h2>ما العادات التي تحتاج إلى إلغاء تعلمها؟ <span class="en">(What habits do you need to unlearn?)</span></h2></div>
+
+<div class="card">
+<h3>ملخص الشرح</h3>
+<div class="row"><span>الفكرة</span>بقدر ما تحتاج إلى بناء عادات تعلم جديدة وإيجابية، فإنك تحتاج أيضاً إلى «إلغاء تعلم» (Unlearn) العادات القديمة والمقيدة التي تعيق تقدمك، لتوفر مساحة للعادات الصحية الجديدة.</div>
+<div class="theme" style="margin:10px 0 0">يعرض الدرس 3 تصنيفات رئيسية للعادات السلبية التي يجب الانتباه لها ومراجعتها: التحضير غير الصحي، والتنفيذ غير الصحي، والتأمل والتقييم غير الصحي.</div>
+</div>
+
+<div class="card">
+<h3>١. التحضير غير الصحي <span class="en">(Unhealthy Preparation)</span></h3>
+<div class="cmp">
+<div class="bad"><b>العادة السلبية</b>البدء مباشرة في كتابة أكواد (ETL) أو (SQL) دون أي تخطيط أو توقع للأخطاء (Cramming &amp; Rushing)، أو الاعتقاد بأنك «تعرف كل شيء» فلا داعي لقراءة وثائق الأدوات السحابية الجديدة.</div>
+<div class="good"><b>التحرر منها</b>التخلي عن العجلة، وتخصيص وقت كافٍ للتحضير وتصميم هيكل البيانات بحكمة قبل البدء في التنفيذ.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>٢. التنفيذ غير الصحي <span class="en">(Unhealthy Execution)</span></h3>
+<div class="cmp">
+<div class="bad"><b>العادة السلبية</b>العمل بمعزل عن الفريق تماماً، ورفض طلب المساعدة أو طلب مراجعة الكود (Code Review) خوفاً من الظهور بمظهر «غير الخبير»، أو الاستسلام السريع عند أول خطأ برمجي (Bug).</div>
+<div class="good"><b>التحرر منها</b>التخلص من العزلة، واعتماد الممارسة المتعددة، وطلب المساعدة وتقبل أخطاء الكود كجزء أساسي من عملية التطوير.</div>
+</div>
+</div>
+
+<div class="card">
+<h3>٣. التأمل غير الصحي <span class="en">(Unhealthy Reflection)</span></h3>
+<div class="cmp">
+<div class="bad"><b>العادة السلبية</b>تجاهل تحليل الأسباب الجذرية للأعطال التي حدثت في مسارات البيانات (Pipelines)، أو إلقاء اللوم على الآخرين بدلاً من مراجعة الأداء الشخصي والنظامي.</div>
+<div class="good"><b>التحرر منها</b>تخصيص وقت بانتظام لمراجعة وتدقيق ما تم إنجازه (Post-mortem)، وتحدي الافتراضات السابقة لتطوير جودة البيانات باستمرار.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٣</b><h2>كيف يمكنك الحفاظ على عادات صحية؟ <span class="en">(How can you maintain healthy habits?)</span></h2></div>
+
+<div class="card">
+<h3>ملخص الشرح</h3>
+<div class="row"><span>التشبيه</span>يشبه الدرس العادات بالسيارات: تعمل بشكل ممتاز عندما تكون جديدة، لكنها تحتاج إلى صيانة وعناية مستمرة لتستمر في العمل بسلاسة. ولكي تكون «ميكانيكي عاداتك الخاصة» (Your own habit mechanic)، تعرض الصفحة 3 خطوات أساسية.</div>
+</div>
+
+<div class="apr">
+<div><div class="l">1</div><h4>الفحص والتساؤل <span class="en">(Examine and question)</span></h4>
+<div class="row">كلما توقفت وتحققت من عادات تعلمك، كلما تعلمت بعمق أكبر وبنيت ثقتك بنفسك.</div>
+<div class="q2"><b>أسئلة لنفسك:</b> ماذا أتعلم الآن؟ كيف أتعلمه؟ ما هي العادات التي نمتلكها؟</div></div>
+<div><div class="l">2</div><h4>تحليل الأنماط <span class="en">(Analyze your patterns)</span></h4>
+<div class="row">إذا انتبهت بعناية، ستظهر لك أنماط واضحة ومكررة.</div>
+<div class="q2"><b>أسئلة لنفسك:</b> ما هي الأنماط التي ألاحظها؟ ما الذي يعمل بشكل جيد ويجب أن أستمر فيه؟ ما الذي لا ينجح، وكيف يمكنني تجربة نهج مختلف؟</div></div>
+<div><div class="l">3</div><h4>النظر في وجهات نظر بديلة <span class="en">(Consider alternative perspectives)</span></h4>
+<div class="row">من السهل الوقوع في فخ «الانحياز المؤكد لنفسك» (Self-serving bias)، والذي يؤدي إلى قصر النظر وأنماط سلوكية سلبية.</div>
+<div class="q2"><b>أسئلة لنفسك:</b> ما هي الافتراضات التي أتبناها؟ ما الذي ينبغي عليّ مراعاته أيضاً؟ لو راقب الآخرون عادات تعلمي، ما هي الملاحظات التي قد يقدمونها لي؟</div></div>
+</div>
+
+<div class="card">
+<h3>تطبيق عملي في هندسة البيانات</h3>
+<div class="theme">كيف نطبق صيانة العادات وفحصها في بيئة عملك؟</div>
+<ol class="steps">
+<li><div><h4>الفحص والتساؤل</h4>توقف دورياً أثناء بناء مسارات البيانات (Data Pipelines) واسأل نفسك: «هل الاعتماد المفرط على نفس أدوات (ETL) يعلمني حقاً شيئاً جديداً، أم أنني أكرر الكود بطريقة آلية دون تطوير مهاراتي؟»</div></li>
+<li><div><h4>تحليل الأنماط</h4>راقب أداءك خلال الشهر الماضي. هل تلاحظ نمطاً متكرراً من تأخير تسليم المهام بسبب عدم عمل اختبارات (Testing) للكود بانتظام؟ إذا كان الأمر كذلك، فما هو النهج البديل (مثل تطبيق مبدأ الاختبار أولاً (Test-Driven Development))؟</div></li>
+<li><div><h4>وجهات نظر بديلة <span class="en">(Code Review)</span></h4>تخلص من الانحياز لكودك الخاص واطلب بوعي من زملائك تقييمه: «لو نظر زميل آخر إلى طريقة تصميم هذا الجدول (Schema)، هل سيراها مثالية أم معقدة بلا داعٍ؟»</div></li>
+</ol>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+اختار عادة واحدة عايز تبنيها في تعلمك (زي مراجعة الكود بعد كل مشروع). اكتب لها المحفز والروتين والمكافأة بكلامك، وبعدين اكتب المعنى الشخصي اللي هيقويها. وإيه عادة قديمة محتاج تتخلى عنها عشان تفضي لها مساحة؟ ابعتلي إجابتك وأضيفها.
+</div>
+
+<div class="mod"><b>قريباً</b><h2>دروس الكورس الجاية</h2></div>
+<div class="next">لما تخلّص كل درس ابعتهولي وأنا أضيفه هنا بنفس الشكل.</div>
+
+<div class="card later" style="margin-top:22px">
+<h3>خريطة البرنامج</h3>
+<div class="theme">التقدم الحالي: ٦ من ١٠ مكتمل</div>
+<ul class="road">
+<li><span class="en">Welcome: Introduction to your journey ahead</span><span class="st done">مكتمل</span></li>
+<li><span class="en">Adaptability &amp; Resilience Course</span><span class="st done">مكتمل</span></li>
+<li><span class="en">Mandatory Webinar: Lead Forward - Mindsets for Growth</span><span class="st">لم يبدأ</span></li>
+<li><span class="en">Problem Solving Course</span><span class="st done">مكتمل</span></li>
+<li><span class="en">Case Assignment: Solve a traffic problem</span><span class="st">لم يبدأ</span></li>
+<li><span class="en">Communicating for Impact Course</span><span class="st done">مكتمل</span></li>
+<li><span class="en">Relationships &amp; Well-Being Course</span><span class="st done">مكتمل</span></li>
+<li><span class="en">My Digital Toolkit: Digital and AI Essentials Course</span><span class="st done">مكتمل</span></li>
+</ul>
+</div>
+</section>
+
+<section id="c3" class="pane" hidden>
+<div class="hero"><small>الكورس ٣ من البرنامج</small>
+<h2>حل المشكلات <span class="en">(Problem Solving Course)</span><span class="badge">مكتمل</span></h2>
+<p>من تقييم أسلوبك الحالي في حل المشكلات، لحد نهج الفرضيات (Hypothesis-led) وتعريف المشكلة بدقة، مع تطبيق كل درس على هندسة البيانات.</p></div>
+
+<div class="mod"><b>الموديول ١</b><h2>ما هو حل المشكلات المنظم؟</h2></div>
+
+<div class="mod"><b>الدرس ١</b><h2>ما هو حل المشكلات المنظم؟ <span class="en">(What is structured problem solving?)</span></h2></div>
+<div class="card">
+<h3>قيّم أسلوبك الحالي قبل تعلم المنهجية</h3>
+<div class="theme">الدرس بيطلب منك تقيّم طريقتك في 6 نقاط، قبل ما تتعلم منهجية ماكنزي المنظمة</div>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>١. الأفعال (Actions)</b>مارك: حل المشكلات عملية اتخاذ قرارات، قد تكون مشروعاً طويلاً أو حلاً فورياً في اجتماع. إميلي: الحل الجيد يحتاج نهجاً منظماً لتفكيك المشكلة.<br><i>اسأل نفسك: ردود فعل عشوائية وقت الأزمات، ولا خطوات منهجية؟</i></div>
+<div class="pt"><b>٢. الأطراف المعنية (Stakeholders)</b>إميلي: فكّر بعناية في مين يتأثر ومين لازم تشركه وإزاي تطرح الحلول بواقعية.<br><i>اسأل نفسك: بحدد المؤثرين وأشركهم في الوقت المناسب، ولا بشتغل لوحدي؟</i></div>
+<div class="pt"><b>٣. النهج (Approach)</b>مارك: حل المشكلات «فن وعلم»، والنهج الهيكلي (Structured Approach) بيحوّل المعقد والغامض لرؤى قابلة للتنفيذ. إميلي: قاعدة (80-20)، ركّز على 20% من الجهد اللي بيجيب 80% من القيمة.<br><i>اسأل نفسك: بكيّف أسلوبي حسب المشكلة، ولا طريقة واحدة لكل شيء؟</i></div>
+<div class="pt"><b>٤. الأدوات (Toolkit)</b>إميلي: تعلم أدوات وتقنيات جديدة بيخليك تختار بوعي وقصد، فالحل أكفأ.<br><i>اسأل نفسك: إيه النماذج والأطر اللي بعتمد عليها؟</i></div>
+<div class="pt"><b>٥. نقاط القوة (Strengths)</b>الشغف بفهم المشكلات وتقسيمها بوضوح مهارة محورية بتتصقل بالممارسة.<br><i>اسأل نفسك: إيه مهاراتي اللي بتساعدني (هدوء، سرعة جمع البيانات، تواصل)؟</i></div>
+<div class="pt"><b>٦. فرص التحسين (Opportunities)</b>إميلي: التنفيذ وتجنب المخاطر الشائعة (Common Pitfalls) هو الجزء الأكتر إغفالاً.<br><i>اسأل نفسك: إيه اللي محتاج أطوّره (تحليل أعمق، تخطيط التنفيذ)؟</i></div>
+</div>
+</div>
+<div class="card">
+<h3>اللي محتاج تركّز عليه</h3>
+<div class="cmp">
+<div class="good"><b>هيكلة المشكلة (Structuring the Problem)</b>تقسيم المشكلة الكبيرة المعقدة لأجزاء صغيرة محددة نقدر نتعامل معاها، بتفكيك المشكلة وقاعدة 80/20.</div>
+<div class="good"><b>الفرضيات والبيانات (Hypotheses &amp; Data)</b>بناء فرضية أولية (أفضل تخمين مبني على معلومات محدودة)، وتحليل البيانات واختبارها للوصول لحلول حقيقية بدل التخمين العشوائي.</div>
+</div>
+</div>
+
+<div class="mod"><b>الدرس ٢</b><h2>سمات الحل الرائع <span class="en">(What is the hallmark of great problem solving?)</span></h2></div>
+<div class="card">
+<div class="cmp">
+<div class="bad"><b>الحل العادي</b>غالباً بيوصل لحل مقبول مش «أفضل حل ممكن». بيعتمد على شخص واحد (غالباً قائد الفريق) بيتحمل العبء ويفرض وجهة نظره في الهيكلة والتحليل.</div>
+<div class="good"><b>الحل الرائع</b>بيستفيد من القوة الجماعية للفريق (Collective power of the group) وبيشرك الجميع بأكبر قدر ممكن.</div>
+</div>
+<div class="apply"><span>خطوات قائد حل المشكلات الناجح:</span>
+<ul>
+<li><b>صياغة المعطيات بوضوح:</b> اكتب إيه المشكلة بالضبط، والقيود (Constraints)، وأصحاب المصلحة (Stakeholders) اللي محتاج تنسق معاهم، وإزاي هنهيكل المشكلة عشان الكل يتفق على النهج.</li>
+<li><b>تجنب التفكير النمطي (Groupthink):</b> لو الفريق كله متفق على نفس الاتجاه، اختبر التفكير ده بفكرة «الفريق الأحمر والفريق الأزرق» (Red team and blue team)، أو عيّن شخصاً (أو كن أنت) يلعب دور «محامي الشيطان» (Devil's advocate).</li>
+<li><b>المزايا المزدوجة للحل التعاوني:</b> أفضل حل بأسرع وقت، والجميع مقتنعون ومؤمنون بالحل (Buy-in) ومستعدون لتنفيذه.</li>
+</ul></div>
+</div>
+<div class="card">
+<h3>التطبيق في هندسة البيانات (الخطوات الأربع من إنغريد)</h3>
+<ol class="steps">
+<li><div><h4>توثيق المشكلة بوضوح <span class="en">(Formalize the problem)</span></h4>بدل «المسار واقع»، اكتب في تذكرة (Jira): «عملية (ETL) اليومية بتتأخر ساعتين وبتأخر تقارير الإدارة». القيود: لازم تخلص قبل 8 صباحاً وممنوع زيادة ميزانية التخزين السحابي (Cloud Cost). الأطراف: محللو البيانات المنتظرون، وفريق (DevOps) المسؤول عن (Airflow) أو (Snowflake).</div></li>
+<li><div><h4>تجنب التفكير النمطي <span class="en">(Devil's Advocate)</span></h4>لو الفريق قال «زودوا حجم الكلاستر (Cluster) وخلاص» وهو حل سهل ومكلف، اسأل: «هل فعلاً محتاجين نزود موارد المعالجة (Compute)، ولا استعلام (SQL) فيه ربط جداول (Join) غير مرتب أو مسح كامل للجدول (Full Table Scan) بدون داعٍ؟»</div></li>
+<li><div><h4>فوائد النهج التعاوني <span class="en">(The Impact of Collaboration)</span></h4>لما الفريق يشارك في حل سليم (تحسين التقسيم (Partitioning) أو إضافة تخزين مؤقت (Caching))، توصل لأسرع حل وكمان الفريق يلتزم بكود نظيف ومتسق مستقبلاً.</div></li>
+</ol>
+</div>
+
+<div class="mod"><b>الدرس ٥</b><h2>فهم المشكلة: الأفق الزمني <span class="en">(Making sense of the problem: Time Horizon)</span></h2></div>
+<div class="card">
+<div class="pts" style="margin:0">
+<div class="pt"><b>١. في اللحظة نفسها <span class="en">(In the Moment)</span></b>الوقت: ثوانٍ أو دقائق. مشكلة طارئة عايزة تصرف سريع.<br><b>مثال:</b> تنبيه (Alert) إن المسار الأساسي وقف ومفيش بيانات داخلة، والتقارير اتضربت.<br><b>التركيز:</b> السبب المباشر (السيرفر وقع؟ الـ(API) اتغير؟)، إصلاح سريع (إعادة تشغيل المهمة)، وإبلاغ أصحاب الشأن فوراً بعطل مؤقت.</div>
+<div class="pt"><b>٢. خلال أسبوع أو أسبوعين <span class="en">(1-2 Weeks)</span></b>الوقت: قصير فيه مساحة بسيطة للتفكير. مهام أكتر من الوقت، فالسر في ترتيب الأولويات (Prioritization).<br><b>مثال:</b> استعلامات بطيئة وبتكلّف في مخزن البيانات، وأسبوع واحد قبل السبرنت (Sprint).<br><b>التركيز:</b> أكتر استعلام بيستخدمه فريق علم البيانات وبيسبب بطء، وتحسينه بس (فهارس (Indexes) أو تقسيم (Partitioning) أو (Materialized View)).</div>
+<div class="pt"><b>٣. على المدى الطويل <span class="en">(Long-term Project)</span></b>الوقت: شهور. مشروع كبير والقرار الأول له تأثير متتابع (Knock-on effects).<br><b>مثال:</b> نقل البنية التحتية للبيانات من نظام تقليدي (On-Premise) للسحابة بالكامل.<br><b>التركيز:</b> خطة عمل (Work Plan: أي مصادر الأول وليه؟)، فهم الاعتماديات (Dependencies) زي الأمان وحوكمة البيانات قبل نقل المسارات، ومواءمة أصحاب الشأن (Security وFinance وAnalytics).</div>
+</div>
+</div>
+
+<div class="mod"><b>الدرس ٦</b><h2>أشكال المشكلات وأحجامها <span class="en">(Problem shapes and size)</span></h2></div>
+<div class="card">
+<div class="cmp">
+<div class="good"><b>أنواع العمل (Types of Work)</b><b>تحليلية أو رقمية (Analytical):</b> إجابتها أرقام (أنفق كام على سيرفرات الكلاود الشهر ده؟).<br><b>مفاهيمية أو نوعية (Conceptual):</b> محتاجة فكر وتواصل (إزاي أقنع مديري بمشكلة تقنية؟).</div>
+<div class="good"><b>مراحل التفكير (Phases of Work)</b><b>تقاربي (Convergent):</b> إجابة واحدة محددة بالاستبعاد (تقرير مبيعات بكرة).<br><b>تباعدي أو إبداعي (Divergent):</b> أفكار جديدة وحلول غير تقليدية (إعادة هيكلة النظام من الصفر).</div>
+</div>
+<div class="apply"><span>٣ مواقف في شغلك:</span>
+<ul>
+<li><b>تحليلي + تقاربي:</b> مديرك طلب قبل اجتماع الخميس تقريراً دقيقاً بأحجام استهلاك بيانات العملاء لتحديد ميزانية الكلاود للربع الجاي. هتراجع الأرقام وتكتب استعلامات وهدفك رقم صحيح 100%.</li>
+<li><b>مفاهيمي + تقاربي:</b> محللو البيانات بيشتكوا إن الجداول غير واضحة، وعايزين حل سريع يظبط التواصل وتسليم البيانات من أول الأسبوع. المشكلة تواصل مش كود، لكن الحل محدد وسريع.</li>
+<li><b>مفاهيمي + تباعدي:</b> الشركة قررت تنقل البنية لنظام مدرن والفريق مقاوم للتغيير، وعايزين أفكار إبداعية تخلي الناس تتقبل الثقافة الجديدة على مدار السنة. مفيش إجابة سحرية، محتاج عصف ذهني.</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الموديول ٢</b><h2>أهداف التعلم: نهج الفرضيات <span class="en">(Module 2: Learning Objectives)</span></h2></div>
+
+<div class="mod"><b>الدرس ١٠</b><h2>مناهج متعددة لحل المشكلات المنظم <span class="en">(Multiple approaches to structured problem solving)</span></h2></div>
+<div class="card">
+<h3>النهج القائم على الفرضيات <span class="en">(Hypothesis-led approach)</span></h3>
+<div class="row"><span>الفكرة</span>بدل ما تدخل المشكلة تايه في التفاصيل أو تجرب عشوائي: (١) توقع الحل من الأول بفرضية (تخمين ذكي مبني على خبرتك)، و(٢) ابحث عن أدلة تثبتها أو تنفيها، بدل تجميع كل البيانات قبل ما تفهم.</div>
+<div class="apply"><span>مثال: مسار (ETL) بيأخذ 4 ساعات كل ليلة فجأة بقى أبطأ بكتير</span>
+<ol class="steps" style="margin-top:10px">
+<li><div><h4>بناء الفرضية <span class="en">(Formulate Hypothesis)</span></h4>بدل قراءة الكود سطر سطر، فكّر دقيقتين: «الاختناق (Bottleneck) غالباً لأن جدول المعاملات (Transactions) كبر والربط (Join) في خطوة التحويل بقى ثقيل على الذاكرة».</div></li>
+<li><div><h4>اختبار الفرضية <span class="en">(Test)</span></h4>راجع سجلات (Logs) المسار وقت البطء، وراقب استهلاك المعالج والذاكرة أثناء خطوة الربط تحديداً.</div></li>
+<li><div><h4>النتيجة والقرار <span class="en">(Conclusion &amp; Action)</span></h4>لو صحت: ركّز على النقطة دي (تعديل الربط أو فهرس أو تقسيم). لو غلطت: الفرضية سقطت، انتقل لفرضية تانية محددة (ضغط الشبكة؟ بطء الـ(API) المصدر؟).</div></li>
+</ol></div>
+</div>
+<div class="card">
+<h3>ليه الطريقة دي ممتازة لمهندس البيانات؟</h3>
+بتوفر وقتك ومجهودك بدل ما تتوه وتجرب حاجات عشوائية في الكود، وبتخليك دايماً شغال بـ«تفكير استباقي» منظم.
+</div>
+
+<div class="card">
+<h3>المناهج الخمسة</h3>
+<div class="theme">النهج بيختلف حسب السياق، وأحياناً بتدمج أكتر من طريقة</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>الفرضيات (Hypothesis-led)</b>اللي الكورس مركز عليه.</div>
+<div class="pt"><b>الملكية الفكرية للمجال (Domain IP-led)</b>خبرات سابقة وقواعد عمل جاهزة في مجال معين.</div>
+<div class="pt"><b>التحليلات المتقدمة (Advanced analytics)</b>مشكلة معقدة وبيانات ضخمة محتاجة نماذج إحصائية وتنبؤية.</div>
+<div class="pt"><b>التفكير التصميمي (Design thinking)</b>ابتكار منتج أو تجربة مستخدم (User Experience).</div>
+<div class="pt"><b>الهندسي (Engineering)</b>بناء أنظمة وبنية تحتية وخطوات تشغيلية.</div>
+</div>
+</div>
+<div class="card">
+<h3>القواسم المشتركة الخمسة (الحمض النووي لأي حل ناجح)</h3>
+<ol class="steps">
+<li><div><h4>مشكلة محددة بدقة <span class="en">(Focused problem statement)</span></h4>مثال: المسار الفلاني بينتهي بمهلة (Timeout) الساعة 3 صباحاً.</div></li>
+<li><div><h4>موجهة نحو التأثير <span class="en">(Impact oriented)</span></h4>الحل هيخلي التقارير تطلع في ميعادها من غير ما تعطل قرار الإدارة.</div></li>
+<li><div><h4>منظور أصحاب الشأن <span class="en">(Stakeholder perspective)</span></h4>فريق ذكاء الأعمال (BI) محتاج البيانات جاهزة أول الصبح.</div></li>
+<li><div><h4>مبنية على الحقائق <span class="en">(Fact based)</span></h4>بص على السجلات الفعلية واستهلاك السيرفرات بالأرقام مش التخمين.</div></li>
+<li><div><h4>التركيز على التجميع <span class="en">(Synthesis)</span></h4>لخّص لمديرك: «المشكلة كانت في حجم الجدول، وحليناها بإضافة تقسيم (Partitioning)، وهتشتغل تمام من بكرة».</div></li>
+</ol>
+</div>
+
+<div class="mod"><b>الدرس ١١</b><h2>مقدمة في نهج الفرضيات <span class="en">(Introduction to the hypothesis-led approach)</span></h2></div>
+<div class="card">
+<h3>الخطوات السبع</h3>
+<div class="theme">نهج حل المشكلات القائم على الفرضيات (Hypothesis-led approach) بيقسّم الطريقة لخطوات مرتبة ومنطقية بتوفر عليك التخبط. مثال ثابت: مسار (Data Pipeline) بينقل معاملات الدفع بيوقف كل يوم الساعة 3 الفجر والتقارير بتضرب.</div>
+<ol class="steps">
+<li><div><h4>تحديد المشكلة <span class="en">(Define problem)</span></h4><div class="row"><span>الفكرة</span>التركيز على التأثير وإيه اللي محتاجين نعرفه بالضبط.</div><div class="app">مثال: المسار اللي بينقل معاملات الدفع بيوقف كل يوم الساعة 3 الفجر والتقارير بتضرب.</div></div></li>
+<li><div><h4>هيكلة المشكلة <span class="en">(Structure problem)</span></h4><div class="row"><span>الفكرة</span>تكسير المشكلة لأجزاء صغيرة وحط «فرضية مبكرة» (Early hypothesis).</div><div class="app">مثال: تفتيتها لـ (هل العطل في المصدر؟ في الكود؟ ولا في مساحة قاعدة البيانات؟) وفرضية: «غالباً الذاكرة (Memory) بتنفد بسبب حجم البيانات الضخم وقت الفجر».</div></div></li>
+<li><div><h4>ترتيب الأولويات <span class="en">(Prioritize issues)</span></h4><div class="row"><span>الفكرة</span>السرعة والكفاءة: إيه أكتر جزء مهم لازم تبدأ بيه؟</div><div class="app">مثال: بدل ما تراجع كل كود المسار، ابدأ بالتركيز المباشر على استهلاك الذاكرة والسجلات (Logs) في توقيت الوقوف.</div></div></li>
+<li><div><h4>تخطيط التحليل وخطة العمل <span class="en">(Develop issue analysis / workplan)</span></h4><div class="row"><span>الفكرة</span>توفير الوقت: هتعمل إيه وفين بالظبط؟</div><div class="app">مثال: «هنفحص سجلات الأخطاء (Error Logs) من الساعة 2:50 إلى 3:10 صباحاً ونراقب استهلاك الـ(RAM)».</div></div></li>
+<li><div><h4>إجراء التحليلات <span class="en">(Conduct analyses)</span></h4><div class="row"><span>الفكرة</span>البحث عن الأدلة: هل بنثبت الفرضية ولا بننفيها؟</div><div class="app">مثال: فتحت أدوات المراقبة (Monitoring Tools) ولقيت إن الـ(RAM) وصلت 100% وحصل نفاد ذاكرة (Out Of Memory / OOM).</div></div></li>
+<li><div><h4>تلخيص النتائج <span class="en">(Synthesize findings)</span></h4><div class="row"><span>الفكرة</span>الإجابة على سؤال «So what؟»: إيه دلالة اللي وصلناله؟</div><div class="app">مثال: الكود الحالي غير مهيأ لمعالجة حجم البيانات الحالي دفعة واحدة، ومحتاجين نعمل تقسيم على دفعات (Batching) أو نقسم البيانات.</div></div></li>
+<li><div><h4>تطوير التوصيات <span class="en">(Develop recommendations)</span></h4><div class="row"><span>الفكرة</span>الحل العملي اللي المفروض ننفذه.</div><div class="app">مثال: تعديل الكود ليعالج البيانات على دفعات (Chunks) وتزويد سعة الـ(RAM) للمثيل (Instance) وقت التشغيل.</div></div></li>
+</ol>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الموديول ٣</b><h2>أهداف التعلم: تعريف المشكلة <span class="en">(Module 3: Learning Objectives)</span></h2></div>
+<div class="card">
+<div class="theme">الوقت المقدر: 45 دقيقة. في الموديول ده هتتعلم إزاي:</div>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>١</b>تتعرف على التحديات الفريدة في تعريف المشكلة.</div>
+<div class="pt"><b>٢</b>تعرّف المشكلة بأدوات زي سؤال المشكلة (SMART problem question) وورقة صياغة المشكلة (Problem Statement Worksheet).</div>
+</div>
+</div>
+
+<div class="mod"><b>الدرس</b><h2>قوة تعريف المشكلة <span class="en">(The power of problem definition)</span></h2></div>
+<div class="card">
+<h3>ليه تعريف المشكلة صعب؟ (حسب إميلي)</h3>
+<div class="pts" style="margin:0">
+<div class="pt"><b>اختلاف وجهات النظر</b>كل واحد في الفريق ممكن يشوف المشكلة من زاوية مختلفة.</div>
+<div class="pt"><b>اختلاف شكل «النجاح»</b>مش الكل متفق على إيه الحل الناجح.</div>
+</div>
+<div class="note">الخلاصة: لازم الفريق كله يتفق على إجابة واضحة لسؤالين: إيه المشكلة بالضبط؟ وإيه شكل النجاح اللي عايزين نوصله؟</div>
+</div>
+<div class="card">
+<h3>مثال مارك: تسعير منتج جديد</h3>
+السؤال يبان بسيط («كام سعر المنتج؟») لكن الفريق ممكن يتقسم: ناس عايزة سعر رخيص للانتشار السريع (Adoption)، وناس عايزة سعر عالي لتعظيم الأرباح (Maximize profits). لازم الاتفاق من الأول عشان محدش يشتغل عكس التاني.
+</div>
+<div class="card">
+<h3>مثال إميلي: أزمة شركة السفن السياحية</h3>
+<div class="theme">مدير الشركة كلمهم الساعة 3 الفجر بسبب كوارث على السفن، والفريق اكتشف إنهم مش عارفين المشكلة الحقيقية:</div>
+<div class="pts" style="margin:0">
+<div class="pt">إنقاذ حياة الناس المعرضين للخطر؟</div>
+<div class="pt">إصلاح السفن وتشغيلها بسرعة عشان الزبائن؟</div>
+<div class="pt">استعادة سمعة الشركة التاريخية؟</div>
+</div>
+<div class="note">الدرس: اختيارك لأي مشكلة بيحدد حلاً مختلفاً جذرياً عن الباقيين.</div>
+</div>
+<div class="card">
+<h3>التحديات وقت الأزمات (حسب مارك)</h3>
+<div class="row"><span>في المشاريع الكبيرة</span>بنظبط التعريف براحتنا. أما في الأزمات (In the moment) فالناس بتفترض إن «الكل فاهم المشكلة»، وهنا لازم تقف وتسأل: «هل كلنا فاهمين إحنا بنحل إيه أصلاً؟»</div>
+<div class="cmp">
+<div class="bad"><b>معلومات ناقصة (Imperfect information)</b>مفيش وقت لتحليلات طويلة أو داتا كاملة.</div>
+<div class="bad"><b>الاندفاع للحل (Bias to action)</b>رغبة ملحة في «عمل أي حاجة وخلاص»، فيصعب الوقوف لحظة والتأكد إننا حددنا المشكلة الصح.</div>
+</div>
+<div class="apply" data-pz="20"><span>في هندسة البيانات:</span> لما المسار يقع وكل الفريق يجري يصلّح، اسأل أول حاجة: هل المشكلة «إيقاف النزيف» (تقارير ناقصة) ولا «إيجاد السبب الجذري»؟ اتفقوا على ده قبل ما تلمسوا الكود. <i>(اقتراح مني)</i></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>درس جديد</b><h2>هل سؤال مشكلتك ذكي؟ <span class="en">(Is it SMART?)</span></h2></div>
+<div class="card">
+<h3>اختبر سؤال المشكلة بقاعدة (SMART)</h3>
+<div class="row"><span>الفكرة</span>بعد ما تلخص المشكلة في سؤال رئيسي واحد (Problem Question)، مرّره على 5 شروط عشان تتأكد إنه هيفيدك فعلاً.</div>
+</div>
+<div class="apr">
+<div><div class="l">S</div><h4>محدد <span class="en">(Specific)</span></h4><div class="row" style="margin-bottom:0">هل السؤال دقيق ومفصل بما يكفي إن الناس القريبين من المشكلة يفهموا بالظبط إيه اللي محتاجين نحله؟ مش سؤال عام وفضفاض.</div></div>
+<div><div class="l">M</div><h4>قابل للقياس <span class="en">(Measurable)</span></h4><div class="row" style="margin-bottom:0">هل فيه رقم أو مؤشر واضح يعرّفنا إمتى نعتبر المشكلة اتحلت بجد؟</div></div>
+<div><div class="l">A</div><h4>قابل للتنفيذ <span class="en">(Actionable)</span></h4><div class="row" style="margin-bottom:0">هل السؤال بيشير للفعل المطلوب؟ غالباً بيبدأ بـ«إزاي نقدر نعمل كذا؟».</div></div>
+<div><div class="l">R</div><h4>ذو صلة <span class="en">(Relevant)</span></h4><div class="row" style="margin-bottom:0">هل بيخدم أهداف الكل (المدير والفريق وأصحاب الشأن) ومرتبط بيهم فعلاً؟</div></div>
+<div><div class="l">T</div><h4>محدد بوقت <span class="en">(Time-bound)</span></h4><div class="row" style="margin-bottom:0">هل مربوط بإطار زمني واضح عشان نطلع بحل عملي يناسب الوقت المتاح؟</div></div>
+</div>
+<div class="card">
+<h3>مثال أرون <span class="en">(DentMerc)</span></h3>
+<div class="cmp">
+<div class="bad"><b>السؤال القديم</b>«هل المفروض شركة DentMerc تدخل سوق فرش الأسنان في جنوب شرق آسيا بمنتج جديد اسمه Click'Brush؟» مش كفاية لأنه مفيش مبيعات مستهدفة أو حصة سوقية ولا وقت محدد للتقييم.</div>
+<div class="good"><b>النسخة (SMART)</b>«إزاي نقدر نحقق حصة سوقية بنسبة 10% في سوق فرش الأسنان في جنوب شرق آسيا بمنتج Click'Brush خلال أول 12 شهر وبميزانية لا تتجاوز 15 مليون روبية؟» محدد، قابل للقياس، قابل للتنفيذ، ذو صلة، ومربوط بوقت.</div>
+</div>
+<div class="apply" data-pz="21"><span>في هندسة البيانات (سؤال المشكلة لبطء تقارير ذكاء الأعمال (BI)):</span> «إزاي نقدر نقلل وقت معالجة مسار (ETL) لبيانات المعاملات ليصبح أقل من ساعتين (لينتهي قبل الساعة 7 صباحاً)، وبدون تجاوز الميزانية الشهرية المسموحة للسحابة (Cloud) خلال الشهر الحالي؟»</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>درس جديد</b><h2>ورقة بيان المشكلة <span class="en">(The Problem Statement Worksheet)</span></h2></div>
+<div class="card">
+<h3>إيه هي الورقة دي؟</h3>
+<div class="row"><span>ببساطة</span>استمارة أو «خريطة طريق» بتملاها أول ما تقابلك أي مشكلة، عشان تتأكد إنك مش تايه ومغطي كل زوايا المشكلة قبل ما تجري تحلها، فما تضيعش وقتك في حل مشكلة غلط أو ناقصة.</div>
+<div class="theme" style="margin-top:12px">مقسمة لـ 6 خانات. المثال هنا مشكلة بطء مسار البيانات (Data Pipeline):</div>
+<ol class="steps">
+<li><div><h4>سؤال المشكلة <span class="en">(Problem Question)</span></h4>السؤال الرئيسي الذكي (بقاعدة SMART) اللي بيحدد بندور على إيه بالظبط.<div class="app">«إزاي نقلل وقت معالجة مسار (ETL) لبيانات المعاملات ليخلص قبل 7 صباحاً خلال الشهر الحالي؟»</div></div></li>
+<li><div><h4>السياق <span class="en">(Context)</span></h4>إيه القصة من أولها؟ وليه المشكلة ظهرت دلوقتي؟<div class="app">الإدارة العليا بتعتمد يومياً على لوحة المبيعات الصباحية (Dashboard)، وبسبب تأخر المسار التقارير بتوصل فاضية أو متأخرة، وده بيعطل قرارات الإدارة اليومية.</div></div></li>
+<li><div><h4>القيود في نطاق الحل <span class="en">(Constraints within Solution Space)</span></h4>الحدود والممنوعات: ميزانية محدودة، وقت ضيق، أو ممنوع تغيير قاعدة البيانات القديمة.<div class="app">ممنوع نزود ميزانية السيرفرات السحابية (Cloud Cost)، ولازم الحل يتم بالكود الموجود أو بتحسين الاستعلامات الحالية من غير عتاد (Hardware) جديد.</div></div></li>
+<li><div><h4>معايير النجاح <span class="en">(Criteria for Success)</span></h4>هنعرف منين إن المشكلة اتحلت بجد؟ إيه النتيجة اللي هترضينا؟<div class="app">المسار يخلص في أقل من ساعة ونصف بانتظام، بنسبة التزام 99% طوال الأسبوع وبدون أخطاء (Errors).</div></div></li>
+<li><div><h4>أصحاب الشأن <span class="en">(Stakeholders)</span></h4>مين له علاقة بالمشكلة؟ مين يقدر يعطل الحل أو يساعدك؟ مين هيستفيد؟<div class="app">محللو (BI) المنتظرون للبيانات، ومدير التكنولوجيا (CTO) صاحب القرار اللي عايز يقلل التكاليف، وأنت كمهندس بيانات المسؤول عن التنفيذ.</div></div></li>
+<li><div><h4>مصادر الرؤى الأساسية <span class="en">(Key Sources of Insight)</span></h4>هتجيب معلوماتك منين؟ مين الخبير اللي هتسأله؟ إيه التقارير اللي هتقراها؟<div class="app">سجلات أخطاء السيرفر (Error Logs)، ومتابعة استهلاك المعالج (CPU) والذاكرة (Memory) وقت تشغيل المعالجة بالليل.</div></div></li>
+</ol>
+<div class="note">نصيحة الدرس: الورقة مش بتتملى وتترمي. اطبعها وعلّقها قدامك على المكتب أو الشاشة، وكل ما تحس إنك تهت وسط الكود والتفاصيل بص فيها عشان تفضل مركز على المشكلة الصح.</div>
+</div>
+
+<div class="card">
+<h3>مارك: ليه نستخدم الورقة دي؟ (ترجمة مبسطة)</h3>
+<div class="row"><span>الفكرة</span>الورقة طريقة بنستخدمها عشان نتأكد إن تعريف المشكلة أفضل ما يمكن. بنبدأ بسؤال «إيه المشكلة اللي بنحاول نحلها؟» وبنطبق عليه (SMART) عشان يبقى واضح ومختصر والكل متفق عليه.</div>
+<div class="row"><span>باقي المكونات</span>السياق، ونطاق مجموعة الحلول (Scope)، والقيود، وأصحاب الشأن، وإزاي هنقيس النجاح.</div>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>١. الاتفاق</b>بتوحّد الجميع على المشكلة: المشاركين مباشرة في الحل وأصحاب الشأن الأوسع.</div>
+<div class="pt"><b>٢. الإبداع</b>بتخليك تفكر في كل الخيارات اللي لازم نعتبرها وإيه جوه النطاق، وتتأكد من مصادر الرؤى من أول العملية.</div>
+<div class="pt"><b>٣. الواقعية</b>لما تحدد شكل النجاح والقيود، بتبقى أدق وأسرع لما توصل لخطوتي الهيكلة وترتيب الأولويات في نهج الفرضيات (Hypothesis-led).</div>
+</div>
+<div class="note">الخلاصة: الورقة بتوسّع مجموعة الحلول (تفكر في النطاق الكامل وكل الأطراف) وفي نفس الوقت بتخليها عملية (القيود ومعايير النجاح).</div>
+<div class="apply" data-pz="22"><span>في هندسة البيانات:</span> قبل ما تبدأ تصلّح مسار بطيء، الورقة بتخليك تتأكد إن المدير ومحللي (BI) وفريق (DevOps) كلهم متفقين على المشكلة وعلى شكل النجاح، فما تحلش مشكلة غلط. وأنت فاكر النطاق والقيود، هتختار الفرضيات (Hypotheses) الأنسب للاختبار بسرعة. <i>(اقتراح مني)</i></div>
+</div>
+
+<div class="mod"><b>الدرس</b><h2>استخدام الورقة في شغلك <span class="en">(Using the worksheet in your job)</span></h2></div>
+<div class="card">
+<h3>مارك: في اللحظة نفسها</h3>
+<div class="row"><span>الفكرة</span>في الموقف الطارئ غالباً مش هتطلع ورقة وتملاها. اللي بتعمله إنك تفكر في مكوناتها وتسأل الأسئلة اللي بتطلع منها.</div>
+<div class="row"><span>مثال مارك</span>صحي الصبح ولقى كسر في ماسورة مياه رئيسية قدام شقته في أبر ويست سايد، والشارع غرقان. فكّر بسرعة: مين كل أصحاب الشأن المتأثرين؟ إزاي هوصل المكتب لتصوير الفيديو؟ إزاي أولادي هيروحوا المدرسة؟ والتوصيلات اللي جاية العصر هتتأثر إزاي؟ الأسئلة دي رتّبت تفكيره في اللحظة.</div>
+<div class="theme" style="margin:12px 0 6px">التلات أخطاء الشائعة وقت ملء الورقة بسرعة:</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>١. أصحاب الشأن</b>تتأكد إنك فكرت في كل الأطراف اللازم إشراكها عشان توصيتك تبقى قابلة للتنفيذ فعلاً.</div>
+<div class="pt"><b>٢. نطاق الحل (Scope)</b>هل واضح وكل الناس متفقة إيه جوه النطاق وإيه برا؟</div>
+<div class="pt"><b>٣. القيود</b>تكون أمين مع نفسك في القيود اللي لازم تحلها، وده بيأثر على الوقت والموارد وترتيب أولويات شغلك.</div>
+</div>
+<div class="apply" data-pz="23"><span>في هندسة البيانات (على طريقة مارك):</span> المسار وقع الساعة 3 الفجر. من غير ورقة، اسأل فوراً: مين المتأثر (محللو (BI) والإدارة والمالية)؟ إيه جوه النطاق (المسار ده بس ولا كل اللي بيعتمد عليه)؟ إيه القيود (الميزانية، مفيش نشر جديد وقت الذروة)؟ <i>(اقتراح مني)</i></div>
+</div>
+<div class="card">
+<h3>إميلي: استخدمها بشكل ديناميكي</h3>
+<div class="row"><span>الفكرة</span>الورقة من أكتر الأدوات فعالية لحلال المشكلات. في أول مشوارها كانت فاكرة إنها لازم تجاوب كل خانة، لكن الحقيقة إن أقوى استخدام أحياناً يكون ديناميكياً وعشوائياً (Ad-hoc): إزاي نسأل الأسئلة الصح عشان نطلع الإجابة حتى لو مفيش وقت نملاها بالتفصيل.</div>
+<div class="row"><span>مهم</span>الورقة مش حاجة تبدأها يوم أول وما تحدّثهاش. كل ما تعرف أكتر عن المشكلة وتفهم أصحاب شأن أكتر، كمّل تحديثها لتبقى دايماً آخر وأحدث تفكيرك.</div>
+<div class="apply" data-pz="24"><span>في هندسة البيانات:</span> اعمل الورقة جوه التذكرة (Jira) الخاصة بالمشكلة، وحدّثها وإنت بتتعلم: مثلاً بعد ما تكتشف إن فريق المالية كمان بيعتمد على الجدول، ضيفه في أصحاب الشأن وعدّل معايير النجاح. <i>(اقتراح مني)</i></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٢٠</b><h2>طرح الأسئلة القوية <span class="en">(Asking powerful questions)</span></h2></div>
+<div class="card">
+<h3>إيه هي «الأسئلة القوية»؟</h3>
+<div class="row"><span>الفكرة</span>الدرس بيكمل كلامنا عن أهمية الأسئلة القوية، وإزاي بتساعدنا نعرف المشكلة صح ونقلل النطاق والميزانية بشكل كبير. في وقت الأزمات أو بداية أي مشروع رغبة الناس الأولى بتكون «حلول سريعة»، لكن الأسئلة القوية بتخليك تقف وتعيد توجيه تفكير الفريق نحو فهم الجذور الحقيقية للمشكلة.</div>
+<div class="cmp">
+<div class="bad"><b>السؤال الضعيف</b>«إزاي نصلح الخلل ده بسرعة؟» بيخلي الناس تجري تجرب حاجات عشوائية.</div>
+<div class="good"><b>السؤال القوي</b>«إيه هو السبب الجذري اللي بيخلي مسار البيانات (Pipeline) يقع كل يوم الساعة 3 الفجر بالتحديد؟» بيخلي الناس تركز وتدور في المكان الصح.</div>
+</div>
+<div class="apply" data-pz="25"><span>تطبيق عملي في هندسة البيانات:</span> بدل الأسئلة السطحية، اسأل فريقك أو نفسك:
+<ul>
+<li>«هل المشكلة دي بسبب حجم البيانات الجديد (Data Volume) ولا بسبب كود التحويل (Transformation)؟» لتحديد أصل العطل بدقة.</li>
+<li>«لو أجلنا التقرير ساعة، هل ده هيأثر على قرار الإدارة ولا القرار بيتاخد أصلاً متأخر؟» لتقييم التأثير الحقيقي وأولويات الحل.</li>
+<li>«هل الحل المقترح هيحتاج نغير البنية التحتية، ولا نقدر نعدل استعلام (SQL) واحد يحل المشكلة من غير تكلفة إضافية؟» لتقليص النطاق والميزانية.</li>
+</ul></div>
+<div class="note">الدرس بيأكد إن طرح الأسئلة الصح في الأول بيوفر عليك أيام من الشغل الغلط والتخبط.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٢١</b><h2>تقنيات إزالة التحيز <span class="en">(Debiasing techniques)</span></h2></div>
+<div class="card">
+<div class="row"><span>الفكرة</span>تحت ضغط الشغل والوقت، كلنا بنقع في فخ «الاعتماد على الحدس والإحساس» (Go with your gut) من غير ما نحس. الدرس بيقسم التحيزات (Biases) اللي بتأثر على قراراتنا لـ 3 أنواع، وإزاي نتعامل مع كل نوع.</div>
+</div>
+
+<div class="card">
+<h3>١. تحيزات التأكيد <span class="en">(Confirmation Biases)</span></h3>
+<div class="row"><span>المعنى</span>الميل لتفسير أي دليل جديد على إنه بيثبت فرضيتك القديمة (حتى لو غلط)، وتجاهل أي دليل تاني بيعارضك.</div>
+<div class="row"><span>مثال</span>«سعر التفاح نزل الفترة دي، فخليني أشتري كيس كامل دلوقتي عشان أوفر فلوس لو احتجته بعدين.»</div>
+<div class="apply"><span>إزاي تتخلص منها (Debiasing Technique):</span>
+<ul>
+<li><b>فحص الفرضيات الأساسية (Key assumption check):</b> اكتب كل افتراضاتك واختبرها واحدة بواحدة بعين انتقادية.</li>
+<li><b>تحليل الفرضيات المتنافسة (Analysis of competing hypotheses):</b> حدد أكتر من احتمال وحط أدلة لكل واحد بالتساوي، بدل ما تمسك في احتمال واحد من الأول.</li>
+</ul></div>
+<div class="app" style="font-size:14px;color:var(--mute);margin-top:8px">في شغلك (اقتراح مني): مقتنع إن بطء المسار سببه الشبكة، فبتفسر أي تأخير على إنه شبكة وتتجاهل سجلات الذاكرة. اكتب الفرضيات المنافسة (الذاكرة، الربط (Join)، المصدر) وحط دليل لكل واحدة.</div>
+</div>
+
+<div class="card">
+<h3>٢. تحيزات الثقة المفرطة <span class="en">(Confidence Biases)</span></h3>
+<div class="row"><span>المعنى</span>ثقة زيادة عن اللزوم لدرجة إنك بتتجاهل أي علامات تحذير واضحة بتقول إن الحل بتاعك ممكن يفشل.</div>
+<div class="row"><span>مثال</span>«أنا متأكد بنسبة 100% إن الحل المقترح بتاعي مش هيفشل أبداً!»</div>
+<div class="apply"><span>إزاي تتخلص منها (Debiasing Technique):</span>
+<ul>
+<li><b>تخيّل الفشل مستقبلاً (Pre-mortem):</b> تخيل إنك سافرت بالزمن للمستقبل ولقيت إن الاستراتيجية فشلت فعلاً، وابدأ اسأل نفسك: «ليه فشلت؟ وإيه اللي غلط اللي عملناه؟» عشان تلحق تتداركه من دلوقتي.</li>
+</ul></div>
+<div class="app" style="font-size:14px;color:var(--mute);margin-top:8px">في شغلك (اقتراح مني): قبل نشر تعديل على بيئة الإنتاج (Production)، اسأل: «لو فشل التعديل ده بكرة، إيه الأسباب المحتملة؟» (مثلاً: هيكل جدول متغير، حجم بيانات أكبر).</div>
+</div>
+
+<div class="card">
+<h3>٣. تحيزات الاستقرار أو الثبات <span class="en">(Stability Biases)</span></h3>
+<div class="row"><span>المعنى</span>التشبث بطريقة تفكير أو عملية قديمة لمجرد إنها «نفعت زمان»، ورفض التجديد.</div>
+<div class="row"><span>مثال</span>«تعالوا نستخدم نفس جدول الشفتات القديم بتاع السنة اللي فاتت عشان كان ماشي كويس وقتها.»</div>
+<div class="apply"><span>إزاي تتخلص منها (Debiasing Technique):</span>
+<ul>
+<li><b>تخفيف القيود (Constraint release):</b> اكتب كل القيود اللي مخلياك مكتوف الأيدي، وابدأ فكها قيد ورا قيد في دماغك وشوف لو فيه أفكار جديدة هتظهر.</li>
+<li><b>تحليل وجهات النظر (Point-of-view analysis):</b> تخيل المشكلة من وجهة نظر 4 أو 5 أشخاص مختلفين عنك في الفريق، واكتب الحل من منظور كل واحد فيهم.</li>
+</ul></div>
+</div>
+
+<div class="card">
+<h3>تطبيق عملي في هندسة البيانات</h3>
+<div class="cmp">
+<div class="bad"><b>تحيز الاستقرار (Stability Bias)</b>لما يقع مسار أو استعلام بطيء، تقول: «إحنا دايماً بنحل المشكلة دي بالفهرسة (Indexing) وخلاص، زي كل مرة.»</div>
+<div class="good"><b>إزالة التحيز</b>تخيل إن الحل ده فشل وحلل الأخطاء (Pre-mortem)، أو بص للمشكلة من وجهة نظر فريق الأعمال (Business) اللي مش مهتم بالكود خالص، المهم إن التقرير يطلع في معاده بدقة.</div>
+</div>
+</div>
+
+<div class="sum" style="margin-top:30px">
+<h3>الخلاصة: أهم أدوات الموديول <span class="en">(Key Takeaways)</span></h3>
+<p style="margin:0 0 8px;color:#B9CADA">أهم 3 أدوات اتعلمناها عشان نضمن إننا بنحل المشكلة الصح:</p>
+<ul>
+<li><b>سؤال أو بيان المشكلة (Problem Question / Statement):</b> تلخيص المشكلة في جملة أو سؤال موجز ومحدد بدقة.</li>
+<li><b>إطار (SMART):</b> محدد، قابل للقياس، قابل للتنفيذ، ذو صلة، ومحدد بوقت. بتختبر بيه هل صياغة مشكلتك صحيحة وفعالة.</li>
+<li><b>ورقة عمل بيان المشكلة (Problem Statement Worksheet):</b> القالب الشامل اللي بتملاه عشان تلم بكل عناصر المشكلة (السياق، القيود، معايير النجاح، وأصحاب الشأن) وتبقوا كلكم كفريق على نفس الصفحة.</li>
+</ul>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+افتكر آخر مشكلة تقنية واجهتها. اكتب سؤال المشكلة بصيغة (SMART) (محدد، قابل للقياس، قابل للتنفيذ، ذو صلة، محدد بوقت)، وبعدين املا 3 خانات من ورقة بيان المشكلة (السياق، القيود، معايير النجاح)، واكتب فرضية أولية لسببها وإزاي هتختبرها. ابعتلي إجابتك وأضيفها.
+</div>
+
+<div class="hero" style="margin-top:44px"><small>الموديول ٤ • الوقت المقدر: حوالي 40 دقيقة</small>
+<h2>هيكلة المشكلة <span class="en">(Structuring the Problem)</span></h2>
+<p>الموديول هيعلمك 3 مهارات أساسية هتستخدمها في تفكيرك وحل المشكلات.</p></div>
+
+<div class="apr">
+<div><div class="l">1</div><h4>شجرة المشاكل <span class="en">(Issue Tree)</span></h4><div class="row" style="margin-bottom:0">إزاي تاخد المشكلة الكبيرة المعقدة وتكسرها لأجزاء أصغر وأبسط يسهل التعامل معها وحلها خطوة بخطوة.</div></div>
+<div><div class="l">2</div><h4>إطار <span class="en">MECE</span></h4><div class="row" style="margin-bottom:0">الأداة (Mutually Exclusive, Collectively Exhaustive) لاختبار شجرة المشاكل: الأجزاء اللي كسرتها مش متداخلة (مش متكررة)، وفي نفس الوقت بتغطي المشكلة 100% من غير ما تنسى حاجة.</div></div>
+<div><div class="l">3</div><h4>مبدأ 80/20 ومصفوفة الأولويات <span class="en">(80/20 Principle &amp; Prioritization Matrix)</span></h4><div class="row" style="margin-bottom:0">إزاي تركز جهودك وتحليلاتك على الـ 20% الأهم من المشكلة اللي هتجيب 80% من النتيجة والتأثير، بدل ما تضيع وقتك في تفاصيل فرعية.</div></div>
+</div>
+
+<div class="mod"><b>الدرس ٢٦</b><h2>قوة هيكلة المشكلة وترتيب الأولويات <span class="en">(The power of problem structuring and prioritization)</span></h2></div>
+<div class="card">
+<div class="row"><span>ليه مهمين؟</span>زي ما عرفنا في قصة مصنع اللحوم (CarneCarne)، الوقت بيكون ضيق جداً ومش متاح تبحث في كل صغيرة وكبيرة. لو دخلت بعشوائية هتلاقي نفسك بتفتح أسئلة وتفاصيل فرعية أكتر من اللي بتلحق تحلها. الهيكلة وترتيب الأولويات هما طوق النجاة اللي بيوجّه وقتك ومواردك المحدودة للمنطقة اللي هتجيب النتيجة.</div>
+<div class="cmp">
+<div class="good"><b>١. الهيكلة (Structuring)</b>تاخد المشكلة الكبيرة وتقسمها لأجزاء أصغر (Sub-issues) عشان يسهل دراستها.</div>
+<div class="good"><b>٢. ترتيب الأولويات (Prioritization)</b>تقرر تبدأ بأنهي جزء: إيه الجزء الأكتر تأثيراً والأهم حالياً؟</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>من غير هيكلة (في هندسة البيانات)</b>عطل ضخم في البنية: هتجري تفتح كل السجلات (Logs) وتغير كود بايثون وتكلم دعم السحابة وتراجع كل الاستعلامات في نفس اللحظة. تشتت وعشوائية.</div>
+<div class="good"><b>بالهيكلة والأولويات</b>تقسم: هل العطل في المصدر (Source)؟ ولا في التحويل (Transformation)؟ ولا في قاعدة البيانات الهدف (Target Database)؟ وبعدين تبدأ بأكتر جزء محتمل (مثلاً المصدر) بناءً على الخبرة والبيانات الأولية.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>مقدمة في أشجار المنطق والمشكلات الفرعية <span class="en">(Introduction to logic trees and sub-issues)</span></h2></div>
+<div class="card">
+<h3>مارك: إزاي نبني شجرة المشاكل (Issue Tree)؟</h3>
+<div class="row"><span>١. شكلها</span>بتبدأ من جانب واحد بـ«سؤال المشكلة الأساسي»، وبعدين بتتفرع لـ 3 أو 4 أسئلة رئيسية (المستوى الأول)، ولكل سؤال بتنزل بتفاصيل أدق (Granular) لحد أسئلة صغيرة جداً ومحددة، كل واحد منها يقدر يتحل بتحليل منفصل (Single Analysis).</div>
+<div class="row"><span>٢. عملية تكرارية (Iterative)</span>نادراً تطلع بالشجرة المثالية من أول محاولة. ارسم أكتر من طريقة لهيكلة المشكلة (طريقتين أو تلاتة)، وجربهم وعدّل باستمرار. ومع معلومات جديدة عادي ترجع تعدل الشجرة عشان تسهل فهمها على أي حد هيقراها.</div>
+<div class="row"><span>٣. التحديات</span><b>المشاريع السريعة/الأزمات:</b> مفيش وقت لمحاولات كتير فبتعتمد على خبرتك القديمة، والخطر إنك تقع في فخ «الاعتماد المفرط على الخبرة» وتنسى الطرق البديلة. <b>المشاريع الضخمة:</b> المشاكل كتيرة ومتداخلة، والصعوبة إنك تتأكد إن الفروع النهائية مستقلة عن بعض (MECE) ومش متداخلة.</div>
+<div class="apply" data-pz="26"><span>في هندسة البيانات: «ليه تقارير الشركة بتطلع متأخرة كل يوم؟»</span>
+<div class="tree">
+<div class="root">سؤال المشكلة: ليه التقارير بتتأخر كل يوم؟</div>
+<div class="br">
+<div>هل العطل في مصادر البيانات (Sources)؟<small>مع التعمق: ضغط على الـ(API) المصدر</small></div>
+<div>هل العطل في أكواد المعالجة (ETL / Transformations)؟</div>
+<div>هل العطل في التخزين النهائي (Data Warehouse)؟</div>
+</div></div>
+وأنت شغال ممكن تكتشف مشكلة فرعية في المصدر (زي ضغط الـ(API))، فتعدل الشجرة لتكون أدق لحد ما توصل لسبب محدد يقدر مهندس بيانات واحد يحله باستعلام (Query) أو سكريبت معين.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>اختبار شجرتك: قاعدة <span class="en">MECE</span></h2></div>
+<div class="card">
+<h3>أولاً: اختبار (MECE): مفيش تداخل ومفيش نواقص</h3>
+<div class="cmp">
+<div class="good"><b>مستقلة (Mutually Exclusive)، مفيش تداخل</b>السبب موجود في فرع واحد بس، مش متكرر في حتة تانية.<br><b>مثال غلط:</b> قايمة (فطار، غداء، وجبات)، لأن الفطار والغداء أصلاً جزء من «الوجبات».</div>
+<div class="good"><b>شاملة (Collectively Exhaustive)، مفيش نواقص</b>نهايات الشجرة تغطي كل الاحتمالات 100%.<br><b>مثال غلط:</b> إشارات المرور (أخضر وأحمر) ونسيت الأصفر.</div>
+</div>
+<div class="note"><b>مثال صح (الأرباح):</b> تفكيك «إزاي نفكك الأرباح (Profitability)؟» لمحركات الإيرادات (Revenue drivers) ومحركات التكاليف (Cost drivers) بيغطي كل حاجة.</div>
+<div class="apply" data-pz="27"><span>في هندسة البيانات (اقتراح مني):</span> فروع «المصدر، التحويل، التخزين» فوق: هل في نقص؟ مثلاً مجدول المهام (Scheduler/Orchestration) أو الشبكة مش ظاهرين، يبقى في فجوة (Gap) محتاجة فرع.</div>
+</div>
+<div class="card">
+<h3>ثانياً: نصيحتين ذهبيتين من مارك</h3>
+<div class="pts" style="margin:0">
+<div class="pt"><b>اسأل الخبراء (Collective wisdom)</b>ما تفتكرش إنك لوحدك هتجيب الإجابة المثالية. عقل الجماعة بيطلع نتيجة أحسن من تفكير شخص واحد.</div>
+<div class="pt"><b>اشتغل بالتكرار (Iterative)</b>ما تضيعش أيام عشان تطلع شجرة مثالية. هات هيكل واصل لـ 80% من الجودة، وجربه وعدل عليه وإنت شغال.</div>
+</div>
+</div>
+<div class="card">
+<h3>ثالثاً: ترتيب الأولويات وفخ الحذف المبكر <span class="en">(Eliminating items too early)</span></h3>
+<div class="row"><span>الفخ</span>بعض الناس بتستعجل وتحذف فروع كاملة من الشجرة لمجرد إنها «صعبة» أو «مش هتنفع دلوقتي».</div>
+<div class="row"><span>مثال مارك</span>مشكلة «إزاي نزود الإيرادات؟»: الحلول العادية (نرفع السعر، أو نبيع كميات أكتر). لكن في حل تاني: الاستحواذ على شركة تانية. ممكن يكون مرفوض حالياً لأن مفيش ميزانية، لكن غلط تحذفه من الشجرة في البداية، لأنك كده بتضيّق نطاق تفكيرك (Narrowly define the scope) وممكن تفوت حل عبقري.</div>
+<div class="note">الخلاصة: اعمل شجرة شاملة وما تستعجلش تحذف منها، اختبرها بـ(MECE)، وشاركها مع غيرك وعدل عليها بالتدريج لحد ما توصل للحل الأمثل.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٣٠</b><h2>ترتيب أولوياتك بمبدأ 80/20 ومصفوفة الأولويات <span class="en">(Prioritizing your issues with 80/20 and the prioritization matrix)</span></h2></div>
+<div class="card">
+<h3>مبدأ 80/20 (قاعدة باريتو، Pareto Principle)</h3>
+<div class="row"><span>الفكرة</span>تقدر تاخد 80% من النتايج أو الفوائد بعمل 20% بس من المجهود. في حل المشكلات: ما تغرقش في التفاصيل، ركز على المؤثر بجد.</div>
+<div class="row"><span>المدى القصير والطويل</span><b>القصير:</b> الوقت ضيق (أسبوع مثلاً)، فبتختار أهم 20% من التحليلات اللي تخلصها في المدة دي. <b>الطويل:</b> الهدف «ما تغلّيش المحيط» (Don't boil the ocean)، والأهم التكرار وتحديث الأولويات: كل تحليل جديد يثبت إن فرع غلط، تقفل السكة دي وتوجه وقتك للمكان الصح.</div>
+<div class="row"><span>مثال مارك</span>كان بيقيم شركة فيها أكتر من 200 نشاط تجاري (Lines of business). تقييمهم واحد واحد مستحيل. لقوا إن حوالي 30 نشاط بس هما صاحبين التأثير الأكبر على القيمة، فركزوا عليهم وحلوا المشكلة في وقت قياسي.</div>
+<div class="row"><span>مرتاح مع الغموض (Comfortable with ambiguity)</span>تطبيق المبدأ معناه توصل لـ 80% من الإجابة الصحيحة مش 100%. اسأل نفسك: «هل اللي وصلتله كافٍ واتجاهياً صحيح عشان نتحرك قدام؟» تقييم حجم سوق جديد (10 مليون ولا 100 مليون؟) كفاية تعرف الاتجاه، لكن في مصنع أشباه موصلات (Semiconductor) ومعدلات الأخطاء (Error rates) لازم دقة متناهية لعدة كسور عشرية.</div>
+<div class="cmp">
+<div class="bad"><b>غلط: «غلّي المحيط»</b>لوحة الشركة (Dashboard) بطيئة وقدامك 100 استعلام (SQL Queries)، فتقعد تحسنهم واحد واحد (أسابيع).</div>
+<div class="good"><b>صح: 80/20</b>من السجلات تكتشف إن أبطأ 5 استعلامات بس هما اللي ساحبين 90% من موارد السيرفر (CPU &amp; Memory). تركز عليهم فتتحل المشكلة في ساعة بدل أسابيع.</div>
+</div>
+</div>
+
+<div class="hero" style="margin-top:44px"><small>الموديول ٥</small>
+<h2>التخطيط والوصول للتوصيات <span class="en">(Module 5: Work Planning and Recommendations)</span></h2>
+<p>من شجرة المشاكل لخطة عمل، ومن التحليل لتوصية يقتنع بيها صاحب القرار.</p></div>
+
+<div class="card">
+<h3>قصة شركة (SodaComp)</h3>
+<div class="row"><span>الموقف</span>شركة مشروبات غازية مقرها ألمانيا، والمدير التنفيذي (CEO) حط هدفاً صعباً وسريعاً: زيادة الحصة السوقية في أوروبا بنسبة 3% قبل نهاية السنة (فاضل 5 شهور بس).</div>
+<div class="row"><span>اللي عمله فريق التسويق</span>صاغ سؤال المشكلة: «إزاي نقدر نحسن حصتنا السوقية في أوروبا بـ 3% قبل آخر السنة؟»، وعمل شجرة مشاكل وركز على أهم فرعين: <b>(١)</b> تحسين استراتيجية قنوات التوزيع (Channel Strategy) زي المطاعم والمتاجر الإلكترونية، و<b>(٢)</b> تطوير الابتكار والمنتجات (Product Development) زي منتجات أصح أو عصائر طبيعية. عرضوا الشغل على المدير التنفيذي فعجبه وطلب منهم الخطوة التالية.</div>
+<div class="apply" data-pz="28"><span>في هندسة البيانات (هدف شبيه):</span> «زيادة سرعة معالجة وتحليل بيانات العملاء بنسبة 50% قبل حملة المبيعات الكبرى خلال 3 شهور». سؤال المشكلة: «إزاي نقلل زمن معالجة بيانات العملاء بـ 50% خلال 3 شهور؟» والفرعين الأهم: <b>المصدر:</b> تحسين سحب البيانات من الـ(APIs) الخارجية، و<b>التحويل (Transformation):</b> إعادة كتابة أبطأ استعلامات (SQL) في المعالجة (ETL). بعد موافقة مدير التقنية (CTO) تبدأ خطة عمل (Work Plan) لكل فرع وتنفذ من بكره.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>قوة خطة العمل <span class="en">(The power of a work plan)</span></h2></div>
+<div class="card">
+<h3>مارك وإميلي: الخطوات الأربع الأخيرة من المنهجية</h3>
+<ol class="steps">
+<li><div><h4>تخطيط التحليلات <span class="en">(Planning the Analysis)</span></h4>تحدد إيه اللي محتاج تثبته أو تنفيه (الفرضية)، ونوع التحليل، ومين المسؤول وهيخلص إمتى (Accountability &amp; Timing).</div></li>
+<li><div><h4>تنفيذ التحليلات <span class="en">(Conducting Analysis)</span></h4>كمي (Quantitative) أو كيفي (Qualitative). حكمة مارك: «مش المهم إحنا مشغولين، المهم مشغولين بإيه؟» واستخدم 80/20 لتوفير الوقت.</div></li>
+<li><div><h4>تلخيص النتائج <span class="en">(Synthesis vs Summary)</span></h4>الملخص (Summary) حكي روتيني لكل اللي عملناه بالترتيب الزمني، وده مش كفاية. التخليص (Synthesis) هو الإجابة المدمجة العميقة لسؤال «فإيه النتيجة؟» (So What؟).</div></li>
+<li><div><h4>تطوير التوصيات والتحرك <span class="en">(Recommendations &amp; Mobilization)</span></h4>التوصية خطة عملية تخلي المؤسسة تتحرك وتنفذ. إميلي: نصف المعركة إقناع الناس (Buy-in)، لأن أحسن حل في العالم من غير حماس الناس ما يحققش نتيجة.</div></li>
+</ol>
+<div class="note">تحذير مارك من التحيز (De-biasing): لو وصلت لنتيجة سريعة في أول أسبوع، فضّل منفتح العقل وتحدى نفسك (احذر التحيز التأكيدي (Confirmation Bias)) عشان تتأكد إنك وصلت للحل الصح مش مجرد أول إجابة.</div>
+</div>
+<div class="card">
+<h3>إنجريد: ربط شجرة المشاكل بخطة العمل</h3>
+<div class="row"><span>الآلية</span>بتاخد الفروع النهائية للشجرة، ولكل فرع بتحدد:</div>
+<div class="pts" style="margin:6px 0 12px">
+<div class="pt"><b>الفرضية (Hypothesis)</b>إيه توقعك؟</div>
+<div class="pt"><b>المبرر (Rationale)</b>ليه ممكن تكون صح أو غلط؟</div>
+<div class="pt"><b>التحليل المطلوب (Analysis)</b>إيه الشغل اللي هنعمله لإثباتها أو نفيها؟</div>
+<div class="pt"><b>مصدر البيانات (Source of Insight)</b>هنطلعها منين (كيفي أو كمي)؟</div>
+</div>
+<div class="row"><span>عبء الإثبات (Burden of Proof)</span>لازم تعرف من أول يوم معيار القبول عند متخذ القرار (CEO أو المدير). لو متوقع دليل قاطع 100% وجبت 80% هيرفض الشغل. ولو مش محتاج دقة متناهية فما تضيعش أسابيع في تحليل مفرط. معرفة المعيار من الأول بيوفر وقت ضخم.</div>
+<div class="apply" data-pz="29"><span>في هندسة البيانات (بطء استعلامات (ETL)):</span>
+<ul>
+<li><b>الفرضية:</b> بطء المسار سببه استعلامات (SQL) غير محسنة في خطوة المعالجة.</li>
+<li><b>التحليل:</b> فحص خطط التنفيذ (Execution Plans) لأبطأ 5 استعلامات.</li>
+<li><b>المصدر:</b> سجلات استعلامات قاعدة البيانات (Query Logs)، وهي بيانات كمية.</li>
+<li><b>عبء الإثبات:</b> مدير التقنية (CTO) مش محتاج تفاصيل جانبية، عايز يعرف الاستعلامات اللي هتقلل وقت المعالجة 50% على الأقل عشان يوافق فوراً.</li>
+<li><b>المسؤول والوقت:</b> أنت المسؤول، وهتخلص خلال يومين (Accountability).</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>تحديد وتنفيذ التحليلات <span class="en">(Determining and conducting analyses)</span></h2></div>
+<div class="card">
+<h3>إنجريد: رحلة تنفيذ التحليل</h3>
+<div class="pts" style="margin:0">
+<div class="pt"><b>١. فخ «الغابة والشجر»</b>بتغرق في التفاصيل والأرقام (الشجر) وتنسى الهدف الكبير (الغابة). بدل التركيز على دقة الأرقام بالمللي اسأل: «هل التحليل ده بيودينا للإجابة الصح على السؤال الأساسي؟»</div>
+<div class="pt"><b>٢. الدقة مقابل الصحة (Precision vs Accuracy)</b>ممكن رقم يبقى دقيق لـ 3 كسور عشرية بس في الاتجاه الغلط! الأهم «الصحة الاتجاهية» (Directional Accuracy): هل الخطوة دي مقربة للحل الصحيح؟</div>
+<div class="pt"><b>٣. إمتى توقف؟ (Sanity Check &amp; Stopping Rules)</b>اعمل وقفات دورية (أسبوع أو شهر): هل اللي جمعناه كفاية لنوقف ونطلع بالنتيجة، ولا ظهرت مفاجأة تخلينا نكمل ونختبر الفرضية بعمق؟</div>
+</div>
+<div class="row" style="margin-top:12px"><span>ربط بقصة (SodaComp)</span>وإنت بتحلل السوق والتكلفة لفكرة «صودا برتقال صحية»، ما تغرقش في تفاصيل الأرقام. اعمل مراجعات دورية عشان تتأكد إنك ماشي في اتجاه زيادة الـ 3% في الحصة السوقية.</div>
+<div class="apply" data-pz="30"><span>في هندسة البيانات (بطء جلب البيانات من قاعدة البيانات):</span>
+<ul>
+<li><b>الغابة والشجر:</b> تقعد 3 أيام تحسّن وتجمّل كود (SQL) وتنسى تسأل: هل العطل من الكود ده، ولا من سيرفر الـ(API) الخارجي أصلاً؟</li>
+<li><b>الدقة مقابل الصحة:</b> بدل ما تحسب الوقت بجزء من الألف من الثانية، يكفي تعرف إن الكود الجديد نزّل المعالجة من ساعة لـ 5 دقائق.</li>
+<li><b>الوقفة الدورية:</b> كل يومين اسأل: «التعديلات دي جابت نتيجة كفاية ولا نكمل تحسين؟»</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٣٧</b><h2>الوصول للتخليص وصياغة التوصية <span class="en">(Getting to synthesis and making a recommendation)</span></h2></div>
+<div class="card">
+<h3>أولاً: الملخص مقابل التخليص</h3>
+<div class="cmp">
+<div class="bad"><b>الملخص (Summary)</b>سرد تفصيلي لكل الحقائق بترتيبها الزمني. زي رسالة أخو إنجريد الطويلة (اجتماعه اتأخر، نسي تليفونه، رجع جابه، وفات القطار).</div>
+<div class="good"><b>التخليص (Synthesis)</b>الإجابة باختصار عن «وفإيه النتيجة؟» (So What؟). زبدة رسالة أخوها: «أنا متأخر على العشاء».</div>
+</div>
+<div class="note">الغلطة الشائعة في المشاريع الكبيرة: عرض «ملخص» لكل الشغل عشان تثبت إنك تعبت، والمطلوب «تخليص» بالمعنى اللي يهم متخذ القرار.</div>
+</div>
+<div class="card">
+<h3>ثانياً: من التخليص إلى التوصية (From Synthesis to Recommendation)</h3>
+<div class="row"><span>الفكرة</span>التوصية بتقول إيه اللي المفروض نعمله بالتحديد. ولنجاحها لازم تكون:</div>
+<div class="pts" style="margin:6px 0 12px">
+<div class="pt"><b>مناسبة للشركة (Appropriate)</b>ماشية مع قدرات وأهداف المؤسسة.</div>
+<div class="pt"><b>قابلة للتنفيذ (Actionable)</b>ليها جدول زمني، ومسؤولين واضحين، وموارد متاحة، وإقناع للمساهمين (Buy-in).</div>
+</div>
+<div class="note">نصيحة إنجريد: ناس كتير بتضيع 90% من الوقت في التحليل وتنسى تخصص وقت كافي للتفكير في التوصية وطريقة عرضها على الإدارة، فالشغل الجميل بيضيع.</div>
+</div>
+<div class="card">
+<h3>ثالثاً: تطبيق على قصة (SodaComp)</h3>
+<div class="pts" style="margin:0 0 12px">
+<div class="pt"><b>صفية (Safia)</b>المستهلكين بيقللوا السكر لأسباب صحية.</div>
+<div class="pt"><b>إيميت (Emmit)</b>السكر الكتير بيسبب وزن زائد، والناس مهتمة باللياقة.</div>
+<div class="pt"><b>ساريت (Sarit)</b>المنافسين الكبار ما عندهمش خيارات صحية كفاية، وأكبر مبيعاتهم في نكهة «البرتقال».</div>
+</div>
+<div class="cmp">
+<div class="good"><b>التخليص (So What)</b>«العملاء عاوزين صحة أفضل، والمنافسين مش مغطيين سوق الصودا الصحية بنكهة البرتقال كفاية، فعندنا فرصة ذهبية لتقديم صودا برتقال صحية منخفضة السكر.»</div>
+<div class="good"><b>التوصية</b>إطلاق منتج «صودا برتقال صحية» في قنوات التوزيع الحالية للشركة خلال الـ 5 شهور القادمة.</div>
+</div>
+<div class="apply" data-pz="31"><span>في هندسة البيانات (تقرير عن بطء قواعد البيانات):</span>
+<ul>
+<li><b>الملخص:</b> تسرد كل أرقام المعالج (CPU) والذاكرة (Memory) والسجلات لكل استعلام خلال الشهر الماضي، وده بيلخبط المدير.</li>
+<li><b>التخليص:</b> «استهلاك السيرفر بيعلى لـ 90% كل يوم الساعة 2 ظهراً بسبب تداخل تقارير المبيعات مع تقارير المخزون.»</li>
+<li><b>التوصية:</b> «نقل تشغيل تقارير المخزون لساعات الليل المتأخرة (غير الذروة)، وده هيحل المشكلة بدون تكلفة إضافية.»</li>
+</ul></div>
+</div>
+
+<div class="sum" style="margin-top:34px">
+<h3>🏁 كورس حل المشكلات اكتمل</h3>
+<ul>
+<li>عرّف المشكلة بسؤال (SMART) وورقة بيان المشكلة، واسأل أسئلة قوية، وتجنب التحيزات.</li>
+<li>هيكل المشكلة بشجرة (MECE)، ورتب أولوياتك بـ 80/20، وما تحذفش بدري.</li>
+<li>ابنِ خطة عمل بفرضيات وعبء إثبات، وحلل باتجاه صحيح، وطلّع «تخليص» وتوصية قابلة للتنفيذ.</li>
+</ul>
+</div>
+</section>
+
+<section id="c4" class="pane" hidden>
+<div class="hero"><small>الكورس ٤ من البرنامج</small>
+<h2>التواصل المؤثر <span class="en">(Communicating for Impact Course)</span><span class="badge">مكتمل</span></h2>
+<p>إزاي تتواصل بطريقة تخلي اللي قدامك يتحرك وينفذ اللي بتطلبه: إطار (EPIC) والتعاطف والاستماع الفعّال، مع تطبيق كل درس على هندسة البيانات.</p></div>
+
+<div class="mod"><b>الدرس</b><h2>أهلاً بك في التواصل المؤثر <span class="en">(Welcome to: Communicating for Impact)</span></h2></div>
+<div class="card">
+<h3>إطار عمل (EPIC)</h3>
+<div class="row"><span>الفكرة</span>السر الأساسي عشان نتواصل بطريقة مؤثرة ونخلي اللي قدامنا يتحرك وينفذ اللي بنطلبه. أربع خطوات:</div>
+</div>
+<div class="apr">
+<div><div class="l">E</div><h4>التعاطف <span class="en">(Empathy)</span></h4>
+<div class="row">تحط نفسك مكان الشخص اللي بتكلمه (مديرك، فريق المطورين، مدير التقنية (CTO)) وتفهم هو بيفكر في إيه وإيه اللي يهمه.</div>
+<div class="q2"><b>في الداتا:</b> قبل ما تشرح تقرير بطء المسار (Pipeline) للـ(CTO)، افهم إن وقته ضيق ومش بيحب التفاصيل التقنية، المهم يتأكد إن المشكلة هتتحل قبل الحملة الجاية.</div></div>
+<div><div class="l">P</div><h4>الهدف المشترك <span class="en">(Purpose)</span></h4>
+<div class="row">تحدد هدفك الواضح من الكلام بحيث يخدم احتياجاتك واحتياجات الشخص اللي قدامك في نفس الوقت.</div>
+<div class="q2"><b>في الداتا:</b> هدفك مش «أنا عدلت الكود»، لكن: «إزاي نضمن استقرار سرعة السيرفر ونوفر 30% من تكلفة السحابة (Cloud)».</div></div>
+<div><div class="l">I</div><h4>الرؤية والوضوح <span class="en">(Insight)</span></h4>
+<div class="row">عرض أفكارك ومعلوماتك بطريقة واضحة ومقنعة (الخلاصة والـ«So What» اللي اتعلمناها في كورس حل المشكلات).</div>
+<div class="q2"><b>في الداتا:</b> رسم بياني بسيط يوضح أسباب العطل بدل سرد أسطر من السجلات (Logs) المعقدة.</div></div>
+<div><div class="l">C</div><h4>المحادثة التفاعلية <span class="en">(Conversation)</span></h4>
+<div class="row">تخطيط الحوار ليكون رايح جاي (Two-way conversation) مش سرد من طرف واحد، وتسمح للناس تسأل وتتفاعل.</div>
+<div class="q2"><b>في الداتا:</b> بعد ما تعرض الحل التقني اسأل الإدارة: «إيه رأيكم في الخطة دي؟ هل شايفين أي تحدي ممكن يواجهنا في التنفيذ؟»</div></div>
+</div>
+<div class="note"><b>ملاحظة مهمة (في الداتا):</b> لما تشرح تقريراً فنياً معقداً لمدير غير تقني، بدل ما تدخل في تفاصيل الأكواد والاستعلامات (Queries) على طول، التعاطف بيخليك تفكر: «هو خايف من إيه؟» غالباً من تعطل النظام أو تأخر التسليمات. فلما تبدأ بطمأنته وعرض الحلول اللي تهم مصلحته، هتلاقيه متقبل ومقتنع بيك.</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>مدى معرفتك بالتعاطف <span class="en">(How familiar are you with empathy?)</span></h2></div>
+<div class="card">
+<div class="theme">تمرين تفاعلي (بطاقات) بيختبر وبيصحح مفهومنا عن إيه هو التعاطف وإيه اللي مش تعاطف</div>
+<div class="cmp">
+<div class="good"><b>✅ التعاطف هو:</b><br>• <b>فهم مشاعر الآخرين:</b> استيعاب تجربة الشخص ومنظوره ومشاعره.<br>• <b>بناء رابط عاطفي وثقة:</b> تقرب منه عشان تفهم دماغه، وده بيبني ثقة مع الوقت.<br>• <b>مراعاة أفكار ومشاعر الآخرين:</b> إدراك مشاعر الناس واحترام طريقة تفكيرهم.</div>
+<div class="bad"><b>❌ التعاطف مش:</b><br>• <b>الموافقة على الرأي:</b> مش لازم توافق، لكن تحترم وتفهم وجهة نظره حتى لو مختلف.<br>• <b>امتلاك حل فوري:</b> بيبدأ بالاستماع والفهم قبل أي حلول.<br>• <b>مجرد الشفقة (Sympathy):</b> الشفقة تحس بظروف حد من بعيد، أما التعاطف تدخل جوه الموقف وتحط نفسك مكانه (Put yourself in their shoes).</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>غير متعاطف (في الداتا)</b>مديرك متعصب لأن لوحة المتابعة (Dashboard) وقفت فجأة، فتقوله: «الأخطاء دي طبيعية والسجلات بتقول كذا.» (جاف.)</div>
+<div class="good"><b>متعاطف صح</b>«أنا فاهم قد إيه الموقف حرج وتأثيره على الإدارة، واشتغلنا فوراً على حله.» بتسمعه بتركيز، وده بيبني ثقة فورية.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>رجوع لشركة (MODA) <span class="en">(Back at MODA)</span></h2></div>
+<div class="card">
+<h3>القصة</h3>
+<div class="row"><span>الأفكار الداخلية في البداية</span><b>نوح (رئيس قسم التكنولوجيا):</b> جائع ومتضايق إن الاجتماع وقت الغداء، وعنده تجربة سيئة من «تحول سابق» للشركة، ومتوقع إن علياء هترمي عليه مواعيد تسليم تعجيزية (Deadlines).<br><b>علياء (مديرة التحول الشامل):</b> مضغوطة جداً بملفات كتيرة (تمرين، مبادرة الإرشاد، مجموعة الشباب، وأخيراً مشروع التحول)، وبتدرب نفسها على التنفس عشان تهدى وتركز.</div>
+<div class="row"><span>بداية الاجتماع</span>علياء متوترة وبتمسح الفتات من على مكتبها (لأنها بتاكل غداها وهي شغالة). نوح كان هيقولها بجفاف: «هاتي المواعيد والخطط عشان فريقي يلحق يخلصها!»، لكن لحظة إدراك (Get a grip, Noah): بص عليها ولقاها تحت ضغط، فقرر يغير طريقته ويطبق «التعاطف».</div>
+<div class="row"><span>نقطة التحول</span>نوح تراجع عن الجفاف وسألها بصدق: «إزاي حاسة نفسك في الدور الجديد؟ باين إن وراكي مسؤوليات كتير.» علياء ارتاحت وفضفضت إن التحول بدأ أبكر من المتوقع. وشجعها: «إنتي مش لوحدك، معاكي فريق عظيم يدعمك، تعالي نعرفك على باقي الشباب.» فاتقلب الاجتماع من توتر لتعاون وثقة متبادلة.</div>
+</div>
+<div class="card">
+<h3>إجابات الأسئلة الثلاثة (رأي الخبراء)</h3>
+<div class="pts" style="margin:0">
+<div class="pt"><b>إيه اللي كان ممكن نوح يعمله قبل الاجتماع؟</b>ما يدخلش وأعصابه مشدودة من تجارب قديمة. كان يفكر: «يا ترى ظروف علياء إيه في الدور الجديد؟ وإيه التحديات اللي بتقابلها؟» بدل ما يدخل جاهز للهجوم.</div>
+<div class="pt"><b>فين ظهر التعاطف؟</b>لما نوح وقف لحظة وخد باله من لغة جسد علياء وضغطها، فسيب أجندة الاجتماع الناشفة وسألها عن حالتها وشعورها وقدّر ضغطها.</div>
+<div class="pt"><b>علياء حسّت بإيه، وإيه التأثير؟</b>ارتاحت وحست بالأمان وإنها مش لوحدها. وعلى المدى الطويل: ثقة عميقة قوية وتعاون سلس في مشاريع التحول بدل الصدام والتوتر.</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>بطريقة نوح القديمة (في الداتا)</b>رايح تقابل مدير المبيعات المشغول، تفتح اللابتوب وتقوله: «السيرفر وقع والاستعلامات بطيئة والناس بتشتكي.» جاف ويزود التوتر.</div>
+<div class="good"><b>بطريقة نوح المتعاطفة</b>«أهلاً بيك، عارف إن الفترة دي ضغط كبير عليك مع هدف المبيعات (Target) الجديد، طمنّي ماشي إزاي؟ وعلى فكرة اشتغلت على حل تقني هيوفر عليكم وقت كبير في جلب البيانات.» بيكسب القلوب ويحل المشاكل بسرعة.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>ما هو التعاطف؟ (كيت آكويلا) <span class="en">(What is empathy?)</span></h2></div>
+<div class="card">
+<h3>كلام كيت آكويلا (Kate Aquila) عن جوهر التعاطف في التواصل الفعّال</h3>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>١. التعاطف نقطة البداية</b>عشان تعرف رايح فين لازم تفهم إنت جاي منين، والأهم تفهم «الشخص اللي قدامك جاي منين وضغطه إيه». التعاطف مش رفاهية، ده الأساس اللي بيتبني عليه أي تواصل ناجح.</div>
+<div class="pt"><b>٢. عقلية «هنا» مقابل «هناك»</b><b>«هنا» (Over Here):</b> غارق في جدولك ومواعيدك وأهدافك وحوارك الداخلي، غافل عن اللي قدامك.<br><b>«هناك» (Over There):</b> منفتح وفضولي ومهتم تعرف الطرف التاني بيفكر في إيه، وهنا المحادثة بتبقى مثمرة ومؤثرة.</div>
+<div class="pt"><b>٣. الاستماع الحقيقي (Great Listening)</b>مش معناه إنك «بتجهز الرد اللي هتقوله». معناه إنك حاضر بكل حواسك، بتسمع اللي بيتقال واللي مش بيتقال، وبتسأل أسئلة عشان تفهم وجهة نظرهم بجد.</div>
+<div class="pt"><b>٤. الاستراحة الذهنية (The Pause)</b>لو جاي من اجتماع ضاغط وعندك اجتماع تاني ورسائل بتطلب تقارير، طبيعي تفقد تركيزك. خد دقيقة تنفس ووقف تفكيرك ثوانٍ قبل الاجتماع الجديد، وفكر في الشخص اللي هتقابله عشان تدخل بعقلية «هناك».</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>بعقلية «هنا» (في الداتا)</b>تدخل اجتماع فريق المطورين أو مدير المنتج (Product Manager) وتقول: «أنا خلصت المسار وكتبت الكود، المشكلة في الـ(API) القديم بتاعكم ملهاش علاقة بيا.» بتدافع عن نفسك وغارق في شغلك.</div>
+<div class="good"><b>بعقلية «هناك»</b>«أنا عارف إن ضغط الإطلاق وقت حرج عندكم، وتعالوا نشوف مع بعض إزاي ندمج المسار عشان نريح السيرفر ونعدي اليوم على خير.» بتسمعهم وبتحل المشكلة المشتركة.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>الاستماع الفعّال <span class="en">(Active Listening)</span></h2></div>
+<div class="card">
+<div class="theme">الدرس مقسم لـ 4 سلوكيات رئيسية عشان تسمع اللي قدامك بجد</div>
+</div>
+<div class="apr">
+<div><div class="l">1</div><h4>الدعم والتشجيع <span class="en">(Supporting and Encouraging)</span></h4>
+<div class="row">تخلي اللي قدامك يحس إنك معاه ومهتم بكلامه.</div>
+<div class="q2"><b>التشجيع (Encouraging):</b> «فهمت، صحيح»، ابتسامة، لغة جسد مفتوحة.<br><b>التحقق (Validating):</b> «لو كنت مكانك كنت حسيت بنفس الشكل» مع هز الراس.<br><b>التخيل (Imagining):</b> «أتخيل قد إيه الموقف ده مزعج ليك».</div></div>
+<div><div class="l">2</div><h4>العكس والتكرار <span class="en">(Reflecting and Repeating)</span></h4>
+<div class="row">تسمع الكلام وتعكسه عشان تتأكد إنك فاهم صح.</div>
+<div class="q2"><b>التلخيص (Summarizing):</b> «هل تقصد إن عندنا ٣ مشاكل رئيسية...؟»، «يبدو أنك تقصد أن...».<br><b>الوصف العاطفي (Describing):</b> «أنت تبدو منزعجاً من هذا الموضوع».</div></div>
+<div><div class="l">3</div><h4>التعمق <span class="en">(Digging Deeper)</span></h4>
+<div class="row">تسأل عشان تفهم الأسباب والعمق.</div>
+<div class="q2"><b>التوضيح (Clarifying):</b> «ليه تفتكر إن ده حصل؟»، «إيه المشكلة اللي حصلت الأول؟»<br><b>الأسئلة المفتوحة (Open):</b> «إيه إحساسك تجاه المشروع ده؟»، «إيه الأخبار عندك الأسبوع ده؟»</div></div>
+<div><div class="l">4</div><h4>تقديم المساعدة <span class="en">(Offering Help)</span></h4>
+<div class="row">تعرض المبادرة والدعم بصدق.</div>
+<div class="q2"><b>شخصي (Personal):</b> «هل في أي حاجة أقدر أعملها عشان أساعدك؟»<br><b>افتراضي (Hypothetical):</b> «في عالم مثالي، تحب الأمور تمشي إزاي؟»، «إزاي نقدر نحقق ده على أرض الواقع؟»</div></div>
+</div>
+<div class="card">
+<h3>تطبيق عملي في هندسة البيانات</h3>
+<div class="theme">مهندس برمجيات جاي يشتكي إن مسار البيانات (Pipeline) عطل الشغل عنده</div>
+<div class="cmp">
+<div class="bad"><b>استماع سلبي</b>تقاطعه وتقوله: «الاستعلام بتاعك غلط.»</div>
+<div class="good"><b>استماع فعّال</b><b>تحقق وتخيل:</b> «متخيل قد إيه ضغط التوقف ده عطل تسليماتكم اليومية.»<br><b>تعمق:</b> «هل المشكلة ظهرت بعد التحديث الأخير للـ(API) ولا من مصدر تاني؟»<br><b>تقديم مساعدة:</b> «تعال نبص عليها سوا ونحلها دلوقتي.»</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>رجوع لشركة (MODA): الهدف من الاجتماع <span class="en">(Back at Moda: Purpose)</span></h2></div>
+<div class="card">
+<h3>مشكلة علياء (Aaliyah)</h3>
+<div class="row"><span>المشكلة</span>علياء ناوية تعمل اجتماع انطلاق (Kickoff meeting) مع فريق التحول، لكن عندها أزمة كلاسيكية: عايزة تقول وتناقش حاجات كتيرة جداً في وقت لا يتعدى 30 دقيقة.</div>
+<div class="row"><span>استشارة ديفيد (David Fu)</span>علياء كلمت ديفيد (عضو مجلس الإدارة والمستشار) وفضفضت له إنها عاوزة تغطي 5 حاجات: تحديد النطاق، المخرجات، المواعيد النهائية، طريقة العمل المشتركة، والتعارف. <b>نصيحته:</b> «ده كتير جداً يا علياء، إيه أولوياتك القصوى؟ وفكري في إيه اللي عاوزة تخرجي بيه من الاجتماع، وفي نفس الوقت قيسي احتياجات فريقك (Gauge their needs).»</div>
+<div class="row"><span>التطبيق الفوري مع نوح (Noah)</span>علياء طبقت النصيحة فوراً، وشافت نوح قاعد متأخر في الشغل ومشغول بعشاء مع عيلة خطيبته، فاستأذنته في 5 دقائق، وبدأت تسأله وتستشيره في أجندة الاجتماع عشان تعرف هو والفريق محتاجين إيه بجد.</div>
+<div class="note"><b>الربط بالهدف (P: Purpose):</b> حشو الاجتماعات بالكتير من الأهداف يقتل فعاليتها. لما يكون عندك اجتماع مهم، وازن بين «إنت عاوز إيه؟» (Your Needs) و«الناس قدامك محتاجين إيه؟» (Their Needs).</div>
+<div class="cmp">
+<div class="bad"><b>الغلط (في الداتا)</b>تروح اجتماع مع المطورين أو الإدارة لشرح خطة مسار البيانات (Data Pipeline) الجديدة، وتحاول تشرح كل تفصيلة تقنية وكل خطأ محتمل وكل أرقام السجلات (Logs) في 15 دقيقة، فتزود التوتر والزحمة.</div>
+<div class="good"><b>بطريقة علياء</b>تحدد الهدف الأساسي بدقة (مثلاً: الاتفاق على مواعيد تسليم الـ(API) الجديد)، وتستشير واحد من الفريق الأول (زي علياء مع نوح) عشان تعرف هم قلقانين من إيه، وتركز الأجندة على اللي يهمهم بجد.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>نظّم رسائلك <span class="en">(Organize your communications)</span></h2></div>
+<div class="card">
+<h3>إليزابيث هيو (Elizabeth Hioe) والخبراء: ليه ننظم الرسالة؟</h3>
+<div class="row"><span>مش كفاية الحقائق والبيانات</span>الناس بتفتكر إن كفاية نجمع أرقام ومعلومات، لكن لازم تصيغها في رسالة مترابطة ومنطقية عشان تحرك الجمهور نحو فعل حقيقي.</div>
+<div class="row"><span>قصة المدير التنفيذي الصناعي</span>مدير تنفيذي في شركة صناعية كبيرة عنده كاريزما وطاقة محفزة، لكن رسالته مش منظمة ولا مبنية على هيكل منطقي. لما سألوا الموظفين فهموا إيه، كل واحد فهم حاجة شكل، وكل قسم كان شغال في اتجاه لوحده. الخبير أكاش شاه (Akash Shah) سمّاها: «كلها كاريزما وبدون محتوى».</div>
+<div class="row"><span>مبدأ التبسيط (Simplification)</span>مارك وايزمان (Mark Wiseman): «بسّط، ثم بسّط، ثم بسّط» رسالتك لأقصى درجة، عشان توصل الخلاصة للناس بوضوح.</div>
+</div>
+<div class="card">
+<h3>مبدأ الهرم <span class="en">(The Pyramid Principle)</span></h3>
+<div class="row"><span>من تطوير باربرا مينتو (Barbara Minto)</span><b>لما تعرض رسالتك:</b> من فوق لتحت، تبدأ بالنتيجة أو الخلاصة (Thesis) الأول، وبعدين التفاصيل والتحليلات اللي بتدعمها. <b>لما تبني حجتك:</b> العكس، تجمع الأفكار والحقائق من تحت لفوق وتبنيها لحد القمة.</div>
+<div class="row"><span>مبدأ (MECE)</span>الأفكار اللي بتجمعها لازم تكون مستقلة عن بعضها وفي نفس الوقت شاملة لكل حاجة (Mutually Exclusive and Collectively Exhaustive)، عشان ما يبقاش فيه تكرار أو ثغرات.</div>
+<div class="cmp">
+<div class="bad"><b>من غير تنظيم (في الداتا)</b>تبدأ تقول لمديرك: «جبنا السجلات وحللنا الجداول ولقينا الاستعلام الفلاني بيعمل كذا والتخزين المؤقت (Cache) بيعمل كذا...» فيتوه منك.</div>
+<div class="good"><b>بمبدأ الهرم</b>تبدأ بالنتيجة فوق: «ممكن نوقف المسار الفلاني مؤقتاً عشان هنوفر 50% من استهلاك السيرفر»، وتحت الهرم تحط الأرقام والدلائل اللي بتثبت كلامك.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>الملخص مقابل التخليص <span class="en">(Summary vs Synthesis)</span></h2></div>
+<div class="card">
+<div class="cmp">
+<div class="bad"><b>الملخص (Summary)</b>نسخة مختصرة لكل الحقائق والأرقام اللي جمعتها من غير زيادة.<br><b>مثال الدرس:</b> تقرير خدمة العملاء (إيميل زوي دوراند): مرتجعات المحل بطيئة، طوابير الانتظار طويلة، استمارة الولاء بتاخد وقت. دي حقائق مرصوصة ورا بعضها.</div>
+<div class="good"><b>التخليص / استخلاص الرؤى (Synthesis)</b>إجابة سؤال «So What؟»: إيه الاستنتاج اللي بيجمع كل الحقائق دي؟<br><b>مثال:</b> «العملاء بيدوروا على تجربة تسوق أسرع في المحل تقلل وقت الانتظار من الدخول للخروج، وبيفضلوا الحلول الذاتية (Self-serve) عشان يخلصوا أسرع.» دي رؤية حقيقية (Insight).</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>ملخص (في الداتا)</b>تبعت لمديرك: «السيرفر استهلك 80% من الذاكرة (RAM)، وعدد الاستعلامات وصل 5000 في الساعة، ووقت الاستجابة بقى 3 ثواني.» أرقام وحقائق.</div>
+<div class="good"><b>تخليص</b>«بناءً على الضغط الحالي، النظام هيواجه بطء حاد في ساعات الذروة بكره، والحل ترقية السيرفر فوراً لتفادي توقف الخدمة.» ده اللي بيخلي الإدارة تاخد قرار فوري.</div>
+</div>
+<div class="apply"><span>ربط (اقتراح مني):</span> ده نفس مفهوم الملخص والتخليص (So What) اللي في كورس حل المشكلات (الدرس ٣٧)، بس هنا بتستخدمه في عرض رسالتك مش في تحليلك.</div>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+افتكر آخر اجتماع أو محادثة صعبة في شغلك أو مذاكرتك. كنت بعقلية «هنا» ولا «هناك»؟ لو رجعت بالزمن، إيه الجملة اللي كنت هتقولها من الأربع سلوكيات (تشجيع، تلخيص، تعمق، عرض مساعدة)؟ واكتب لو لسه محتاج تستخدم (EPIC) في موقف جاي. ابعتلي إجابتك وأضيفها.
+</div>
+
+<div class="mod" style="margin-top:34px"><b>المرجع الشامل</b><h2>دليل مهارات التواصل المؤثر</h2></div>
+<div class="card">
+<div class="theme">الكورس بيعلمنا إزاي نحوّل الأفكار المعقدة (زي الشغل التقني والبيانات) إلى لغة بسيطة وواضحة ومقنعة لأي شخص (مدير، عميل، أو فريق)، وكله بيعتمد على إطار (EPIC).</div>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>E: التعاطف (Empathy)</b>ما تفكرش في اللي إنت عايز تقوله وبس، فكر في اللي قدامك محتاج إيه وإيه اللي شاغل باله وإيه مخاوفه، وابني كلامك على حل مشاكله.</div>
+<div class="pt"><b>P: الهدف (Purpose)</b>لازم تعرف طالع الاجتماع أو بتقدم العرض ليه: عشان تاخد قرار؟ توافق على ميزانية؟ ولا تشارك معلومة؟</div>
+<div class="pt"><b>I: الرؤى ومبدأ الهرم (Insights &amp; The Pyramid Principle)</b>الملخص (Summary) رص أرقام وحقائق من غير هدف، والتخليص (Synthesis) إجابة «So What؟». وفي مبدأ الهرم: ابدأ بالخلاصة أو التوصية فوق، وحط الأدلة والبيانات التقنية تحتها في مجموعات منطقية.</div>
+<div class="pt"><b>C: الحوار والإلقاء (Conversation &amp; Delivery)</b>٣ عناصر للأسلوب: الحضور الجسدي (وقفة ثابتة وثقة وتجنب الحركات العصبية)، ونبرة الصوت (السرعة والمستوى للتعبير عن الحماس)، والتواصل العاطفي (فهم مود الجمهور وبناء الألفة والثقة).</div>
+</div>
+<div class="apply"><span>إدارة الاجتماعات: فتح، تضييق، إغلاق (Open, Narrow, Close)</span>
+<ul>
+<li><b>Open:</b> طرح الأجندة وفتح باب الأفكار بسرعة وبحماس (عصف ذهني (Brainstorming) قصير ومنظم).</li>
+<li><b>Narrow:</b> تصفية الخيارات ومناقشة البدائل وأخذ القرارات الصعبة.</li>
+<li><b>Close:</b> تلخيص المتفق عليه وتحديد الخطوات القادمة (Action Items) بوضوح لضمان الالتزام.</li>
+</ul></div>
+<div class="apply" style="margin-top:12px" data-pz="32"><span>في هندسة البيانات:</span>
+<ul>
+<li><b>مع الإدارة العليا:</b> ما تشرحش كود بايثون وتفاصيل سيرفرات أو حجم السجلات (Logs) بالترتيب. ادخل بالخلاصة فوراً: «محتاجين نعمل ترقية للمسار (Pipeline) النهاردة لتفادي سقوط النظام وقت الذروة، وده هيوفر 40% من وقت التشغيل»، وبعدين حط الأرقام كأدلة تحت.</li>
+<li><b>في لوحات المتابعة (Dashboards) وتقارير (BI):</b> ما تعرضش أرقام وخلاص، ترجم البيانات لرؤية واضحة تساعد متخذ القرار ياخد خطوة فورية.</li>
+<li><b>في الاجتماعات الفنية:</b> (Open) عصف ذهني سريع (3 دقائق) لمشاكل المعمارية (Architecture) الحالية، (Narrow) صفّوا الحلول واختاروا أفضل طريقة لترحيل البيانات (Data Migration)، (Close) أنهي بجدول زمني ومين هيخلص إيه وإمتى بدقة.</li>
+</ul></div>
+</div>
+
+<div class="sum" style="margin-top:30px">
+<h3>🏁 كورس التواصل المؤثر اكتمل</h3>
+<ul>
+<li>افهم جمهورك (E) وحدد هدفك (P) قبل أي اجتماع.</li>
+<li>ابدأ بالخلاصة (I) وخلّي الحوار رايح جاي (C).</li>
+<li>افتح، ضيّق، أغلق: الاجتماع ينتهي بقرارات وخطوات واضحة.</li>
+</ul>
+</div>
+</section>
+
+<section id="c5" class="pane" hidden>
+<div class="hero"><small>الكورس ٥ من البرنامج</small>
+<h2>العلاقات والرفاهية <span class="en">(Relationships &amp; Well-Being Course)</span><span class="badge">مكتمل</span></h2>
+<p>إزاي تحافظ على طاقتك وتتعافى، وتبني علاقات قوية (إطار AVEC)، وتصنع فريقاً آمناً نفسياً، مع تطبيق كل درس على هندسة البيانات.</p></div>
+
+<div class="mod"><b>الموديول ١</b><h2>الضغط والبطارية والتعافي</h2></div>
+
+<div class="mod"><b>الدرس</b><h2>منحنى الضغط والرفاهية وشحن البطارية <span class="en">(Stress &amp; Well-Being curve, Battery Charge)</span></h2></div>
+<div class="card">
+<div class="cmp">
+<div class="good"><b>الضغط مش دايماً شر (منحنى حرف U)</b>ضغط قليل جداً بيسبب الملل والكسل (Boredom)، وضغط زائد بيؤدي للاحتراق النفسي (Burnout). المكان المثالي قمة المنحنى: «التحدي الصحي» اللي بيخلي تركيزك وأداءك في أقصاه.</div>
+<div class="good"><b>شحن البطارية (Battery Charge)</b>الباحث الرياضي أندرو هاملتون بيقترح تقييم صحتك وطاقتك كل يوم بدرجات من 1 لـ 5 على عدة أسئلة (النوم، الطاقة الحيوية، العضلات...). لو المجموع قل عن 20، بطاريتك فاضية ومحتاج يوم تعافي (Recovery Day).</div>
+</div>
+<div class="apply" data-pz="33"><span>في هندسة البيانات:</span>
+<ul>
+<li><b>وازن بين الملل والاحتراق:</b> لو بتكرر مهام ومش بتتعلم حاجة، اسعَ لتحديات جديدة (معمارية سحابية جديدة أو تحسين استعلام معقد).</li>
+<li><b>راقب «بطاريتك التقنية» زي ما بتراقب السجلات:</b> لو بتصلح نفس الخطأ (Debug) ساعات وعقلك وقف، اقفل اللابتوب وخد بريك. الاستمرار وإنت مفلس إجهادياً بيطلع كود سيء وأخطاء أصعب.</li>
+<li><b>اختبار البطارية اليومي:</b> قبل ما تفتح بيئة التطوير (IDE) اسأل: هل نمت كويس؟ هل حاسس بطاقة؟ لو في المنطقة الحمراء، ركز على مهام الصيانة الخفيفة وأجّل قرارات تصميم مسار جديد.</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٥</b><h2>إيه مكونات الرفاهية؟ <span class="en">(What are the ingredients of well-being?)</span></h2></div>
+<div class="card">
+<h3>مصادر طاقة البطارية الأربعة</h3>
+<div class="theme">المشكلة إننا بنهمل 3 ونركز على ركن واحد بس</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>البدني (Physical)</b>النوم الصحي والتمارين والتغذية: الوقود الأساسي للجسد.<br><i>في الداتا:</i> ما تقعدش 8 ساعات متواصلة قدام الشاشة. ألارم كل ساعة تقوم تتمشى دقيقتين وتشرب مياه.</div>
+<div class="pt"><b>العقلي والنفسي (Mental &amp; Emotional)</b>الهوايات والتأمل (Meditation) والتركيز والوعي الذاتي: فصل العقل عن ضغط الأكواد.<br><i>في الداتا:</i> لما تقفل اللابتوب بالليل ما تفضلش تفكر في المسار اللي وقع. العب رياضة أو اقرأ بعيد عن التكنولوجيا.</div>
+<div class="pt"><b>الاجتماعي (Social)</b>علاقات حقيقية ودور مجتمعي أو عائلي: بيقلل العزلة والاحتراق.<br><i>في الداتا:</i> اتكلم مع زملائك عن التحديات التقنية، واعملوا فترات استراحة سوا.</div>
+<div class="pt"><b>الروحي والمهني (Spiritual)</b>الإحساس بالرسالة أو النداء المهني (Professional Calling).<br><i>في الداتا:</i> افتكر إن شغلك بيسهل القرارات للشركة كلها وبيحل مشاكل ضخمة.</div>
+</div>
+</div>
+<div class="card">
+<h3>٤ قواعد ذهبية للتطبيق (Principles for Putting This Into Practice)</h3>
+<ol class="steps">
+<li><div><h4>التغييرات الصغيرة تصنع نتائج مستدامة</h4>مش لازم تغيير جذري فجأة، ابدأ بخطوات صغيرة.</div></li>
+<li><div><h4>صغير ومتكرر أفضل <span class="en">(Small and Frequent)</span></h4>ما تعتمدش على إجازة سنوية كبيرة، وزع لحظات التعافي على اليوم.<div class="app" data-pz="34">في الداتا: بدل «بريك ساعتين لما أخلص المشروع»، بريك 5 دقائق كل ما تخلص مرحلة (ETL) أو تصلح خطأ. الاستراحات الصغيرة (Micro-breaks) بتمنع الاحتراق.</div></div></li>
+<li><div><h4>ابنِ على عاداتك الإيجابية الحالية</h4>استغل العادات الكويسة وافتح بيها باب لعادات أصح.</div></li>
+<li><div><h4>الناس مهمة <span class="en">(People Matter)</span></h4>شارك رحلتك مع شخص يدعمك ويشجعك.</div></li>
+</ol>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٦</b><h2>إزاي تحافظ على توازنك؟ <span class="en">(How can you stay balanced?)</span></h2></div>
+<div class="card">
+<div class="row"><span>ميزانية الجسم (The Body Budget)</span>حسب د. ليزا فيلدمان باريت (Lisa Feldman Barrett)، جسمك زي البنك بيخزن طاقة وبيصرفها. ممكن تسحب من رصيدك لفترة قصيرة (ديدلاين)، لكن من غير تعافي (Recovery) الجسم «يفلس» وتحصل الاحتراق.</div>
+<div class="row"><span>التعافي بالاستمرارية مش بالشدة (Weaving in Recovery)</span>مش إجازة سنوية بس، لكن لحظات تعافي صغيرة متكررة في اليوم العادي.</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>بداية اليوم</b>ما تبدأش بالموبايل والإيميلات وإنت على السرير. ابدأ بروتين هادئ ونوايا واضحة.</div>
+<div class="pt"><b>أثناء الشغل</b>بريك كل ساعتين، مكالمات وإنت ماشي (Walking meetings)، وساعتين تركيز عميق من غير مقاطعة (Uninterrupted work blocks).</div>
+<div class="pt"><b>نهاية اليوم</b>حدد اللي لازم يخلص فعلاً (Ruthless Prioritization)، وابعد عن الشاشات قبل النوم بساعة، واكتب 3 حاجات حسيت بالامتنان ليها.</div>
+</div>
+<div class="note"><b>ابدأ صغيراً (Start Small):</b> النجاحات الصغيرة بتخلي المخ يفرز دوبامين (Dopamine) فبيديك حماس تكمل، بدل أهداف تعجيزية تخليك تكسل.</div>
+<div class="apply" data-pz="35"><span>في هندسة البيانات:</span>
+<ul>
+<li><b>احمِ وقت التركيز العميق (Deep Work):</b> اعزل نفسك عن (Slack) والإيميلات ساعتين الصبح لتصميم المعمارية أو نمذجة البيانات (Data Modeling) بكفاءة، من غير تضييع طاقة في التنقل بين المهام (Context Switching).</li>
+<li><b>التعافي الصغير المتكرر:</b> بدل 6 ساعات متواصلة مع خطأ مستعصي في سكريبت (ETL)، قوم كل ساعتين: مد رجليك، اشرب مياه، افصل 5 دقايق. ده بيخليك تلاقي الحل أسرع.</li>
+<li><b>سياسة إغلاق الأبواب بعد العمل:</b> زي (graceful shutdown) للنظام، اعمل «إغلاق» لعقلك بالليل وابعد الموبايل عن السرير.</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٧</b><h2>صمم خطة التعافي بتاعتك <span class="en">(Creating your recovery plan)</span></h2></div>
+<div class="card">
+<div class="row"><span>التعافي شخصي (It's Personal)</span>النوم والأكل والرياضة مشتركة عند الكل، لكن باقي الأنشطة بتختلف. مقابلة ناس ممكن تشحن الشخص الاجتماعي (Extrovert) وتستنزف الانطوائي (Introvert).</div>
+<div class="row"><span>حدّد اللي بيشحنك واللي بيستنزفك (Energy Audit)</span>بص على أنشطتك اليومية (اجتماعات زووم، شغل فردي مركز، مواصلات، اجتماعات الفريق) وحدد مين بيدّيك طاقة ومين بيمتصها.</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>الصبح</b>نية إيجابية وحركة خفيفة، اجتماعات ماشي لو ممكن، وساعة أو ساعتين تركيز عميق للشغل الصعب.</div>
+<div class="pt"><b>بعد الظهر</b>بريك كل ساعتين، رسالة لطيفة لصديق أو زميل، وسؤال: «إيه اللي لازم يخلص النهاردة فعلاً وإيه ممكن يتأجل؟»</div>
+<div class="pt"><b>بالليل</b>احجز على التقويم (Calendar) أنشطة بتحبها أو عشاء مع شخص قريب، واكتب 3 حاجات ممتن ليها.</div>
+<div class="pt"><b>قبل النوم</b>ابعد الموبايل عن الأوضة (منبه عادي)، وافصل عن الإيميلات والأخبار قبل النوم بساعة.</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>بدل (في الداتا)</b>الصبح تفتح (Slack) و(PagerDuty) وتشوف التنبيهات وإنت لسه نايم. بعد الظهر 5 ساعات متواصلة مع مهمة (Airflow DAG) واقعة. بالليل اللابتوب معاك على السرير وبتفكر في ترحيل البيانات بكره.</div>
+<div class="good"><b>اعمل</b>ساعة أو ساعتين تركيز عميق الصبح. ألارم كل ساعتين تتمشى 5 دقايق، ولو الإجهاد زاد ناقش زميل (Pair Programming / Rubber Ducking). وبالليل «إغلاق رقمي (Digital Shutdown)»: قفل الشاشات وراجع 3 إنجازات عدت عليك اليوم.</div>
+</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٨</b><h2>المرونة العاطفية وبناء العادات <span class="en">(Emotional flexibility and habit making)</span></h2></div>
+<div class="card">
+<div class="row"><span>عقل العصر الحجري (Stone Age Brain)</span>رغم التكنولوجيا، أجزاء مخنا القديمة بتتعامل مع «زميل متضايق» أو «كود ضرب النظام» زي ما كان أجدادنا بيتعاملوا مع نمر متوحش: كورتيزول وذعر.</div>
+<div class="theme" style="margin:12px 0 6px">المرونة العاطفية (Emotional Flexibility)، 3 خطوات:</div>
+<ol class="steps">
+<li><div><h4>الوعي <span class="en">(Awareness)</span></h4>تلاحظ الشعور السلبي بدل ما تكبته.</div></li>
+<li><div><h4>القبول <span class="en">(Acceptance)</span></h4>تبطل تقاوم الشعور (المقاومة بتزوده)، وتتخيله بشكل طريف (مثال الدرس: «أهلاً أيتها الأخطبوط الزرقاء... يا قلقي»).</div></li>
+<li><div><h4>الاختيار النشط <span class="en">(Active Choice)</span></h4>يا المواجهة المباشرة (تتكلم مع الشخص أو تحل المشكلة)، يا الاستغناء والتحرر (Diffusion)، زي شد الحبل مع الأخطبوط: تسيبه يفلت وتمشي من غير ما تحرق طاقتك.</div></li>
+</ol>
+<div class="apply" data-pz="36"><span>في هندسة البيانات:</span>
+<ul>
+<li><b>تعامل مع «رعب المسار الواقع» كنمر متوحش:</b> خد نفس عميق وقول: «دي مجرد مشكلة تقنية مش خطر على حياتي». الهدوء بيخليك تلاقي مكان الخطأ في السجلات بسرعة.</li>
+<li><b>سمّي القلق (Labeling the Emotion):</b> «أهو الأخطبوط الأزرق بتاع المهلة (Timeout) رجع». التسمية بتشغّل الجزء المنطقي في المخ (Prefrontal Cortex) عشان تعمل (Debug).</li>
+<li><b>اختر:</b> مشكلة تقنية صعبة ومحتاجة حل: احلها بهدوء خطوة خطوة. مشكلة جربت فيها كل حاجة والنظام لسه معلق: (Diffusion)، سيب الكود 10 دقايق، اشرب قهوة، وارجع هتلاقي مخك جاب الحل.</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٩</b><h2>أهمية القدوة <span class="en">(The importance of role modeling)</span></h2></div>
+<div class="card">
+<div class="row"><span>بيتر دروكر (Peter Drucker)</span>«مهمتك الأولى والأساسية كقائد هي أن تسيطر على طاقتك الخاصة، ثم تساعد في تنسيق طاقة من حولك.» والسلوكيات «معدية» (Behaviors are contagious): لو إنت متوتر ومهستيري، الفريق هيتوتر. لو دخلت بهدوء وتخطيط، هتنشر الطمأنينة.</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>وضع الحدود والتواصل بوضوح (Set expectations and boundaries)</b>قول للناس إمتى متاح وإمتى محتاج تركيز عميق.</div>
+<div class="pt"><b>شارك اللي بيحصل واطلب الدعم</b>اعترف بالضغط بدل ما تكتمه.</div>
+<div class="pt"><b>ابنِ أعراف الفريق (Team norms)</b>حاجات منتظمة وثابتة: ميعاد بريك، مراجعة سريعة.</div>
+<div class="pt"><b>احتفلوا ببعض (Celebrate one another)</b>أشِد بإنجازات زملائك حتى الصغيرة.</div>
+</div>
+<div class="apply" data-pz="37"><span>في هندسة البيانات:</span>
+<ul>
+<li><b>كن «مرساة الأمان» وقت وقوع النظام:</b> لما يحصل عطل مفاجئ والكل يتوتر، نفس عميق ومنهجية هادئة بتهدي الفريق وبتخليهم يشتغلوا بكفاءة.</li>
+<li><b>حدود وقت التركيز:</b> وضّح الأوقات اللي بتكون فيها مشغول بالمعمارية أو نماذج البيانات، وإن الرد على (Slack) هيكون في أوقات محددة.</li>
+<li><b>احتفل بالإنجازات الخفية:</b> محدش برا فريق البيانات بيعرف إنك خليت استعلام ياخد ساعات يخلص في ثواني. احتفلوا بيها مع بعض عشان تقلل الاحتراق.</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الموديول ٢</b><h2>إطار (AVEC): علاقات قوية</h2></div>
+
+<div class="mod"><b>الدرس ١٢</b><h2>إطار (AVEC) للعلاقات القوية <span class="en">(AVEC: A framework for strong relationships)</span></h2></div>
+<div class="card">
+<div class="row"><span>الفكرة</span>أطول دراسة في التاريخ البشري أثبتت إن أكبر مؤشر على الصحة والسعادة وطول العمر مش الفلوس ولا الشهرة، لكن جودة العلاقات الاجتماعية. وعشان نبني علاقات قوية عندنا 4 مفاتيح (كلمة (AVEC) بالفرنسية تعني «مع»).</div>
+</div>
+<div class="apr">
+<div><div class="l">A</div><h4>الانتباه <span class="en">(Attention)</span></h4><div class="row" style="margin-bottom:0">تركز مع اللي قدامك بكل حواسك. لغة الجسد (تلف جسمك نحوه وتواصل بصري) بتنشّط الجهاز العصبي وتحسسه بالأمان. اسمع بفضول واسأل أسئلة حقيقية ووقف الأحكام المسبقة.</div></div>
+<div><div class="l">V</div><h4>الشفافية <span class="en">(Vulnerability)</span></h4><div class="row" style="margin-bottom:0">تكون على طبيعتك وتخرج من منطقة الراحة: تعترف بأفكارك ومشاعرك وتتحمل المسؤولية في المواقف الصعبة، وتقول بثقة: «أنا ما أعرفش الحتة دي» من غير ما تحس إنه بيقلل منك.</div></div>
+<div><div class="l">E</div><h4>التعاطف <span class="en">(Empathy)</span></h4><div class="row" style="margin-bottom:0">تحاول تفهم وتعيش مشاعر ومنظور الشخص اللي قدامك، وتسمع بعمق، وده بيمهد للرحمة.</div></div>
+<div><div class="l">C</div><h4>الرحمة <span class="en">(Compassion)</span></h4><div class="row" style="margin-bottom:0">اهتمام حقيقي بتخفيف ألم أو ضغط الشخص اللي قدامك، وتقديم دعم فعلي.</div></div>
+</div>
+<div class="card">
+<h3>تطبيق (AVEC) في يومك التقني</h3>
+<ul style="margin:0;padding-right:20px">
+<li><b>الانتباه:</b> لما زميل أحدث منك يسألك عن مشكلة في المسار أو استعلامه، ما تبصش في شاشتك وتديه إجابة وإنت مش مهتم. التفت له واسمع لآخر كلمة. بيبني ثقة وبيخليه يرجعلك تاني.</li>
+<li><b>الشفافية:</b> لو طُلب منك تقدير زمني لترحيل بيانات كبير وإنت مش متأكد، قول: «أنا لسه مش متأكد من النقطة دي وهبحث عنها وأرجعلك» بدل ميعاد وهمي.</li>
+<li><b>التعاطف:</b> لما الديدلاين يقرب والكل متوتر بسبب مشكلة مفاجئة في قاعدة البيانات، افهم حجم الضغط بدل ما تزود اللوم.</li>
+<li><b>الرحمة:</b> «تعال نقعد سوا نعمل (Pair Programming) ونحل الخطأ ده مع بعض.»</li>
+</ul>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الركن الأول</b><h2>الانتباه <span class="en">(Attention)</span></h2></div>
+<div class="card">
+<div class="row"><span>الفكرة</span>الإنسان بطبيعته بيحب الشخص اللي بيستقبله ويديله اهتمام من غير «أحكام مسبقة». لما الناس تديلنا اهتمام بنحس بالقبول، ولما يتجاهلونا بنحس بالرفض. معهد غوتمان (Gottman Institute): تجاهل إشارات التواصل البسيطة بين الناس هو السبب الأول للطلاق في العلاقات الشخصية، وبنفس القياس تجاهل زملاء العمل بيأثر على جودة الشغل وروح الفريق.</div>
+<div class="note">ستيفن كوفي: «مشكلة التواصل الكبرى هي أننا لا نستمع لكي نفهم... بل نستمع لكي نرد.»</div>
+<div class="cmp">
+<div class="good"><b>قبل المحادثة (Preparation)</b>وقفة وهدّي عقلك: «هل عندي الوقت والطاقة أدي المحادثة حقها دلوقتي؟» وابعد المشتتات (اقفل الإيميلات و(Slack)).</div>
+<div class="good"><b>أثناء المحادثة (During)</b>أظهر الاهتمام بلغة الجسد، واسمع من غير ما تفكر هترد تقول إيه، ولخص كلامه بنفس كلماته للتأكد من فهمك من غير تقييم فوري.</div>
+</div>
+<div class="apply" data-pz="38"><span>في هندسة البيانات:</span> لما محلل بيانات أو مدير منتج (Product Manager) يشتكي إن «فيه بيانات ناقصة»، ما تقاطعوش بـ«الكود بتاعي سليم». التفت له واسأل: «قصدك إن المسار الفلاني ما جابش المقاييس المطلوبة في التوقيت الفلاني؟» الفهم العميق بيحل المشكلة في دقائق. وفي اجتماع تصميم المعمارية، اقفل بيئة التطوير (IDE) وادّي الفريق 100% من انتباهك.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ١٤</b><h2>الشفافية <span class="en">(Vulnerability)</span></h2></div>
+<div class="card">
+<div class="row"><span>الفكرة</span>القدرة على إسقاط الدروع المصطنعة وإظهار طبيعتك البشرية. الأبحاث (ومنها برينيه براون (Brené Brown)) بتثبت إنها «مهد الإبداع والانتماء والشجاعة والثقة». ولما القادة أو الأقدم يعترفوا بغلطهم ويقولوا «أنا مش متأكد»، بيخلقوا بيئة آمنة نفسياً (Psychological Safety).</div>
+<div class="cmp">
+<div class="good"><b>قبل المحادثة</b>راقب مشاعرك من غير نقد ذاتي، وفكر إيه اللي بيقلقك تكشفه، وادّي نفسك إذن بعدم مشاركة اللي مش مريحك لسه.</div>
+<div class="good"><b>أثناء المحادثة</b>اتكلم بصيغة «أنا» عن مشاعرك ومخاوفك، وضّح نواياك بصدق، واعترف بدورك: «أنا أخدت قرار من غير ما أوضحه كويس، وده سبب قلق للفريق».</div>
+</div>
+<div class="apply" data-pz="39"><span>في هندسة البيانات:</span>
+<ul>
+<li><b>قول «مش عارف»:</b> لما يطلب منك محلل تصميم مسار معقد، بدل «هخلصه بكره» قول: «الجزئية دي جديدة عليا ومحتاج ساعتين أدرس التوثيق عشان أديك تقدير دقيق». ده بيحميك من الاحتراق وبيكسبك ثقة الإدارة.</li>
+<li><b>اعترف بالخطأ:</b> لو عدّلت قاعدة بيانات الإنتاج والمسار وقف: «عملت تحديث للاستعلام الفلاني وواضح إني أغفلت تأثيره على الفهارس (Indexes)، تعالوا نصلحه سوا ونعمل تحليل للسبب الجذري (Root Cause Analysis) عشان ما يتكررش».</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ١٥</b><h2>التعاطف <span class="en">(Empathy)</span></h2></div>
+<div class="card">
+<div class="row"><span>الفكرة</span>الأبحاث بتثبت إن التعاطف من أهم مهارات القيادة الناجحة ومؤشر قوي على كفاءة المديرين، لكن حوالي 40% فقط من قادة الأعمال عندهم مهارات تعاطف قوية (حسب الدرس).</div>
+<div class="note">كارل روجرز (Carl Rogers): «نحن نعتقد أننا نستمع، لكن نادراً ما نستمع بفهم حقيقي وتعاطف حقيقي... ومع ذلك فالاستماع بهذا النوع الخاص من أقوى قوى التغيير التي أعرفها.»</div>
+<div class="cmp">
+<div class="good"><b>قبل المحادثة</b>انوي إنك «تستمع لتتعلم وتساند» بدل «تشرح وجهة نظرك»، وابقَ منفتح العقل وافترض دوافع إيجابية.</div>
+<div class="good"><b>أثناء المحادثة</b>اسمع بعمق ومن غير مقاطعة، واسمح لنفسك «تحس» بمشاعر الشخص، واسأل وكرر اللي سمعته: «اللي حاسس بيه وأنا سامعك هو كذا...»</div>
+</div>
+<div class="apply" data-pz="40"><span>في هندسة البيانات:</span>
+<ul>
+<li><b>مع مستخدمي البيانات (Data Consumers):</b> لما فريق الأعمال يشتكي إن المسار وقف، ما تقولش «دي مشكلة استعلاماتكم!». حط نفسك مكانهم: هم تحت ضغط الإدارة. اسمع بعمق وقول: «أنا حاسس بضغط الموقف، وتعالوا نحل المسار ده سوا خطوة خطوة.»</li>
+<li><b>في مراجعات الكود (Code Reviews):</b> لزميل أحدث منك، بلاش أسلوب ناقد وهجومي. افهم ليه كتب الكود كده، واشرح بهدوء من غير تعالٍ إزاي يحسنه.</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ١٦</b><h2>الرحمة <span class="en">(Compassion)</span></h2></div>
+<div class="card">
+<div class="cmp">
+<div class="good"><b>التعاطف (Empathy)</b>إنك «تحس» باللي قدامك وتفهم موقفه.</div>
+<div class="good"><b>الرحمة (Compassion)</b>خطوة عملية إضافية: تحوّل الشعور لرغبة ومبادرة حقيقية لمساعدته وتقليل ألمه أو ضغطه.</div>
+</div>
+<div class="row"><span>القوة الذاتية للرحمة</span>الدراسات بتثبت إن ممارستها بتفيد صحتك النفسية والجسدية وبتزود حماستك، وبتخلق «دائرة خير» (Virtuous Cycle): كل ما كنت رحيم، شوفت العالم أكتر إيجابية.</div>
+<div class="cmp">
+<div class="good"><b>قبل المحادثة</b>حط نفسك مكان الشخص: «لو أنا مكانه كنت أحب أتلقى دعم من أي نوع؟» وانوي مساندته حتى مع اختلاف الرأي.</div>
+<div class="good"><b>أثناء المحادثة</b>عبّر عن رغبتك الصادقة: «إيه أكتر حاجة ممكن أعملها دلوقتي عشان أسهل عليك الموقف ده؟» وقدّم مساعدة محددة وصغيرة.</div>
+</div>
+<div class="apply" data-pz="41"><span>في هندسة البيانات:</span>
+<ul>
+<li>زميل بيعاني ساعات مع خطأ معقد في المسار: «شايفك بتعاني مع الخطأ ده من فترة، تحب نقعد ربع ساعة سوا نعمل (Pair Programming)؟» مبادرة صغيرة بتصنع ولاء وامتنان.</li>
+<li>مش كل الناس بتحب نفس شكل المساعدة. لزميل متوتر من ديدلاين: «تحب أخد منك جزء من المهام دي، ولا نتناقش سوا في حل ينجزنا؟»</li>
+</ul></div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الموديول ٣</b><h2>الأمان النفسي وفعالية الفريق</h2></div>
+
+<div class="mod"><b>الدرس ٢٠</b><h2>إيه اللي بيدفع فعالية الفريق؟ <span class="en">(What drives team effectiveness?)</span></h2></div>
+<div class="card">
+<div class="row"><span>مشروع أرسطو (Project Aristotle) من جوجل</span>درسوا أكتر من 180 فريق عمل ليكتشفوا إيه اللي بيخلي الفريق فعّالاً. النتيجة مفاجئة: مش الأداء الفردي العالي ولا سنين الخبرة ولا حجم الفريق ولا إنهم في نفس المكتب (Co-located). العوامل الحقيقية:</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>الأمان النفسي (Psychological Safety)</b>يحسوا بالأمان للمخاطرة وإظهار الضعف من غير خوف.</div>
+<div class="pt"><b>المعنى والأثر (Impact &amp; Meaning)</b>حاسين إن شغلهم له قيمة ومهم للشركة.</div>
+<div class="pt"><b>وضوح الأدوار والأهداف (Clear Roles &amp; Goals)</b>كل فرد عارف دوره وأهدافه بدقة.</div>
+<div class="pt"><b>الاعتمادية والجودة (Dependability)</b>كل واحد بيسلم شغله بجودة عالية وفي موعده.</div>
+</div>
+<div class="apply" data-pz="42"><span>في هندسة البيانات:</span> <b>الأمان النفسي:</b> لو مهندس بيانات مبتدئ (Junior) بوظ استعلام أو مسار ورد الفعل هجومي، الناس هتخاف تبدع. لو فيه أمان هيعترفوا فوراً ونصلح سوا. <b>وضوح الأهداف:</b> في مستودع البيانات (Data Warehouse) ومسارات (ETL)، لازم يكون واضح مين مسؤول عن الاستيعاب (Ingestion) ومين عن النمذجة (Modeling).</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٢٢</b><h2>إزاي نصنع الأمان النفسي؟ <span class="en">(How do we create psychological safety?)</span></h2></div>
+<div class="card">
+<div class="row"><span>الفكرة</span>الأمان النفسي مش بيحصل صدفة، بيتصنع بسلوكيات يومية واعية (خصوصاً من القادة والزملاء المؤثرين):</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>الترحيب بالأسئلة والاعتراف بعدم المعرفة</b>رد فعل إيجابي على السؤال «البسيط» بيشجع الناس تسأل من غير خوف.</div>
+<div class="pt"><b>الأخطاء فرص للتعلم مش للوم</b>نبحث عن السبب الجذري (Root Cause) بجلسات شفافة بدون اتهام (Blameless Post-mortems).</div>
+<div class="pt"><b>تشجيع اختلاف الآراء</b>الفريق الناجح مش اللي كله «تمام يا فندم»، بل اللي يسمح بآراء نقدية جريئة.</div>
+<div class="pt"><b>الربط مع (AVEC)</b>الانتباه لسماع المشاكل، والشفافية للاعتراف بالأخطاء، والتعاطف والرحمة مع ضغط الظروف.</div>
+</div>
+<div class="apply" data-pz="43"><span>في هندسة البيانات:</span> لما النظام يقع أو الترحيل يضرب، ما تقولش «مين اللي كتب الكود ده؟». قول: «تعالوا نشوف السجلات ونعرف إيه الثغرة التقنية اللي وقعت مننا ونصلحها عشان ما تتكررش.» وافتح الباب للمبتدئين يسألوا في أي تفصيلة في المعمارية أو استعلامات (SQL) من غير ما تحسسهم إن السؤال غبي.</div>
+</div>
+
+<div class="card">
+<h3>نموذج (REACH): أفعال صنع الأمان النفسي</h3>
+<div class="apr">
+<div><div class="l">R</div><h4>إعادة صياغة الأخطاء <span class="en">(Reframe mistakes)</span></h4><div class="row" style="margin-bottom:0">الغلط فرصة تعليمية ومصدر بيانات لنجاح قادم، مش كارثة تستوجب العقاب.</div></div>
+<div><div class="l">E</div><h4>تشجيع كل الأصوات <span class="en">(Encourage all voices)</span></h4><div class="row" style="margin-bottom:0">إشراك الجميع في القرار، خصوصاً الأحدث اللي ممكن يكون عندهم رأي مبتكر.</div></div>
+<div><div class="l">A</div><h4>تقدير الإسهامات <span class="en">(Appreciate contributions)</span></h4><div class="row" style="margin-bottom:0">التأكيد لكل شخص إننا شايفين مجهوده مهما كان حجم إنجازه.</div></div>
+<div><div class="l">C</div><h4>توجيه الفريق <span class="en">(Coach team members)</span></h4><div class="row" style="margin-bottom:0">تبادل الخبرات والإرشاد (Mentoring) وبناء شبكة دعم داخل الفريق.</div></div>
+</div>
+<div class="apply" data-pz="44"><span>في هندسة البيانات:</span> لما خطأ يوقف مسار (ETL)، اعتبره دراسة حالة (Case Study) تطلع منها درس يمنع تكراره. وفي مراجعات الكود، اسمح لأي عضو (حتى حديث التخرج) ينتقد المعمارية أو يقترح تحسين في استعلاماتك من غير ما تخوفه.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٢٧</b><h2>مفاهيم شائعة خاطئة <span class="en">(Common misconceptions)</span></h2></div>
+<div class="card">
+<div class="theme">خطوات (REACH) واضحة، لكن 3 مفاهيم خاطئة بتعطل الناس عن تطبيقها:</div>
+<div class="cmp">
+<div class="bad"><b>١. «يعني مفيش صراع والكل لطيف دايماً»</b></div>
+<div class="good"><b>الحقيقة</b>الأمان النفسي بيسمح بالاختلافات الصحية بشرط إدارتها باحترام ومن غير هجوم شخصي. اللطف الزائد المصطنع بيخلي الناس تخفي آراءها (Self-censoring) وده بيدمر الشغل.</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>٢. «يعني نناقش كل قرار صغير من كل الزوايا وفي اجتماعات لا تنتهي»</b></div>
+<div class="good"><b>الحقيقة</b>مش بيبطّئ العمل، لكنه بيتيح لكل صوت يتكلم وقت الحاجة وفي القرارات الهامة، والوصول لكفاءة أعلى بمشاركة الجميع.</div>
+</div>
+<div class="cmp">
+<div class="bad"><b>٣. «يعني مفيش محاسبة ولا تركيز على الأداء»</b></div>
+<div class="good"><b>الحقيقة</b>العكس تماماً: بيزود المحاسبة، لأن الناس لما تعرف إنها مش هتتعاقب على الاعتراف بالخطأ هتقول الحقيقة أسرع وتصلح المشاكل بجد، فالفريق أكتر إنتاجية.</div>
+</div>
+<div class="apply" data-pz="45"><span>في هندسة البيانات:</span> لما يقع مسار، الأمان النفسي مش معناه نضحك ونقول «محصلش حاجة». معناه نواجه المشكلة بصراحة وصرامة فنية ونحلل الخطأ من غير لوم شخصي. ده بيضمن جودة أداء عالية وسرعة إنجاز.</div>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+قيّم بطاريتك الليلة من 1 لـ 5 في النوم والطاقة والتركيز. إيه أصغر خطوة تعافي ممكن تضيفها لبكره؟ واختار ركن واحد من (AVEC) (انتباه، شفافية، تعاطف، رحمة) تمارسه مع زميل في الأسبوع ده، واكتب موقفاً حقيقياً هتجربه فيه. ابعتلي إجابتك وأضيفها.
+</div>
+
+<div class="sum" style="margin-top:30px">
+<h3>🏁 كورس العلاقات والرفاهية اكتمل</h3>
+<ul>
+<li>الضغط المعتدل بيقوّي، والزايد بيحرق: راقب بطاريتك واشحنها بتعافي صغير ومتكرر.</li>
+<li>العلاقات القوية = انتباه + شفافية + تعاطف + رحمة (AVEC).</li>
+<li>الفريق الفعّال بيبدأ بأمان نفسي: أخطاء بدون لوم وكل صوت مسموع، مع محاسبة حقيقية.</li>
+</ul>
+</div>
+</section>
+
+<section id="c6" class="pane">
+<div class="hero"><small>الكورس ٦ من البرنامج</small>
+<h2>صندوق أدواتي الرقمي <span class="en">(My Digital Toolkit: Digital and AI Essentials Course)</span><span class="badge">مكتمل</span></h2>
+<p>«صندوق الأدوات الرقمي» بتاعك: تتعرف على التطورات الرقمية والذكاء الاصطناعي وتبني مهاراتك فيهم.</p></div>
+
+<div class="mod"><b>المقدمة</b><h2>أهلاً بك في الكورس الجديد</h2></div>
+<div class="card">
+<h3>الكورس ده هيعلمك إيه؟</h3>
+<div class="row"><span>الهدف</span>الكورس ده بيمثل «صندوق الأدوات الرقمي» (Digital Toolkit) بتاعك، وبيخليك واعي بالتطورات الرقمية السريعة والذكاء الاصطناعي. المحاور الأساسية:</div>
+</div>
+<div class="apr">
+<div><div class="l">1</div><h4>التعرف على التطورات الرقمية</h4><div class="row" style="margin-bottom:0">إزاي التكنولوجيا الحديثة بتغير شكل العالم وطريقة شغل الشركات.</div></div>
+<div><div class="l">2</div><h4>بناء صندوق الأدوات الرقمي <span class="en">(Digital Toolkit)</span></h4><div class="row" style="margin-bottom:0">تطوير مهاراتك وخبراتك عبر مجالات البيانات (Data) والتقنية (Tech) وطرق العمل الحديثة.</div></div>
+<div><div class="l">3</div><h4>الذكاء الاصطناعي التوليدي والوكيل <span class="en">(Generative AI &amp; Agentic AI)</span></h4><div class="row" style="margin-bottom:0">استكشاف أمثلة حقيقية عالية التأثير لاستخدامات الذكاء الاصطناعي في بيئة العمل وبواسطة الأفراد.</div></div>
+</div>
+<div class="note"><b>ملاحظة من الصفحة:</b> الكورس بينصحك تحمّل ملف (Forward Learning Workbook) من موديول الترحيب عشان تسجل فيه ملاحظاتك وأفكارك طول رحلتك في الكورس.</div>
+
+<div class="card">
+<h3>إزاي ده يخدم شغلك كمهندس بيانات؟ <span class="en">(اقتراح مني)</span></h3>
+<ul style="margin:0;padding-right:20px">
+<li><b>التطورات الرقمية:</b> مجالك قلب الموضوع ده. السحابة (Cloud) ومعالجة البيانات اللحظية (Streaming) والذكاء الاصطناعي كلهم بيعتمدوا على بيانات نضيفة وموثوقة تبنيها إنت.</li>
+<li><b>صندوق الأدوات:</b> فكر في صندوقك الحالي (SQL، بايثون (Python)، قواعد البيانات، أدوات تنسيق المهام (Orchestration)) وإيه اللي محتاج تضيفه (سحابة، مراقبة، أتمتة بالذكاء الاصطناعي).</li>
+<li><b>الذكاء الاصطناعي التوليدي والوكيل:</b> هتتعلم أمثلة حقيقية. فكر إزاي ممكن تستخدمها في شغلك: مساعد يكتب ويراجع استعلامات (SQL)، أو وكيل (Agent) يراقب المسارات (Pipelines) وينبه عن الأعطال.</li>
+</ul>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٨</b><h2>طرق العمل: التفكير التصميمي <span class="en">(Ways of Working: Design Thinking)</span></h2></div>
+<div class="card">
+<div class="row"><span>إيه هو؟</span>طريقة عمل بتهدف لفهم احتياجات المستخدمين أو العملاء بعمق وحل المشاكل بطريقة إبداعية ومبتكرة. مش للمصممين بس، بقت أسلوب حياة داخل الشركات الرقمية الكبرى.</div>
+<div class="row"><span>المحور: المستخدم النهائي (End User)</span>«مين اللي هيستخدم المنتج أو الخدمة؟» وبنعرفه بالمقابلات (Interviews) ومجموعات التركيز (Focus Groups) والملاحظة والاستطلاعات.</div>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>مثال: توصيل الوجبات لكبار السن</b>الحكومة كانت فاكرة إن المشكلة في طعم الأكل. لما قعدوا مع الناس اكتشفوا إن بعضهم بيتحرج ياخد مساعدة حكومية أو بيكره ياكل لوحده، فغيروا نظام التوصيل بالكامل.</div>
+<div class="pt"><b>مثال: الميلك شيك (Milkshake)</b>شركة فاست فود مبيعاتها واقفة، وإجابات الناس عن النكهات ما أفادتش. لما درسوا نمط حياتهم اكتشفوا إن حوالي نص الزباين بيشتروه الصبح وهم سايقين لأنه بياخد وقت طويل في الشرب ويملا الفراغ، فصمموا منتج جديد (سموذي) يخدم الاحتياج ده.</div>
+</div>
+<div class="note">في أي وظيفة: موظف خدمة العملاء بيحسن العمليات من احتياجات العملاء، ومسؤول التوظيف (Recruiter) بيعتبر المتقدمين «المستخدم النهائي»، والمحلل المالي بيعتبر زملاءه القارئين للتقارير «المستخدم النهائي» فيقدملهم بيانات مركزة وواضحة.</div>
+<div class="apply" data-pz="46"><span>في هندسة البيانات:</span> اعتبر مستهلكي البيانات (Data Consumers &amp; Analysts) هم «المستخدم النهائي». لما تبني مساراً (Pipeline) أو جدولاً جديداً في مستودع البيانات (Data Warehouse)، ما تبنيهوش بمزاجك التقني بس. اسألهم: «إيه المشاكل اللي بتواجهكم في الاستعلامات (Queries)؟ وإيه المقاييس (Metrics) اللي بتبحثوا عنها وبتتأخر؟» هتبني بنية تحتية توفر عليهم ساعات وتديهم قيمة حقيقية وسريعة.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٩</b><h2>طرق العمل: المنهجية الرشيقة <span class="en">(Ways of Working: Agile)</span></h2></div>
+<div class="card">
+<div class="row"><span>إيه هو؟</span>طريقة عمل ومبادئ ظهرت عند مطوري البرمجيات لتوصيل المنتجات للسوق أسرع. بدل شهور وسنين تخطيط وتنفيذ لمنتج ضخم مرة واحدة (الطريقة التقليدية)، بيعتمد على «السبرنتس» (Sprints): دورات عمل قصيرة وسريعة (أسبوعين مثلاً) تسرّع الابتكار والتطوير المستمر.</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>التركيز على المستخدم النهائي (Focus on end users)</b>كل خطوة تلبي احتياج المستفيد الحقيقي.</div>
+<div class="pt"><b>العمل الجماعي (Be team-oriented)</b>تعاون حقيقي ومستمر بمرونة عالية وتواصل دائم.</div>
+<div class="pt"><b>خلق قيمة مستمرة (Drive continuous value)</b>سلّم أجزاء صغيرة ومفيدة أول بأول بدل الانتظار للنهاية.</div>
+<div class="pt"><b>التجربة والتعلم السريع (Experiment and learn quickly)</b>ما تخافش من الفشل، جرب وتعلم من الأخطاء بسرعة.</div>
+</div>
+<div class="apply" data-pz="47"><span>في هندسة البيانات:</span> بدل ما تقعد شهرين تكتب مساراً ضخماً وتظهر تعقيداته في الآخر، اشتغل بالـ(Sprints): أول أسبوع تسلّم جزء الاستيعاب (Ingestion)، والأسبوع اللي بعده التحويلات (Transformations) وتسلمها للمحللين يختبروها. كده بتاخد ملاحظات سريعة وتصلح أي مشكلة في المسار أو هيكل الجداول (Schema) بدري وبأقل خسائر.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ١٤</b><h2>ليه الذكاء الاصطناعي التوليدي مهم؟ <span class="en">(Why is Gen AI important?)</span></h2></div>
+<div class="card">
+<div class="row"><span>حجم التأثير</span>الذكاء الاصطناعي التوليدي (GenAI) بيحدث نقلة نوعية في أغلب القطاعات: العلوم الحيوية (Life Sciences) بتسريع اكتشاف الأدوية، والتصنيع (آلات تفكر وتتكيف)، والإعلام والتصميم (إعادة تشكيل إنتاج المحتوى)، والمالية (إعادة صياغة القرارات المالية).</div>
+<div class="row"><span>ليه ده مهم ليك؟</span>مبقاش مقتصر على مهندسي البرمجيات، بقى مهارة أساسية لكل الناس. اللي هيعرف يستخدمه بفعالية ومسؤولية هيبقى في مكانة أفضل. المفهوم الجوهري: «الإنسان في الحلقة» (Human-in-the-loop)، يعني الأدوات تعزز وتدعم الأحكام البشرية مش تلغيها.</div>
+<div class="row"><span>ليه دلوقتي (Why now)؟</span>إحنا عند نقطة تحول (Tipping point): تكلفة استخدام أدواته انخفضت بشكل ملحوظ وبقى جوه التطبيقات اليومية، ميسور وعملي وقابل للتوسع السريع، فبقى فهمه ضرورة مش رفاهية.</div>
+<div class="pts" style="margin:12px 0 0">
+<div class="pt"><b>الفضول (Curiosity)</b>للتجربة والاستكشاف المستمر.</div>
+<div class="pt"><b>المسؤولية (Responsibility)</b>مراعاة الأبعاد الأخلاقية.</div>
+<div class="pt"><b>المرونة (Adaptability)</b>التعامل مع التغيرات السريعة.</div>
+<div class="pt"><b>التفكير المتمركز حول الإنسان (Human-centered thinking)</b>ضمان إن التكنولوجيا تخدم الإنسان.</div>
+</div>
+<div class="apply" data-pz="48"><span>في هندسة البيانات:</span> إنت مش بس بتستفيد من أدواته في تسريع كتابة الاستعلامات (SQL) وتحسين التوثيق (Documentation)، بل إنت المسؤول عن تجهيز البنية التحتية والمسارات اللي بتغذي النماذج دي ببيانات نظيفة وموثوقة. و«الإنسان في الحلقة» معناه إنك كمهندس بتشرف وتقيّم النتائج النهائية لضمان جودتها وأمنها (Data Security).</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ١٩</b><h2>شوف المنظومة الكاملة <span class="en">(Seeing the full ecosystem)</span></h2></div>
+<div class="card">
+<div class="theme">التجربة السلسة اللي بتشوفها في الشات بوتس مبنية على عناصر تكنولوجية وبنية تحتية ضخمة بتشتغل مع بعض:</div>
+<ol class="steps">
+<li><div><h4>النماذج والأبحاث <span class="en">(Models and research)</span></h4>النماذج اللغوية الكبيرة (LLMs) المدرّبة على بيانات ضخمة، «العقل المدبر» لأي أداة (بعضها مفتوح المصدر وبعضها مغلق يُستخدم عبر واجهات (APIs)).</div></li>
+<li><div><h4>البيانات ومنصات الذكاء الاصطناعي والأدوات <span class="en">(Data, AI platforms, and tooling)</span></h4>تنظيم البيانات، وضبط النماذج وتحسينها (Fine-tuning)، ومراقبة أدائها بعد النشر.</div></li>
+<li><div><h4>خدمات الحوسبة والبنية التحتية <span class="en">(Compute services and infrastructure)</span></h4>الخدمات السحابية وقواعد البيانات اللي بتتحمل تخزين ومعالجة الكميات الهائلة.</div></li>
+<li><div><h4>الأجهزة والطاقة <span class="en">(Hardware and power)</span></h4>الشرائح الذكية، ومراكز البيانات الكبرى، وأنظمة التبريد والكهرباء.</div></li>
+<li><div><h4>التطبيقات المدعومة بالذكاء الاصطناعي <span class="en">(AI-enabled applications)</span></h4>أدوات إنتاجية عامة، تطبيقات للقطاع الطبي والمالي، ومساعدين رقميين وبرمجيين.</div></li>
+<li><div><h4>أدوات تطوير الحلول الرقمية <span class="en">(AI tools to develop AI/digital solutions)</span></h4>بتسمح حتى لغير المبرمجين المحترفين يبنوا حلولاً أسرع وأسهل.</div></li>
+<li><div><h4>مقدمو الخدمات <span class="en">(Service Providers)</span></h4>شركات الاستشارات والخبراء اللي بيساعدوا المؤسسات على بناء وتخصيص وإطلاق حلولها.</div></li>
+</ol>
+<div class="apply" data-pz="49"><span>في هندسة البيانات:</span> كل النماذج والمنصات والتطبيقات اللي في القمة مش ممكن تشتغل من غير بنية تحتية قوية للبيانات (Data Infrastructure &amp; Pipelines) اللي إنت مسؤول عن تصميمها وإدارتها في السحابة، لتغذية الأنظمة دي ببيانات دقيقة وموثوقة.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٢٥</b><h2>إمتى يكون الذكاء الاصطناعي التوليدي هو الأداة الصح؟ <span class="en">(When is Gen AI the right tool?)</span></h2></div>
+<div class="card">
+<div class="cmp">
+<div class="good"><b>✅ المهام المناسبة (Suitable)</b>• <b>استكشافية مش نهائية:</b> أفكار ومسودات وخيارات (مثال: «اقترح 3 أفكار لحملة تسويقية»).<br>• <b>إبداعية ولغوية:</b> صياغة وتواصل (مثال: إعادة صياغة إيميل ليكون أكتر مهنية).<br>• <b>نقطة بداية ممتازة:</b> مسودات أولى تطورها بعد كده.<br>• <b>اختصارات الإنتاجية:</b> مهام روتينية متكررة (مثال: إعادة تنسيق ملاحظات اجتماع).<br>• <b>الإنسان في الحلقة:</b> يشتغل بأفضل شكل مع حكمك ومراجعتك.</div>
+<div class="bad"><b>⛔ المهام غير المناسبة (Unsuitable)</b>• <b>الدقة حرجة:</b> حقائق وأرقام مضبوطة وتفاصيل قانونية (مثال: حساب ضرائب الدخل).<br>• <b>معلومات فورية أو حية:</b> ممكن يخرّف (Hallucinate) أو معلوماته قديمة.<br>• <b>محتوى حساس أو سري:</b> ممنوع تحط بيانات الشركة أو بيانات شخصية (PII) في الأدوات العامة.<br>• <b>قرارات عالية المخاطر:</b> طبية أو مالية أو قانونية حرجة.<br>• <b>عمليات منظمة وقواعد ثابتة:</b> (Excel) وقواعد البيانات أدق وأثبت (مثال: الرواتب).</div>
+</div>
+<div class="note">في الصفحة تمرين تفاعلي لتصنيف مهام (اقتراح كورسات، قوانين إمبارح، نصائح طبية، حساب الضرائب، تصميم واجهة موقع، خطة سوشيال ميديا) لتحديد المناسب وغير المناسب للذكاء الاصطناعي.</div>
+<div class="apply" data-pz="50"><span>في هندسة البيانات (اقتراح مني):</span> مناسب: مسودة استعلام (SQL) أو توثيق تراجعه وتختبره بنفسك. غير مناسب: نسخ بيانات عملاء حقيقية أو أسرار الشركة في أداة عامة، أو الاعتماد عليه وحده في حساب أرقام تقارير مالية.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>أمثلة</b><h2>أربع حالات استخدام حقيقية</h2></div>
+<div class="pts">
+<div class="pt"><b>ماريا: مرشد مهني (Career Coach)</b><i>المشكلة:</i> متخرجة جديدة ومشتتة وسط مجالات كتيرة.<br><i>الحل:</i> طلبت من الـ(GenAI) يشتغل كمرشد مهني يسألها عن اهتماماتها ونقاط قوتها، فاقترح مجال «نجاح العملاء» (Customer Success) في شركات (SaaS) ولستة بـ 10 شركات في مدينتها، وساعدها تظبط السيرة الذاتية وتقدم بثقة.</div>
+<div class="pt"><b>جمال: مساعد اجتماعات (Meeting Assistant)</b><i>المشكلة:</i> مديره اعتذر عن اجتماع مهم مع الرئيس التنفيذي وطلب منه يغطيه ويسجل النقاط.<br><i>الحل:</i> أداة تفريغ نصي (Transcription) معتمدة من الشركة سجلت الاجتماع لحظياً فركز في الاستماع، وبعدها استخرج القرارات والمهام (Action Items)، وطلع إيميل احترافي وجدول متابعة في ثوانٍ.</div>
+<div class="pt"><b>فريق تسويق (EduCo): الذكاء الاصطناعي الوكيل (Agentic AI)</b><i>المشكلة:</i> ضغط شديد واجتماع أفكار وشيك مع مدير التسويق (CMO).<br><i>الحل:</i> الوكيل اشتغل بشكل ذاتي وجمع أرقام عن سوق التعليم لجيل Z في أستراليا، واقترح حملات متكاملة بنصوص إعلانات ومنشورات في ساعات.</div>
+<div class="pt"><b>مزود خدمة إنترنت (WiFi Provider)</b><i>المشكلة:</i> شكاوى وطوابير انتظار طويلة وتكرار الحكاية لكل موظف.<br><i>الحل:</i> مساعد صوتي ذكي اسمه «آفا» (Ava) حل 40% من المشاكل فوراً، ولما تتحول الحالة المعقدة لموظف، النظام بيديه ملخصاً فورياً على الشاشة فما يخليش العميل يعيد الحكاية.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>أساسيات كتابة الأوامر <span class="en">(Prompting basics)</span></h2></div>
+<div class="card">
+<div class="theme">العناصر الثلاثة لأي أمر (Prompt) ناجح:</div>
+<div class="apr">
+<div><div class="l">T</div><h4>المهمة <span class="en">(Task)</span></h4><div class="row" style="margin-bottom:0">الهدف المطلوب، بتبدأ بفعل وبأقصى دقة (عرّف، أنشئ، ابحث، حلل، اشرح، ترجم).<br><i>مثال:</i> «Define the US auto industry in 2-3 sentences».</div></div>
+<div><div class="l">C</div><h4>السياق <span class="en">(Context)</span></h4><div class="row" style="margin-bottom:0">الخلفية والتفاصيل اللي بيحتاجها عشان يطلع إجابة مخصصة لسياقك.<br><i>مثال:</i> «Key elements of an industry definition are its segments and activities».</div></div>
+<div><div class="l">F</div><h4>صيغة المخرجات <span class="en">(Output Format)</span></h4><div class="row" style="margin-bottom:0">شكل المعلومات: جدول، نقاط، إيميل، عدد كلمات.<br><i>مثال:</i> «Give its market size and how that is split across the 5 biggest players in a table».</div></div>
+</div>
+<div class="note"><b>راجع دايماً ورا الذكاء الاصطناعي (Always check GenAI's work!):</b> حتى لو الإجابة منظمة وواضحة ممكن يغلط أو يألف معلومات (Hallucination). راجع البيانات، واطلب المصادر، وطبق معايير شركتك.</div>
+<div class="apply" data-pz="51"><span>في هندسة البيانات (اقتراح مني):</span> المهمة: «اكتب استعلام (SQL) يجمع المبيعات الشهرية». السياق: «جدول orders فيه الأعمدة كذا، وقاعدة البيانات (PostgreSQL)». صيغة المخرجات: «الاستعلام مع شرح سطرين لكل جزء».</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس</b><h2>تقنيات متقدمة لإضافة السياق <span class="en">(Advanced techniques to add context)</span></h2></div>
+<div class="card">
+<div class="pts" style="margin:0">
+<div class="pt"><b>الأمثلة (Examples)</b>ادّي الذكاء الاصطناعي «مثال حي» على شكل المخرجات المطلوبة (وصف وظيفة قديم، تقرير، استبيان)، بنسخه في الأمر أو رفع الملف، مع التنبيه بوضوح إنه مجرد مثال للاقتداء.</div>
+<div class="pt"><b>الشخصيات أو الأدوار (Personas)</b>اطلب التحليل أو الكتابة من منظور شخصية أو دور محترف (مدير تسويق، شريك رئيسي في ماكنزي، أم لطفل عمره 32 سنة، أو حتى ستيف جوبز)، فبيختصر تفاصيل كتير ويطلع بالنبرة المناسبة.</div>
+<div class="pt"><b>النبرة والأسلوب (Tone)</b>التحكم في طريقة الكلام: إيميل «أكتر احترافية»، أو خطاب بنبرة تحفيزية أو مطمئنة أو جادة.</div>
+</div>
+<div class="apply"><span>نصائح لأمر فعال (Tips for effective prompting):</span>
+<ul>
+<li>خلي لغتك واضحة وبسيطة ومحددة.</li>
+<li>قسّم المهام المعقدة لخطوات أصغر: «اعمل كذا الأول وبعدين كذا».</li>
+<li>أعد صياغة الأمر لو الإجابة ما عجبتكش من أول مرة، عامله زي الإنسان وجرب تفهمه بطريقة مختلفة.</li>
+</ul></div>
+<div class="apply" style="margin-top:12px" data-pz="52"><span>في هندسة البيانات (اقتراح مني):</span> ارفع له مثال جدول توثيق (Data Dictionary) قديم وقوله «ده مثال»، وخليه «يتصرف كمراجع كود (Code Reviewer) صارم» عشان يراجع استعلامك، وحدد النبرة لو بتكتب تقريراً لمدير غير تقني.</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٣٦</b><h2>شريكك في حل المشكلات <span class="en">(Your Problem Solving partner)</span></h2></div>
+<div class="card">
+<div class="row"><span>الفكرة</span>استخدم الذكاء الاصطناعي التوليدي كشريك لحل المشاكل مش مجرد أداة لإجابة الأسئلة، بدمج استراتيجيات وأطر ماكنزي لحل المشكلات المعقدة. أربع طرق:</div>
+<div class="pts" style="margin:0">
+<div class="pt"><b>شريك تفكير وتوليد أفكار (Thought partner)</b>يساعدك تختبر مشكلتك وتطرح أسباباً محتملة. <i>نصيحة:</i> اطلب منه دور «المتشكك أو المعارض» (Challenger) لينتقد أفكارك ويكشف زوايا ما انتبهتش لها.</div>
+<div class="pt"><b>بناء وتنظيم الهيكل (Strengthen structure)</b>تحويل الأفكار غير المترابطة لهيكل منطقي، زي شجرة المشاكل (Issue Tree)، أو التأكد من (MECE).</div>
+<div class="pt"><b>دعم الأبحاث والتحليل (Support research and analysis)</b>يختصر ساعات البحث، يقترح معايير مقارنة، يلخص مستندات ضخمة، ويولد مسودات مخططات (First-cut charts). <i>نصيحة:</i> استخدم أدوات بتحافظ على سرية بياناتك ومش بتستخدمها في التدريب.</div>
+<div class="pt"><b>تطوير الرسائل (Strengthen your messaging)</b>يصيغ رسالتك لكل جمهور: تبسيط للمبتدئين، اختصار للقيادات العليا، أو تعديل النبرة.</div>
+</div>
+<div class="apply" data-pz="53"><span>في هندسة البيانات (اقتراح مني):</span> لما مسار (Pipeline) بيتأخر، اطلب منه يبني معاك شجرة أسباب (مصدر، تحويل، تخزين) ويتأكد من (MECE)، واطلب دور «المتشكك» ليفتش فرضيتك، وبعدين صيغ ملخص النتيجة لمديرك بالهرم (الخلاصة أولاً).</div>
+</div>
+
+<div class="mod" style="margin-top:34px"><b>الدرس ٤٠</b><h2>التحول المؤسسي في عصر الذكاء الاصطناعي <span class="en">(Organizational transformation in the era of AI)</span></h2></div>
+<div class="card">
+<h3>إطار ماكنزي لإعادة الهيكلة (McKinsey Rewired framework)</h3>
+<div class="theme">من استخدام الذكاء الاصطناعي كأفراد إلى تحول مؤسسي شامل وآمن ومستدام، في 6 عناصر:</div>
+<ol class="steps">
+<li><div><h4>الخريطة الاستراتيجية <span class="en">(Strategic Roadmap)</span></h4>خارطة طريق واضحة لدمج الذكاء الاصطناعي، بالبدء بالمجالات ذات أعلى قيمة.</div></li>
+<li><div><h4>المواهب والمهارات <span class="en">(Talent)</span></h4>إعادة تشكيل الأدوار الوظيفية ورفع مهارات كل الموظفين (Upskilling).</div></li>
+<li><div><h4>نموذج التشغيل <span class="en">(Operating model)</span></h4>«مصنع ذكاء اصطناعي» مركزي (Central AI factory) لتصميم واختبار وتحسين الأدوات على مستوى الشركة، مع تقريب فرق الأعمال من فريق تقنية المعلومات (IT).</div></li>
+<li><div><h4>التكنولوجيا <span class="en">(Technology)</span></h4>أنظمة وبنية تحتية تسمح للوكلاء (AI agents) بالتواصل والتعاون، مع أمان وسرية البيانات.</div></li>
+<li><div><h4>البيانات <span class="en">(Data)</span></h4>أساس قوي للبيانات عبر الشركة: أدوات للبحث والاسترجاع والحوكمة (Data Governance) عشان الذكاء الاصطناعي يشتغل بكفاءة واعتمادية.</div></li>
+<li><div><h4>التبني والتوسع والاستدامة <span class="en">(Adopt, Scale and Sustain)</span></h4>مساعدة الناس على التكيف، وتشجيع إعادة استخدام الأدوات والبيانات، والحفاظ على الإشراف البشري في القرارات، ومتابعة القيمة المحققة بدقة.</div></li>
+</ol>
+</div>
+<div class="card">
+<h3>مبادئ الاعتماد المسؤول للذكاء الاصطناعي <span class="en">(Responsible AI Principles)</span></h3>
+<div class="pts" style="margin:0">
+<div class="pt"><b>الشفافية (Transparency)</b>توضيح إمتى المستخدم بيتفاعل مع ذكاء اصطناعي وإزاي الأنظمة بتشتغل.</div>
+<div class="pt"><b>التركيز البشري والسيطرة (Human centricity &amp; controllability)</b>مساعدة البشر مع بقاء السيطرة والإشراف في يد الإنسان.</div>
+<div class="pt"><b>المساءلة والاجتهاد (Accountability &amp; diligence)</b>جهة مسؤولة عن تصرفات الذكاء الاصطناعي ومعالجة المشكلات.</div>
+<div class="pt"><b>الموثوقية والأمان (Reliability &amp; safety)</b>أنظمة قوية مقاومة للمحاولات الضارة وسوء الاستخدام.</div>
+<div class="pt"><b>العدالة (Fairness)</b>معاملة الجميع بشكل متساوٍ وتجنب التحيزات غير العادلة.</div>
+<div class="pt"><b>الخصوصية والأمان (Privacy &amp; security)</b>الالتزام بقوانين الخصوصية وحماية جودة البيانات.</div>
+<div class="pt"><b>الأخلاق (Ethics)</b>ذكاء اصطناعي مستدام ومفيد للجميع.</div>
+<div class="pt"><b>القدرة على التكيف (Adaptability)</b>مواكبة التطورات والقوانين الجديدة.</div>
+</div>
+<div class="apply" data-pz="54"><span>في هندسة البيانات (اقتراح مني):</span> عنصر «البيانات» في الإطار هو شغلك مباشرة: حوكمة البيانات، وجودتها، وإمكانية البحث والاسترجاع، وخصوصية البيانات الشخصية (PII). وكمهندس تقدر تدعم «المساءلة» بتتبع مصدر البيانات (Data Lineage) وسجلات الوصول.</div>
+</div>
+
+<div class="q">
+<h3>سؤال تأمل ليك</h3>
+اكتب في ملفك 3 أدوات موجودة فعلاً في صندوقك الرقمي دلوقتي و3 عايز تضيفها. واكتب أمراً (Prompt) حقيقياً لمهمة في شغلك بالعناصر التلاتة (مهمة وسياق وصيغة مخرجات)، وحدد جزء هتراجعه بنفسك لأنه مش مناسب للذكاء الاصطناعي. ابعتلي اللي كتبته وأضيفه.
+</div>
+
+<div class="sum" style="margin-top:30px">
+<h3>🏁 كورس صندوق أدواتي الرقمي اكتمل</h3>
+<ul>
+<li>اشتغل بالتفكير التصميمي والمنهجية الرشيقة: المستخدم أولاً، وسبرنتس قصيرة، وتجربة وتعلم سريع.</li>
+<li>الذكاء الاصطناعي شريك مش بديل: أوامر واضحة (مهمة وسياق وصيغة)، ودايماً «الإنسان في الحلقة» ومراجعة النتائج.</li>
+<li>اعرف إمتى تستخدمه وإمتى لا، وابنِ الأساس: بيانات موثوقة وحوكمة ومبادئ مسؤولة.</li>
+</ul>
+</div>
+</section>
+<script>
+function show(id){['c1','c2','c3','c4','c5','c6'].forEach(function(c){document.getElementById(c).hidden=(c!==id);document.getElementById('b'+c[1]).className=(c===id)?'on':'';});window.scrollTo(0,0);}
+</script>
+</div></main>
+<footer>Nexus Code — Development Lab · مساحة تعلّم حيّة، تتحدث مع كل درس جديد</footer>
+<script>
+(function(){
+var F={de:"هندسة البيانات",acc:"المحاسبة",mkt:"التسويق",geo:"الجيولوجيا وعلوم الأرض"};
+var EX={"acc": {"2": "لما الميزانية العمومية مش بتتوازن أو إقفال الشهر بيتأخر، قسّم المشكلة: راجع دفتر اليومية وحدد الحساب أو القيد اللي بدأ منه الفرق، جرب أكتر من تفسير، ولو احتجت مساعدة روح للزميل ومعاك محاولاتك وأرقامك.", "3": "في تقريرك للإدارة المالية ابدأ بالنتيجة والتأثير: «فروقات المخزون رفعت التكلفة 3%، والسبب كذا، والحل المقترح كذا خلال أسبوع»، وسيب تفاصيل القيود لبعدين.", "6": "لما تتغير فجأة معايير المحاسبة أو دليل الحسابات أو متطلبات المراجع قبل التسليم، اتعامل بهدوء: حدّث خطتك ورتب الأولويات بدل ما تعطل الإقفال.", "9": "اطلب مراجعة زميل لهيكل دليل الحسابات أو القالب قبل ما تعتمده، وقول «مش متأكد من النقطة دي» بدل ما تخمّن في معالجة قيد.", "17": "هدف مثل «أخلص شهادة المحاسبة القانونية» هدف أداء. أما نية التعلم فتبقى «أفهم إزاي بتتبني القوائم المالية من القيود لحد التقرير وأطبقه على شركة حقيقية».", "21": "«إزاي نقلل وقت الإقفال الشهري لأقل من 5 أيام عمل (قبل يوم 7 من الشهر) من غير زيادة عدد الموظفين خلال الربع الجاي؟»", "23": "قبل الإقفال بيوم اكتشفت فرق كبير في الحسابات: اسأل فوراً: مين المتأثر (المدير المالي والمراجع)؟ إيه جوه النطاق (الحساب ده ولا كل الفرع)؟ إيه القيود (موعد التسليم وصلاحيات التعديل)؟", "27": "فروع «تكلفة المواد، الأجور، المصروفات العامة» لتحليل ارتفاع التكلفة: هل في نقص؟ مثلاً الإهلاك أو تكاليف التمويل مش ظاهرين، يبقى في فجوة محتاجة فرع.", "28": "عندك 100 حساب في دفتر الأستاذ: بدل ما تراجعهم كلهم، لقيت 5 حسابات بس بيمثلوا 90% من الفروقات، فركز عليهم وخلص المراجعة في يوم.", "31": "الملخص: سرد كل القيود والفروقات. التخليص: «فروقات الموردين زادت 15% بسبب تأخير قيد الفواتير، والتوصية: قيد الفواتير يوم الاستلام، وده هيوفر مراجعة أسبوع في الإقفال.»", "32": "مع الإدارة العليا: ما تشرحش القيود بالترتيب. ادخل بالخلاصة: «محتاجين نعدل سياسة الاعتراف بالإيراد لتفادي ملاحظة المراجع، وده هيوفر أسبوع في الإقفال»، وبعدين الأرقام كأدلة.", "33": "في موسم الإقفال والمراجعة: وازن بين الملل والاحتراق. راقب بطاريتك، ولو بتراجع نفس القيود ساعات وعقلك وقف، خد بريك. المراجعة وإنت مفلس بتطلع أخطاء أكبر.", "36": "لما تلاقي خطأ كبير في تقرير مالي قبل التسليم بدقايق، خد نفس وقول: «دي مشكلة قابلة للحل مش خطر على حياتي»، وسمّي القلق، وارجع التركيز لمراجعة القيود.", "40": "لما المدير المالي يتعصب من تأخر التقرير، ما تقولش «دي مش مسؤوليتي». اسمعه بتركيز وقول: «أنا فاهم ضغط الموقف قدام الإدارة، تعالى نحل الفرق مع بعض.»", "43": "لما يظهر خطأ في القيود، ما تقولش «مين اللي سجّل ده؟». قول: «تعالوا نشوف المستندات ونعرف إيه الثغرة في الإجراء ونصلحها عشان ما تتكررش.»", "46": "اعتبر المدير المالي والمراجعين «المستخدم النهائي» للتقارير. اسألهم: «إيه اللي بيتأخر عليكم؟ وإيه المؤشرات اللي محتاجينها؟» وابني التقرير على احتياجهم الفعلي.", "47": "بدل ما تقعد شهراً تبني نظام تقارير ضخماً، سلّم على دورات قصيرة: أسبوع أول قالب التقرير، وأسبوع ثاني عرض على المدير، وعدّل بناءً على ملاحظاته.", "50": "مناسب: مسودة رسالة للعميل أو شرح لسياسة محاسبية تراجعه بنفسك. غير مناسب: حساب الضرائب أو وضع أرقام العميل السرية في أداة عامة."}, "mkt": {"2": "لما حملة إعلانية أداؤها يقع فجأة، قسّم المشكلة: افحص التتبع (Tracking) والاستهداف والإعلان نفسه وحدد نقطة التراجع بدقة، جرب أكتر من حل، واستشر زميلاً ومعاك بيانات محاولاتك.", "3": "في تقرير الحملة للمدير ابدأ بالنتيجة: «معدل التحويل نزل 20% بسبب الصفحة المقصودة، والتعديل المقترح هياخد يومين»، وبعدين التفاصيل.", "6": "لما تغيّر الإدارة ميزانية الحملة أو الرسالة قبل الإطلاق، اتعامل بهدوء: عدّل الخطة ورتب الأولويات بدل ما توقف التنفيذ.", "9": "اطلب مراجعة زميل لخطة الحملة وقوائم الاستهداف قبل الإطلاق، وقول «مش عارف النقطة دي» بدل ما تخمّن.", "17": "هدف «أحقق 10 آلاف متابع» هدف أداء. نية التعلم: «أفهم إزاي بتتكون رحلة العميل وأجرب قنوات مختلفة وأتعلم من الأرقام».", "21": "«إزاي نرفع معدل التحويل من 2% إلى 3.5% خلال 90 يوم بميزانية إعلانات لا تتجاوز الحالية؟»", "23": "الحملة وقفت وقت الذروة: اسأل فوراً: مين المتأثر (المبيعات والعملاء)؟ إيه جوه النطاق (القناة دي ولا كل الحملة)؟ إيه القيود (الميزانية وموافقات الإعلان)؟", "27": "فروع «تراجع المبيعات: سعر، منتج، قناة»: هل في نقص؟ مثلاً المنافسة أو الموسمية مش ظاهرين، يبقى في فجوة. وهل «القناة» و«الإعلانات» متداخلين؟", "28": "عندك 50 قناة وإعلان: بدل تحسينهم كلهم، لقيت 5 بس بيجيبوا 80% من المبيعات، فركز ميزانيتك وجهدك عليهم.", "31": "الملخص: كل أرقام الحملة. التخليص: «التفاعل بيعلى 40% في الفيديو القصير، والتوصية: نحول 30% من الميزانية للفيديو القصير الشهر الجاي.»", "32": "مع الإدارة العليا: ادخل بالخلاصة: «محتاجين نحول جزء من الميزانية للفيديو القصير لرفع المبيعات 20%»، وبعدين البيانات كأدلة بدل سرد كل الإعلانات.", "33": "في موسم الحملات: وازن بين الملل والاحتراق. راقب بطاريتك، ولو بتعدل نفس الإعلان ساعات وعقلك وقف، خد بريك وارجع بذهن صافي.", "36": "لما الحملة تتعثر قبل العرض على العميل بدقايق، خد نفس وسمّي القلق، وقول «ده تحدي مش خطر»، وارجع للأرقام بهدوء.", "40": "لما العميل أو فريق المبيعات يتعصب من نتائج الحملة، اسمعه بعمق وقول: «فاهم ضغطك، تعالى نشوف إيه اللي ممكن نعدله بسرعة.»", "43": "لما حملة تفشل، ما تقولش «مين اللي أطلقها؟». قول: «تعالوا نحلل البيانات ونعرف إيه اللي غلط في التخطيط عشان نتجنبه.»", "46": "اعتبر العميل «المستخدم النهائي» للحملة. اقعد معاه واسأله عن مشكلته وسلوكه الحقيقي، مش بس رأيه في الإعلان، وابني الحملة على احتياجه.", "47": "بدل ما تخطط حملة لشهرين وتطلقها مرة واحدة، اشتغل على دورات قصيرة: أسبوع تجرب إعلان وتقيس وتعدل، وبعدين تطلق النسخة الأفضل.", "50": "مناسب: أفكار لمحتوى الحملة ومسودات إعلانات تراجعها بنفسك. غير مناسب: أرقام حقيقية عن العملاء أو قرارات ميزانية كبيرة من غير مراجعة."}, "geo": {"2": "لما نتائج عينات التحليل أو نموذج التكوين الجيولوجي مش منطقية، قسّم المشكلة: افحص أخذ العينات والمعايرة والقراءات وحدد مرحلة الخطأ بدقة، جرب أكتر من تفسير، وارجع للزميل أو الخبير ومعاك بياناتك.", "3": "في تقرير المسح أو الحفر ابدأ بالنتيجة والأثر: «المنطقة (أ) مرشحة للحفر لأن التركيز أعلى بكذا، والتوصية كذا»، وبعدين أرقام العينات.", "6": "لما تتغير فجأة حدود الموقع أو الطقس أو خطة المسح الميداني، اتعامل بهدوء: عدّل خطة العمل ورتب نقاط العينات بدل ما توقف الرحلة.", "9": "اطلب مراجعة زميل أو خبير لخطة أخذ العينات أو تفسير المقطع الجيولوجي قبل ما تعتمده، وقول «مش متأكد» بدل ما تخمّن.", "17": "هدف «أخلص خريطة الموقع» هدف أداء. نية التعلم: «أفهم إزاي التكوينات الصخرية بتتكون وإزاي أقرأ المقاطع وأطبقه في الميدان».", "21": "«إزاي نحدد مواقع الحفر الأعلى احتمالاً بحيث نغطي 80% من المنطقة خلال موسم العمل الميداني القادم وبميزانية محددة؟»", "23": "حفارة وقفت أو بيانات المسح ناقصة في الميدان: اسأل فوراً: مين المتأثر (الفريق والعميل)؟ إيه جوه النطاق (الموقع ده ولا كل المشروع)؟ إيه القيود (الميزانية والطقس وتصاريح الموقع)؟", "27": "فروع «سبب ضعف إنتاجية البئر: الخزان، الحفر، المعدات»: هل في نقص؟ مثلاً جودة البيانات الزلزالية أو الظروف السطحية مش ظاهرة، يبقى في فجوة.", "28": "عندك 100 عينة: بدل تحليلها كلها، لقيت 10 مواقع بس بتفسر 80% من التغيّر في التركيز، فركز التحليل المعملي عليها.", "31": "الملخص: كل قراءات العينات. التخليص: «التركيز بيعلى بالقرب من الصدع، والتوصية: نحفر عند الصدع الشمالي أولاً لأنه أقل تكلفة وأعلى احتمالاً.»", "32": "مع الإدارة أو العميل: ادخل بالخلاصة: «الموقع (ب) أنسب للحفر وهيوفر 30% من التكلفة»، وبعدين بيانات العينات والمقاطع كأدلة.", "33": "في موسم العمل الميداني: وازن بين الملل والاحتراق. راقب بطاريتك قبل قرارات الميدان، وبعد يوم مجهد في الحرارة أجّل قرارات الحفر المهمة لحد ما تتعافى.", "36": "لما تلاقي بيانات مسح غير مطابقة وإنت في الميدان، خد نفس وسمّي القلق، وقول «دي مشكلة قابلة للحل»، وارجع للفحص بهدوء.", "40": "لما العميل أو مدير المشروع يتعصب من تأخر نتائج المسح، اسمعه بعمق وقول: «فاهم ضغط الجدول الزمني، تعالى نشوف أسرع طريقة لتسليم النتايج.»", "43": "لما عينة تتلف أو قراءة تطلع غلط، ما تلومش حد. قول: «تعالوا نشوف الإجراء ونعرف الثغرة ونصلحها عشان ما تتكررش.»", "46": "اعتبر مستخدمي الخرائط والتقارير (المهندسين وصناع القرار) هم «المستخدم النهائي». اسألهم إيه المعلومات اللي محتاجينها وبأي شكل، وابني الخريطة على احتياجهم.", "47": "بدل ما تنتظر مسحاً كاملاً قبل أي تحليل، اشتغل على مراحل قصيرة: مسح منطقة صغيرة، تحليل مبدئي، تعديل الخطة، وبعدين توسع.", "50": "مناسب: مسودة تقرير أو شرح مفهوم جيولوجي تراجعه بنفسك. غير مناسب: تفسير بيانات ميدانية حقيقية أو قرارات سلامة وحفر معتمدة عليه وحده."}};
+var GL={"acc": [["مسار البيانات (Pipeline)", "دورة المستندات أو الإقفال الشهري"], ["مستودع البيانات (Data Warehouse)", "دفتر الأستاذ العام"], ["جودة البيانات (Data Quality)", "مطابقة الحسابات (Reconciliation)"], ["السجلات (Logs)", "مسار المراجعة (Audit Trail)"], ["تغيير هيكل الجداول (Schema Change)", "تغيير دليل الحسابات"], ["لوحة المتابعة (Dashboard)", "القوائم والتقارير المالية"], ["السبب الجذري (Root Cause)", "تحليل الفروقات"], ["مراجعة بعد العطل (Post-mortem)", "مراجعة ما بعد الإقفال"], ["مستهلكو البيانات (Data Consumers)", "الإدارة المالية والمراجعون"]], "mkt": [["مسار البيانات (Pipeline)", "رحلة العميل (Funnel)"], ["مستودع البيانات (Data Warehouse)", "قاعدة بيانات العملاء المركزية (CRM)"], ["جودة البيانات (Data Quality)", "دقة بيانات التتبع (Tracking)"], ["السجلات (Logs)", "سجل الحملات والتعديلات"], ["تغيير هيكل الجداول (Schema Change)", "تغيير مؤشرات الأداء (KPIs) أو هيكل التقرير"], ["لوحة المتابعة (Dashboard)", "لوحة أداء الحملات"], ["السبب الجذري (Root Cause)", "سبب تراجع الأداء"], ["مراجعة بعد العطل (Post-mortem)", "مراجعة ما بعد الحملة"], ["مستهلكو البيانات (Data Consumers)", "العملاء وفريق المبيعات والإدارة"]], "geo": [["مسار البيانات (Pipeline)", "سلسلة العمل الميداني والمعملي (من العينة للتقرير)"], ["مستودع البيانات (Data Warehouse)", "قاعدة بيانات المشروع الجيولوجية"], ["جودة البيانات (Data Quality)", "دقة المعايرة وجودة العينات"], ["السجلات (Logs)", "سجلات الآبار وسجل الحفر (Well Logs)"], ["تغيير هيكل الجداول (Schema Change)", "تغيير نظام الإحداثيات أو معايير التسجيل"], ["لوحة المتابعة (Dashboard)", "الخرائط والتقارير الجيولوجية"], ["السبب الجذري (Root Cause)", "السبب الجيولوجي أو الإجرائي للانحراف"], ["مراجعة بعد العطل (Post-mortem)", "مراجعة ما بعد المشروع (الدروس المستفادة)"], ["مستهلكو البيانات (Data Consumers)", "المهندسون والعملاء وصناع القرار"]]};
+var mem={};
+function sg(k){try{var v=localStorage.getItem(k);return v===null?(mem[k]||null):v}catch(e){return mem[k]||null}}
+function ss(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}
+function esc(t){var d=document.createElement("div");d.textContent=t;return d.innerHTML}
+var units=[].slice.call(document.querySelectorAll("[data-pz]"));
+var orig={};units.forEach(function(el){orig[el.getAttribute("data-pz")]=el.innerHTML});
+function plain(h){var d=document.createElement("div");d.innerHTML=h;return d.textContent.replace(/\s+/g," ").trim()}
+var prof={name:sg("nx_name")||"",field:sg("nx_field")||"",custom:sg("nx_custom")||""};
+function fname(){return prof.field==="custom"?prof.custom:(F[prof.field]||F.de)}
+function fkey(){return prof.field==="custom"?"cx_"+prof.custom.replace(/[^\w\u0600-\u06FF]+/g,"_"):prof.field}
+function render(){
+ var f=prof.field||"de",fk=fkey();
+ units.forEach(function(el){
+  var n=el.getAttribute("data-pz");
+  el.innerHTML=orig[n];
+  if(f==="de")return;
+  var ex=EX[f]&&EX[f][n],ai=sg("nx_ai_"+fk+"_"+n);
+  if(ex){el.innerHTML="<span>في "+esc(fname())+":</span> "+ex+" <em class=\"pzb\">مخصص لمجالك</em>"}
+  else if(ai){el.innerHTML="<span>في "+esc(fname())+":</span> "+esc(ai)+" <em class=\"pzb ai\">مولّد بالذكاء الاصطناعي</em>"}
+  else{el.insertAdjacentHTML("beforeend","<div class=\"pzf\">المثال ده من هندسة البيانات. <button type=\"button\" class=\"pzg\">ولّد مثالاً لمجالي</button></div>")}
+ });
+ bar();
+}
+function bar(){
+ var b=document.getElementById("pzbar");if(!b)return;
+ var f=prof.field||"de";
+ var h="<span>أهلاً يا <b id=\"pzn\"></b> · مجالك: <b id=\"pzf\"></b></span> <button type=\"button\" id=\"pzc\">غيّر مجالي</button>";
+ if(f!=="de")h+=" <button type=\"button\" id=\"pza\">ولّد باقي الأمثلة (التبويب الحالي)</button> <span id=\"pzs\"></span>";
+ if(GL[f]){h+="<details><summary>جدول ترجمة المصطلحات لمجالك</summary><table>";GL[f].forEach(function(r){h+="<tr><td>"+r[0]+"</td><td>"+r[1]+"</td></tr>"});h+="</table></details>"}
+ b.innerHTML=h;
+ document.getElementById("pzn").textContent=prof.name||"زائرنا";
+ document.getElementById("pzf").textContent=fname();
+ document.getElementById("pzc").onclick=ask;
+ var a=document.getElementById("pza");if(a)a.onclick=genAll;
+}
+function say(t){var s=document.getElementById("pzs");if(s)s.textContent=t}
+async function gen(el,quiet){
+ var n=el.getAttribute("data-pz"),fk=fkey();
+ var smp=null;try{smp=await window.claude.use("sample")}catch(e){}
+ if(!smp){if(!quiet)say("التوليد مش متاح هنا. لازم تفتح الصفحة من حساب Claude.");return "off"}
+ try{
+  var q="شخص شغال في مجال: "+fname()+". الفقرة دي مثال بيطبق مبدأ على مجال هندسة البيانات. أعد كتابة المثال لمجال المستخدم بنفس المبدأ بالضبط، بالعامية المصرية، في جملتين أو ثلاث، والمصطلحات الإنجليزية الضرورية بين أقواس، من غير مقدمة ولا عناوين ولا رموز تنسيق. المثال الأصلي:\n"+plain(orig[n]);
+  var r=await smp(q,{modelTier:"quick"});
+  var t=(r&&r.text||"").trim();
+  if(t){ss("nx_ai_"+fk+"_"+n,t);render();return "ok"}
+ }catch(e){if(!quiet)say("تعذر التوليد الآن. جرب بعد شوية.");return (e&&e.code)||"err"}
+ return "err";
+}
+async function genAll(){
+ var pane=document.querySelector(".pane:not([hidden])");if(!pane)return;
+ var todo=[].slice.call(pane.querySelectorAll(".pzf")).map(function(x){return x.parentElement});
+ if(!todo.length){say("كل أمثلة التبويب ده جاهزة.");return}
+ for(var i=0;i<todo.length;i++){
+  say("بولّد "+(i+1)+" من "+todo.length+"...");
+  var r=await gen(todo[i],true);
+  if(r==="off"){say("التوليد مش متاح هنا. لازم تفتح الصفحة من حساب Claude.");return}
+  if(r!=="ok"){say("وقفت عند "+(i+1)+" من "+todo.length+". جرب تاني بعد شوية.");return}
+ }
+ say("خلص التوليد.");
+}
+document.addEventListener("click",function(e){
+ var t=e.target;if(t&&t.classList&&t.classList.contains("pzg")){gen(t.closest("[data-pz]"))}
+});
+function ask(){
+ var ov=document.createElement("div");ov.className="pz-ov";
+ var h="<div class=\"pz-box\"><h2>أهلاً بيك في Nexus Code</h2><p>اكتب اسمك واختار مجالك، وأنا هغيّر الأمثلة التطبيقية في الصفحة لمجالك. المبادئ والمعلومات الأساسية بتفضل زي ما هي.</p><input type=\"text\" id=\"pzi\" placeholder=\"اسمك\" maxlength=\"40\"><div class=\"pz-ch\">";
+ [["de","هندسة البيانات (Data Engineering)"],["acc","المحاسبة"],["mkt","التسويق"],["geo","الجيولوجيا وعلوم الأرض"],["custom","مجال آخر"]].forEach(function(o){
+  h+="<label><input type=\"radio\" name=\"pzr\" value=\""+o[0]+"\""+((prof.field||"de")===o[0]?" checked":"")+"> "+o[1]+"</label>"});
+ h+="</div><input type=\"text\" id=\"pzx\" placeholder=\"اكتب مجالك (لو اخترت مجال آخر)\" maxlength=\"40\"><div><button type=\"button\" class=\"pz-go\" id=\"pzok\">ابدأ</button><button type=\"button\" class=\"pz-sk\" id=\"pzsk\">تخطى</button></div><div class=\"pz-note\">الاسم والمجال بيتحفظوا على جهازك بس، ومفيش حساب أو باسورد. غير مجالك أي وقت من أعلى الصفحة.</div></div>";
+ ov.innerHTML=h;document.body.appendChild(ov);
+ document.getElementById("pzi").value=prof.name;document.getElementById("pzx").value=prof.custom;
+ document.getElementById("pzok").onclick=function(){
+  var f=(document.querySelector("input[name=pzr]:checked")||{}).value||"de";
+  var c=document.getElementById("pzx").value.trim();
+  if(f==="custom"&&!c){document.getElementById("pzx").focus();return}
+  prof.name=document.getElementById("pzi").value.trim();prof.field=f;prof.custom=f==="custom"?c:"";
+  ss("nx_name",prof.name);ss("nx_field",prof.field);ss("nx_custom",prof.custom);
+  document.body.removeChild(ov);render();
+ };
+ document.getElementById("pzsk").onclick=function(){
+  if(!prof.field){prof.field="de";ss("nx_field","de")}
+  document.body.removeChild(ov);render();
+ };
+}
+if(!prof.field)ask();else render();
+})();
+</script>
+</body>
+</html>
